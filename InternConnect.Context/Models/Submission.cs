@@ -21,13 +21,16 @@ namespace InternConnect.Context.Models
         public bool AcceptedByCoordinator { get; set; }
         public bool AcceptedByChair { get; set; }
         public bool AcceptedByDean { get; set; }
+        public bool EmailSentByCoordinator { get; set; }
+        public bool CompanyAgrees { get; set; }
         public string EndorsementFileName { get; set; }
 
-        public int TrackId { get; set; }
-        public Track Track { get; set; }
+        public int Track { get; set; }
 
-        public int SectionId { get; set; }
-        public Section Section { get; set; }
+        public Student Student { get; set; }
+
+        public int AcademicYearId { get; set; }
+        public AcademicYear AcademicYear { get; set; }
 
 
 

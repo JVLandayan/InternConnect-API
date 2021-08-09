@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,6 @@ namespace InternConnect.Context.Models
         public DateTime DateAdded { get; set; }
         public string AddedBy { get; set; }
 
-        public string ResetKey { get; set; }
 
         public int SectionId { get; set; }
         public Section Section { get; set; }
@@ -22,6 +22,9 @@ namespace InternConnect.Context.Models
 
         public int SubmissionId { get; set; }
         public Submission Submission { get; set; }
+
+        public int ProgramId { get; set; }
+        public Program Program { get; set; }
 
 
 

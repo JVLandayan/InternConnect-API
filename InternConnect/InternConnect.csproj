@@ -28,4 +28,8 @@
     <ProjectReference Include="..\InternConnect.Context\InternConnect.Context.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Profiles\" />
+  </ItemGroup>
+
 </Project>

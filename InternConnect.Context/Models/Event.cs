@@ -12,8 +12,6 @@ namespace InternConnect.Context.Models
         public string Name { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public int ProgramId { get; set; }
-        public Program Program { get; set; }
 
         public int AdminId { get; set; }
         public Admin Admin { get; set; }

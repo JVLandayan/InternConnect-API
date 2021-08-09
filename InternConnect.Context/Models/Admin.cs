@@ -9,10 +9,12 @@ namespace InternConnect.Context.Models
     public class Admin
     {
         public int Id { get; set; }
-        public string Email { get; set; }
         public string StampFileName { get; set; }
         public int AuthId { get; set; }
         public Authorization Authorization { get; set; }
+
+        public int ProgramId { get; set; }
+        public Program Program { get; set; }
 
         public int SectionId { get; set; }
 

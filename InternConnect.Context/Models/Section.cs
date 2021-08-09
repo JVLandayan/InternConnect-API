@@ -12,5 +12,6 @@ namespace InternConnect.Context.Models
         public string Name { get; set; }
 
         public Student Student { get; set; }
+        public Admin Admin { get; set; }
     }
 }

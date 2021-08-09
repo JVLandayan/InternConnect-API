@@ -9,9 +9,13 @@ namespace InternConnect.Context.Models
     public class Logs
     {
         public int Id { get; set; }
+
+        public string Email { get; set; }
+        public string SubmissionId { get; set; }
         public DateTime DateStamped { get; set; }
         public int AdminId { get; set; }
         public Admin Admin { get; set; }
+
 
     }
 }

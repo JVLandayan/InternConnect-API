@@ -11,7 +11,14 @@ namespace InternConnect.Context.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public Track Track { get; set; }
+        public List<Track> Tracks { get; set; }
+        
+
+        public Student Student { get; set; }
+
+        public Admin Admin { get; set; }
+
+        public Event Event { get; set; }
 
     }
 }
