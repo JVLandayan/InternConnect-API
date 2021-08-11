@@ -15,7 +15,7 @@ namespace InternConnect.Context.Models
         public string IgaarpEmail { get; set; }
         public int PdfStateId { get; set; }
         public PdfState PdfState { get; set; }
-
         public Submission Submission { get; set; }
+
     }
 }

@@ -30,6 +30,7 @@ namespace InternConnect.Context
         public DbSet<Submission> Submissions { get; set; }
         public DbSet<Track> Tracks { get; set; }
         public DbSet<WebState> WebState { get; set; }
+        public DbSet<AdminResponse> AdminResponses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -87,6 +88,7 @@ namespace InternConnect.Context
             modelBuilder.Entity<PdfState>().Property(s => s.IgaarpName).IsRequired();
             modelBuilder.Entity<PdfState>().Property(s => s.UstLogoFileName).IsRequired();
             modelBuilder.Entity<PdfState>().Property(s => s.CollegeLogoFileName).IsRequired();
+            modelBuilder.Entity<PdfState>().Property(s => s.DeanName).IsRequired(); 
 
             //Submissions
             modelBuilder.Entity<Submission>().HasKey(s => s.Id);
@@ -95,13 +97,22 @@ namespace InternConnect.Context
             modelBuilder.Entity<Submission>().Property(s => s.FirstName).IsRequired();
             modelBuilder.Entity<Submission>().Property(s => s.MiddleInitial).IsRequired();
             modelBuilder.Entity<Submission>().Property(s => s.StudentNumber).IsRequired();
-            modelBuilder.Entity<Submission>().Property(s => s.CompanyName).IsRequired();
-            modelBuilder.Entity<Submission>().Property(s => s.CompanyAddress).IsRequired();
             modelBuilder.Entity<Submission>().Property(s => s.AcceptanceLetterFileName).IsRequired();
             modelBuilder.Entity<Submission>().Property(s => s.CompanyProfileFileName).IsRequired();
+            modelBuilder.Entity<Submission>().Property(s => s.ContactPerson).IsRequired();
+            modelBuilder.Entity<Submission>().Property(s => s.ContactPersonEmail).IsRequired();
+            modelBuilder.Entity<Submission>().Property(s => s.ContactPersonPosition).IsRequired();
+            modelBuilder.Entity<Submission>().Property(s => s.IsoCode).IsRequired();
+
 
             modelBuilder.Entity<Submission>()
                 .HasOne(s => s.AcademicYear).WithOne(ay => ay.Submission).HasForeignKey<Submission>("AcademicYearId");
+
+            modelBuilder.Entity<Submission>()
+                .HasOne(s => s.Company).WithOne(c => c.Submission).HasForeignKey<Submission>("CompanyId");
+
+            modelBuilder.Entity<Submission>()
+                .HasOne(s => s.AdminResponse).WithOne(ar => ar.Submission).HasForeignKey<Submission>("AdminResponseId");
 
             //Authorization
             modelBuilder.Entity<Authorization>().HasKey(auth => auth.Id);
@@ -140,7 +151,7 @@ namespace InternConnect.Context
             //Companies
             modelBuilder.Entity<Company>().HasKey(c => c.Id);
             modelBuilder.Entity<Company>().Property(c=>c.Name).IsRequired();
-            modelBuilder.Entity<Company>().Property(c => c.Address).IsRequired();
+            modelBuilder.Entity<Company>().Property(c => c.AddressOne).IsRequired();
             modelBuilder.Entity<Company>().Property(c => c.City).IsRequired();
             modelBuilder.Entity<Company>()
                 .HasMany(c=>c.Opportunities).WithOne(o=>o.Company).HasForeignKey(o=>o.CompanyId);
@@ -151,6 +162,16 @@ namespace InternConnect.Context
             modelBuilder.Entity<Opportunity>().HasKey(o => o.Id);
             modelBuilder.Entity<Opportunity>().Property(o => o.Title).IsRequired();
             modelBuilder.Entity<Opportunity>().Property(o => o.Position).IsRequired();
+
+            //AdminResponse
+            modelBuilder.Entity<AdminResponse>().HasKey(ar => ar.Id);
+            modelBuilder.Entity<AdminResponse>().Property(ar => ar.AcceptedByChair).IsRequired();
+            modelBuilder.Entity<AdminResponse>().Property(ar => ar.AcceptedByCoordinator).IsRequired();
+            modelBuilder.Entity<AdminResponse>().Property(ar => ar.AcceptedByDean).IsRequired();
+            modelBuilder.Entity<AdminResponse>().Property(ar => ar.CompanyAgrees).IsRequired();
+            modelBuilder.Entity<AdminResponse>().Property(ar => ar.EmailSentByCoordinator).IsRequired();
+            
+
 
 
 
