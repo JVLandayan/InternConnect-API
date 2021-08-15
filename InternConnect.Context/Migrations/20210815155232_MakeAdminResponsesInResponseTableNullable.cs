@@ -2,7 +2,7 @@
 
 namespace InternConnect.Context.Migrations
 {
-    public partial class ConfigEventsRelationshipToAdminTable : Migration
+    public partial class MakeAdminResponsesInResponseTableNullable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

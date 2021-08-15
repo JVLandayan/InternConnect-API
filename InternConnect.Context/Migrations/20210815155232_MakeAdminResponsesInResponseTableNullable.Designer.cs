@@ -4,14 +4,16 @@ using InternConnect.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InternConnect.Context.Migrations
 {
     [DbContext(typeof(InternConnectContext))]
-    partial class InternConnectContextModelSnapshot : ModelSnapshot
+    [Migration("20210815155232_MakeAdminResponsesInResponseTableNullable")]
+    partial class MakeAdminResponsesInResponseTableNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,21 +125,23 @@ namespace InternConnect.Context.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool?>("AcceptedByChair")
+                        .IsRequired()
                         .HasColumnType("bit");
 
                     b.Property<bool?>("AcceptedByCoordinator")
+                        .IsRequired()
                         .HasColumnType("bit");
 
                     b.Property<bool?>("AcceptedByDean")
+                        .IsRequired()
                         .HasColumnType("bit");
 
-                    b.Property<string>("Comments")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool?>("CompanyAgrees")
+                        .IsRequired()
                         .HasColumnType("bit");
 
                     b.Property<bool?>("EmailSentByCoordinator")
+                        .IsRequired()
                         .HasColumnType("bit");
 
                     b.HasKey("Id");

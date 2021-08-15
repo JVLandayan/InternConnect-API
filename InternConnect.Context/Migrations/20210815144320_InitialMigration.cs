@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace InternConnect.Context.Migrations
 {
-    public partial class initialmigration : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,6 +20,23 @@ namespace InternConnect.Context.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Accounts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AdminResponses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AcceptedByCoordinator = table.Column<bool>(type: "bit", nullable: false),
+                    AcceptedByChair = table.Column<bool>(type: "bit", nullable: false),
+                    AcceptedByDean = table.Column<bool>(type: "bit", nullable: false),
+                    EmailSentByCoordinator = table.Column<bool>(type: "bit", nullable: false),
+                    CompanyAgrees = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AdminResponses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -42,12 +59,27 @@ namespace InternConnect.Context.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IgaarpName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DeanName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UstLogoFileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CollegeLogoFileName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PdfState", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Programs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsoCode = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Programs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -101,103 +133,21 @@ namespace InternConnect.Context.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Content",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    StateId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Content", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Content_WebState_StateId",
-                        column: x => x.StateId,
-                        principalTable: "WebState",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Submissions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SubmissionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MiddleInitial = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StudentNumber = table.Column<int>(type: "int", nullable: false),
-                    CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CompanyAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AcceptanceLetterFileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CompanyProfileFileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AcceptedByCoordinator = table.Column<bool>(type: "bit", nullable: false),
-                    AcceptedByChair = table.Column<bool>(type: "bit", nullable: false),
-                    AcceptedByDean = table.Column<bool>(type: "bit", nullable: false),
-                    EmailSentByCoordinator = table.Column<bool>(type: "bit", nullable: false),
-                    CompanyAgrees = table.Column<bool>(type: "bit", nullable: false),
-                    EndorsementFileName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Track = table.Column<int>(type: "int", nullable: false),
-                    AcademicYearId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Submissions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Submissions_AcademicYear_AcademicYearId",
-                        column: x => x.AcademicYearId,
-                        principalTable: "AcademicYear",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Companies",
+                name: "Tracks",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HeaderFileName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LogoFileName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContactPerson = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContentId = table.Column<int>(type: "int", nullable: false)
+                    ProgramId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Companies", x => x.Id);
+                    table.PrimaryKey("PK_Tracks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Companies_Content_ContentId",
-                        column: x => x.ContentId,
-                        principalTable: "Content",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Opportunities",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Position = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Introduction = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CompanyId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Opportunities", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Opportunities_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
+                        name: "FK_Tracks_Programs_ProgramId",
+                        column: x => x.ProgramId,
+                        principalTable: "Programs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -230,9 +180,70 @@ namespace InternConnect.Context.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Admins_Programs_ProgramId",
+                        column: x => x.ProgramId,
+                        principalTable: "Programs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Admins_Sections_SectionId",
                         column: x => x.SectionId,
                         principalTable: "Sections",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Students",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AddedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SectionId = table.Column<int>(type: "int", nullable: false),
+                    AccountId = table.Column<int>(type: "int", nullable: false),
+                    SubmissionId = table.Column<int>(type: "int", nullable: false),
+                    ProgramId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Students", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Students_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Students_Programs_ProgramId",
+                        column: x => x.ProgramId,
+                        principalTable: "Programs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Students_Sections_SectionId",
+                        column: x => x.SectionId,
+                        principalTable: "Sections",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Content",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StateId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Content", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Content_WebState_StateId",
+                        column: x => x.StateId,
+                        principalTable: "WebState",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -282,83 +293,104 @@ namespace InternConnect.Context.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Programs",
+                name: "Companies",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EventId = table.Column<int>(type: "int", nullable: true)
+                    AddressOne = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AddressTwo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AddressThree = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HeaderFileName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LogoFileName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContentId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Programs", x => x.Id);
+                    table.PrimaryKey("PK_Companies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Programs_Events_EventId",
-                        column: x => x.EventId,
-                        principalTable: "Events",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Students",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AddedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SectionId = table.Column<int>(type: "int", nullable: false),
-                    AccountId = table.Column<int>(type: "int", nullable: false),
-                    SubmissionId = table.Column<int>(type: "int", nullable: false),
-                    ProgramId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Students", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Students_Accounts_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Students_Programs_ProgramId",
-                        column: x => x.ProgramId,
-                        principalTable: "Programs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Students_Sections_SectionId",
-                        column: x => x.SectionId,
-                        principalTable: "Sections",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Students_Submissions_SubmissionId",
-                        column: x => x.SubmissionId,
-                        principalTable: "Submissions",
+                        name: "FK_Companies_Content_ContentId",
+                        column: x => x.ContentId,
+                        principalTable: "Content",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tracks",
+                name: "Opportunities",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProgramId = table.Column<int>(type: "int", nullable: false)
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Position = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Introduction = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CompanyId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tracks", x => x.Id);
+                    table.PrimaryKey("PK_Opportunities", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Tracks_Programs_ProgramId",
-                        column: x => x.ProgramId,
-                        principalTable: "Programs",
+                        name: "FK_Opportunities_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Submissions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsoCode = table.Column<int>(type: "int", nullable: false),
+                    SubmissionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MiddleInitial = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StudentNumber = table.Column<int>(type: "int", nullable: false),
+                    ContactPerson = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContactPersonEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContactPersonPosition = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AcceptanceLetterFileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyProfileFileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EndorsementFileName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TrackId = table.Column<int>(type: "int", nullable: false),
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    AcademicYearId = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    AdminResponseId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Submissions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Submissions_AcademicYear_AcademicYearId",
+                        column: x => x.AcademicYearId,
+                        principalTable: "AcademicYear",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Submissions_AdminResponses_AdminResponseId",
+                        column: x => x.AdminResponseId,
+                        principalTable: "AdminResponses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Submissions_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Submissions_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -420,11 +452,6 @@ namespace InternConnect.Context.Migrations
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Programs_EventId",
-                table: "Programs",
-                column: "EventId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Students_AccountId",
                 table: "Students",
                 column: "AccountId",
@@ -443,44 +470,39 @@ namespace InternConnect.Context.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Students_SubmissionId",
-                table: "Students",
-                column: "SubmissionId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Submissions_AcademicYearId",
                 table: "Submissions",
                 column: "AcademicYearId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Submissions_AdminResponseId",
+                table: "Submissions",
+                column: "AdminResponseId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Submissions_CompanyId",
+                table: "Submissions",
+                column: "CompanyId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Submissions_StudentId",
+                table: "Submissions",
+                column: "StudentId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tracks_ProgramId",
                 table: "Tracks",
                 column: "ProgramId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Admins_Programs_ProgramId",
-                table: "Admins",
-                column: "ProgramId",
-                principalTable: "Programs",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Admins_Accounts_AccountId",
-                table: "Admins");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Admins_Authorizations_AuthId",
-                table: "Admins");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Admins_Programs_ProgramId",
-                table: "Admins");
+            migrationBuilder.DropTable(
+                name: "Events");
 
             migrationBuilder.DropTable(
                 name: "Logs");
@@ -489,46 +511,46 @@ namespace InternConnect.Context.Migrations
                 name: "Opportunities");
 
             migrationBuilder.DropTable(
-                name: "Students");
+                name: "Submissions");
 
             migrationBuilder.DropTable(
                 name: "Tracks");
 
             migrationBuilder.DropTable(
-                name: "Companies");
-
-            migrationBuilder.DropTable(
-                name: "Submissions");
-
-            migrationBuilder.DropTable(
-                name: "Content");
+                name: "Admins");
 
             migrationBuilder.DropTable(
                 name: "AcademicYear");
 
             migrationBuilder.DropTable(
-                name: "WebState");
+                name: "AdminResponses");
 
             migrationBuilder.DropTable(
-                name: "PdfState");
+                name: "Companies");
 
             migrationBuilder.DropTable(
-                name: "Accounts");
+                name: "Students");
 
             migrationBuilder.DropTable(
                 name: "Authorizations");
 
             migrationBuilder.DropTable(
+                name: "PdfState");
+
+            migrationBuilder.DropTable(
+                name: "Content");
+
+            migrationBuilder.DropTable(
+                name: "Accounts");
+
+            migrationBuilder.DropTable(
                 name: "Programs");
 
             migrationBuilder.DropTable(
-                name: "Events");
-
-            migrationBuilder.DropTable(
-                name: "Admins");
-
-            migrationBuilder.DropTable(
                 name: "Sections");
+
+            migrationBuilder.DropTable(
+                name: "WebState");
         }
     }
 }

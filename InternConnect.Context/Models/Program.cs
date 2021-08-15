@@ -19,7 +19,6 @@ namespace InternConnect.Context.Models
 
         public Admin Admin { get; set; }
 
-        public Event Event { get; set; }
 
     }
 }

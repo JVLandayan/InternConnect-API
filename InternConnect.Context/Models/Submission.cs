@@ -23,6 +23,7 @@ namespace InternConnect.Context.Models
         public string JobDescription { get; set; }
         public string EndorsementFileName { get; set; }
         public int TrackId { get; set; }
+        public int StudentId { get; set; }
         public Student Student { get; set; }
         public int AcademicYearId { get; set; }
         public AcademicYear AcademicYear { get; set; }

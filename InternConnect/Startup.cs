@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using InternConnect.Context;
+using InternConnect.Profiles;
 using Newtonsoft.Json.Serialization;
 
 namespace InternConnect
@@ -40,7 +41,6 @@ namespace InternConnect
             });
 
 
-            //services.ConfigureCors();
             //services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
             services.AddDbContext<InternConnectContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("InternConnectAppCon")));
@@ -49,6 +49,8 @@ namespace InternConnect
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "InternConnect", Version = "v1" });
             });
+
+            services.AddAutoMapper(typeof(InternConnectMappings));
 
             //JSON Serializer
             services.AddControllers()

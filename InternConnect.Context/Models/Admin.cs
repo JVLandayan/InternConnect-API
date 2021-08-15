@@ -13,11 +13,10 @@ namespace InternConnect.Context.Models
         public int AuthId { get; set; }
         public Authorization Authorization { get; set; }
 
-
-        public int ProgramId { get; set; }
+        public int? ProgramId { get; set; }
         public Program Program { get; set; }
 
-        public int SectionId { get; set; }
+        public int? SectionId { get; set; }
 
         public Section Section { get; set; }
 

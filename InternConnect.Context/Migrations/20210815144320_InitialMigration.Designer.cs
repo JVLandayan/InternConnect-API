@@ -4,14 +4,16 @@ using InternConnect.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InternConnect.Context.Migrations
 {
     [DbContext(typeof(InternConnectContext))]
-    partial class InternConnectContextModelSnapshot : ModelSnapshot
+    [Migration("20210815144320_InitialMigration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,10 +89,10 @@ namespace InternConnect.Context.Migrations
                     b.Property<int>("AuthId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProgramId")
+                    b.Property<int>("ProgramId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SectionId")
+                    b.Property<int>("SectionId")
                         .HasColumnType("int");
 
                     b.Property<string>("StampFileName")
@@ -105,12 +107,10 @@ namespace InternConnect.Context.Migrations
                         .IsUnique();
 
                     b.HasIndex("ProgramId")
-                        .IsUnique()
-                        .HasFilter("[ProgramId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("SectionId")
-                        .IsUnique()
-                        .HasFilter("[SectionId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Admins");
                 });
@@ -122,22 +122,19 @@ namespace InternConnect.Context.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool?>("AcceptedByChair")
+                    b.Property<bool>("AcceptedByChair")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("AcceptedByCoordinator")
+                    b.Property<bool>("AcceptedByCoordinator")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("AcceptedByDean")
+                    b.Property<bool>("AcceptedByDean")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Comments")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("CompanyAgrees")
+                    b.Property<bool>("CompanyAgrees")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("EmailSentByCoordinator")
+                    b.Property<bool>("EmailSentByCoordinator")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -391,6 +388,9 @@ namespace InternConnect.Context.Migrations
                     b.Property<int>("SectionId")
                         .HasColumnType("int");
 
+                    b.Property<int>("SubmissionId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId")
@@ -485,7 +485,8 @@ namespace InternConnect.Context.Migrations
                     b.HasIndex("CompanyId")
                         .IsUnique();
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("StudentId")
+                        .IsUnique();
 
                     b.ToTable("Submissions");
                 });
@@ -558,11 +559,15 @@ namespace InternConnect.Context.Migrations
 
                     b.HasOne("InternConnect.Context.Models.Program", "Program")
                         .WithOne("Admin")
-                        .HasForeignKey("InternConnect.Context.Models.Admin", "ProgramId");
+                        .HasForeignKey("InternConnect.Context.Models.Admin", "ProgramId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("InternConnect.Context.Models.Section", "Section")
                         .WithOne("Admin")
-                        .HasForeignKey("InternConnect.Context.Models.Admin", "SectionId");
+                        .HasForeignKey("InternConnect.Context.Models.Admin", "SectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Account");
 
@@ -676,8 +681,8 @@ namespace InternConnect.Context.Migrations
                         .IsRequired();
 
                     b.HasOne("InternConnect.Context.Models.Student", "Student")
-                        .WithMany("Submissions")
-                        .HasForeignKey("StudentId")
+                        .WithOne("Submission")
+                        .HasForeignKey("InternConnect.Context.Models.Submission", "StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -765,7 +770,7 @@ namespace InternConnect.Context.Migrations
 
             modelBuilder.Entity("InternConnect.Context.Models.Student", b =>
                 {
-                    b.Navigation("Submissions");
+                    b.Navigation("Submission");
                 });
 
             modelBuilder.Entity("InternConnect.Context.Models.WebState", b =>

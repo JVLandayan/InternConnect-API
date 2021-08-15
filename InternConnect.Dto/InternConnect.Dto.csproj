@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -21,6 +21,27 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Content\" />
+    <Folder Include="AdminResponse\" />
+    <Folder Include="Authorization\" />
+    <Folder Include="Company\" />
+    <Folder Include="Event\" />
+    <Folder Include="Logs\" />
+    <Folder Include="Opportunity\" />
+    <Folder Include="Track\" />
+    <Folder Include="WebState\" />
+    <Folder Include="Submission\" />
+    <Folder Include="Student\" />
+    <Folder Include="Section\" />
+    <Folder Include="Program\" />
+    <Folder Include="PdfState\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InternConnect.Context\InternConnect.Context.csproj" />
   </ItemGroup>
 
 </Project>

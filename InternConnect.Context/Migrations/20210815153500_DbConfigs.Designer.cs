@@ -4,14 +4,16 @@ using InternConnect.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InternConnect.Context.Migrations
 {
     [DbContext(typeof(InternConnectContext))]
-    partial class InternConnectContextModelSnapshot : ModelSnapshot
+    [Migration("20210815153500_DbConfigs")]
+    partial class DbConfigs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,22 +124,19 @@ namespace InternConnect.Context.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool?>("AcceptedByChair")
+                    b.Property<bool>("AcceptedByChair")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("AcceptedByCoordinator")
+                    b.Property<bool>("AcceptedByCoordinator")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("AcceptedByDean")
+                    b.Property<bool>("AcceptedByDean")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Comments")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("CompanyAgrees")
+                    b.Property<bool>("CompanyAgrees")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("EmailSentByCoordinator")
+                    b.Property<bool>("EmailSentByCoordinator")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");

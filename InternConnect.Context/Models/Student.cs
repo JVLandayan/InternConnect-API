@@ -20,8 +20,7 @@ namespace InternConnect.Context.Models
         public int AccountId { get; set; }
         public Account Account { get; set; }
 
-        public int SubmissionId { get; set; }
-        public Submission Submission { get; set; }
+        public List<Submission> Submissions { get; set; }
 
         public int ProgramId { get; set; }
         public Program Program { get; set; }
