@@ -40,17 +40,14 @@ namespace InternConnect
                 });
             });
 
-
-            //services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
-
             services.AddDbContext<InternConnectContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("InternConnectAppCon")));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "InternConnect", Version = "v1" });
             });
-
             services.AddAutoMapper(typeof(InternConnectMappings));
+
 
             //JSON Serializer
             services.AddControllers()
