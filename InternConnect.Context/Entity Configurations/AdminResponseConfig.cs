@@ -14,6 +14,7 @@ namespace InternConnect.Context.Entity_Configurations
         public void Configure(EntityTypeBuilder<AdminResponse> modelBuilder)
         {
             modelBuilder.HasKey(ar => ar.Id);
+            modelBuilder.Property(ar => ar.Comments).IsRequired(false);
 
         }
     }

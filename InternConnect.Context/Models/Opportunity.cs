@@ -15,5 +15,6 @@ namespace InternConnect.Context.Models
         public int CompanyId { get; set; }
         public Company Company { get; set; }
 
+
     }
 }

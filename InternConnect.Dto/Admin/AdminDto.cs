@@ -33,7 +33,7 @@ namespace InternConnect.Dto.Admin
             public Section Section { get; set; }
 
             public int AccountId { get; set; }
-            public Account Account { get; set; }
+            public Context.Models.Account Account { get; set; }
 
             public List<Logs> Logs { get; set; }
             public List<Event> Events { get; set; }

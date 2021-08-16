@@ -14,5 +14,8 @@ namespace InternConnect.Context.Models
         public string UstLogoFileName { get; set; }
         public string CollegeLogoFileName { get; set; }
         public AcademicYear AcademicYear { get; set; }
+
     }
+
+    
 }

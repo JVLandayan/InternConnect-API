@@ -9,7 +9,6 @@ namespace InternConnect.Context.Models
     public class Company
     {
         public int Id { get; set; }
-
         public string Name { get; set; }
         public string AddressOne { get; set; }
         public string AddressTwo { get; set; }
@@ -19,7 +18,6 @@ namespace InternConnect.Context.Models
         public string LogoFileName { get; set; }
         public string Description { get; set; }
         public int ContentId { get; set; }
-        public Content Content { get; set; }
         public List<Opportunity> Opportunities { get; set; }
         public Submission Submission { get; set; }
 

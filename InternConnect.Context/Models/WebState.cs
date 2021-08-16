@@ -11,7 +11,6 @@ namespace InternConnect.Context.Models
         public int Id { get; set; }
         public string LogoFileName { get; set; }
         public string CoverPhotoFileName { get; set; }
-        public Content Content { get; set; }
 
     }
 }
