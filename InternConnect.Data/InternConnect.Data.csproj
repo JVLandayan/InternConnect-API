@@ -23,4 +23,8 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\InternConnect.Context\InternConnect.Context.csproj" />
+  </ItemGroup>
+
 </Project>

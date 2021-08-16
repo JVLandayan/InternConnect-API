@@ -17,7 +17,7 @@ namespace InternConnect.Dto.Program
 
             public int? IsoCode { get; set; }
 
-            public List<Track> Tracks { get; set; }
+            public List<Context.Models.Track> Tracks { get; set; }
 
         }
 

@@ -21,7 +21,7 @@ namespace InternConnect.Dto.Company
             public string HeaderFileName { get; set; }
             public string LogoFileName { get; set; }
             public string Description { get; set; }
-            public List<Opportunity> Opportunities { get; set; }
+            public List<Context.Models.Opportunity> Opportunities { get; set; }
         }
 
         public class UpdateCompany

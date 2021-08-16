@@ -51,7 +51,7 @@ namespace InternConnect.Dto.AdminResponse
             public bool EmailSentByCoordinator { get; set; }
             public bool CompanyAgrees { get; set; }
             public string Comments { get; set; }
-            public Submission Submission { get; set; }
+            public Context.Models.Submission Submission { get; set; }
 
         }
     }

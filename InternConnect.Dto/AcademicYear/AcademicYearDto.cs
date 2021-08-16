@@ -19,7 +19,7 @@ namespace InternConnect.Dto.AcademicYear
             public DateTime EndDate { get; set; }
             public string IgaarpEmail { get; set; }
             public int PdfStateId { get; set; }
-            public PdfState PdfState { get; set; }
+            public Context.Models.PdfState PdfState { get; set; }
         }
 
         public class AddAcademicYear
