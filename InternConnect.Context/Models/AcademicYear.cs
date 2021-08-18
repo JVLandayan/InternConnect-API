@@ -13,9 +13,6 @@ namespace InternConnect.Context.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string IgaarpEmail { get; set; }
-        public int PdfStateId { get; set; }
-        public PdfState PdfState { get; set; }
-        public Submission Submission { get; set; }
 
     }
 }

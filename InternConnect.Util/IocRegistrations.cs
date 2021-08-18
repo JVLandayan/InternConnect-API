@@ -31,7 +31,7 @@ namespace InternConnect.Util
             services.AddScoped<ITrackRepository, TrackRepository>();
             services.AddScoped<IWebStateRepository, WebStateRepository>();
 
-            //
+            //Services-ThirdParties
 
             return services;
         }

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using InternConnect.Dto.PdfState;
 
 namespace InternConnect.Dto.AcademicYear
 {
@@ -25,8 +26,6 @@ namespace InternConnect.Dto.AcademicYear
         public class AddAcademicYear
         {
             [Required]
-            public int Id { get; set; }
-            [Required]
             public string CollegeName { get; set; }
             [Required]
             public DateTime StartDate { get; set; }
@@ -34,6 +33,7 @@ namespace InternConnect.Dto.AcademicYear
             public DateTime EndDate { get; set; }
             [Required]
             public string IgaarpEmail { get; set; }
+
         }
 
         public class UpdateAcademicYear
@@ -48,6 +48,7 @@ namespace InternConnect.Dto.AcademicYear
             public DateTime EndDate { get; set; }
             [Required]
             public string IgaarpEmail { get; set; }
+            public Context.Models.PdfState PdfState { get; set; }
 
         }
     }

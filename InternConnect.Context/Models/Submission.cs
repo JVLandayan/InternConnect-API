@@ -25,13 +25,8 @@ namespace InternConnect.Context.Models
         public int TrackId { get; set; }
         public int StudentId { get; set; }
         public Student Student { get; set; }
-        public int AcademicYearId { get; set; }
-        public AcademicYear AcademicYear { get; set; }
         public int CompanyId { get; set; }
         public Company Company { get; set; }
-
-        public int AdminResponseId { get; set; }
-
         public AdminResponse AdminResponse { get; set; }
 
 

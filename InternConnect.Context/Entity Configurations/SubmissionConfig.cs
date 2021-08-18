@@ -26,14 +26,12 @@ namespace InternConnect.Context.Entity_Configurations
             modelBuilder.Property(s => s.ContactPersonPosition).IsRequired();
             modelBuilder.Property(s => s.IsoCode).IsRequired();
 
-            modelBuilder
-                .HasOne(s => s.AcademicYear).WithOne(ay => ay.Submission).HasForeignKey<Submission>("AcademicYearId");
 
             modelBuilder
                 .HasOne(s => s.Company).WithOne(c => c.Submission).HasForeignKey<Submission>("CompanyId");
 
             modelBuilder
-                .HasOne(s => s.AdminResponse).WithOne(ar => ar.Submission).HasForeignKey<Submission>("AdminResponseId");
+                .HasOne(s => s.AdminResponse).WithOne(ar => ar.Submission).HasForeignKey<AdminResponse>(s=>s.SubmissionId);
 
 
         }

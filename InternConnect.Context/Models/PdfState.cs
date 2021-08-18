@@ -13,7 +13,6 @@ namespace InternConnect.Context.Models
         public string DeanName { get; set; }
         public string UstLogoFileName { get; set; }
         public string CollegeLogoFileName { get; set; }
-        public AcademicYear AcademicYear { get; set; }
 
     }
 

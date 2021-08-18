@@ -36,16 +36,10 @@ namespace InternConnect.Context.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PdfStateId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PdfStateId")
-                        .IsUnique();
 
                     b.ToTable("AcademicYear");
                 });
@@ -140,7 +134,13 @@ namespace InternConnect.Context.Migrations
                     b.Property<bool?>("EmailSentByCoordinator")
                         .HasColumnType("bit");
 
+                    b.Property<int>("SubmissionId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SubmissionId")
+                        .IsUnique();
 
                     b.ToTable("AdminResponses");
                 });
@@ -181,9 +181,6 @@ namespace InternConnect.Context.Migrations
                     b.Property<string>("City")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ContentId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -392,15 +389,9 @@ namespace InternConnect.Context.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AcademicYearId")
-                        .HasColumnType("int");
-
                     b.Property<string>("AcceptanceLetterFileName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("AdminResponseId")
-                        .HasColumnType("int");
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
@@ -456,12 +447,6 @@ namespace InternConnect.Context.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AcademicYearId")
-                        .IsUnique();
-
-                    b.HasIndex("AdminResponseId")
-                        .IsUnique();
-
                     b.HasIndex("CompanyId")
                         .IsUnique();
 
@@ -511,17 +496,6 @@ namespace InternConnect.Context.Migrations
                     b.ToTable("WebState");
                 });
 
-            modelBuilder.Entity("InternConnect.Context.Models.AcademicYear", b =>
-                {
-                    b.HasOne("InternConnect.Context.Models.PdfState", "PdfState")
-                        .WithOne("AcademicYear")
-                        .HasForeignKey("InternConnect.Context.Models.AcademicYear", "PdfStateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PdfState");
-                });
-
             modelBuilder.Entity("InternConnect.Context.Models.Admin", b =>
                 {
                     b.HasOne("InternConnect.Context.Models.Account", "Account")
@@ -551,6 +525,17 @@ namespace InternConnect.Context.Migrations
                     b.Navigation("Program");
 
                     b.Navigation("Section");
+                });
+
+            modelBuilder.Entity("InternConnect.Context.Models.AdminResponse", b =>
+                {
+                    b.HasOne("InternConnect.Context.Models.Submission", "Submission")
+                        .WithOne("AdminResponse")
+                        .HasForeignKey("InternConnect.Context.Models.AdminResponse", "SubmissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Submission");
                 });
 
             modelBuilder.Entity("InternConnect.Context.Models.Event", b =>
@@ -615,18 +600,6 @@ namespace InternConnect.Context.Migrations
 
             modelBuilder.Entity("InternConnect.Context.Models.Submission", b =>
                 {
-                    b.HasOne("InternConnect.Context.Models.AcademicYear", "AcademicYear")
-                        .WithOne("Submission")
-                        .HasForeignKey("InternConnect.Context.Models.Submission", "AcademicYearId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("InternConnect.Context.Models.AdminResponse", "AdminResponse")
-                        .WithOne("Submission")
-                        .HasForeignKey("InternConnect.Context.Models.Submission", "AdminResponseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("InternConnect.Context.Models.Company", "Company")
                         .WithOne("Submission")
                         .HasForeignKey("InternConnect.Context.Models.Submission", "CompanyId")
@@ -638,10 +611,6 @@ namespace InternConnect.Context.Migrations
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("AcademicYear");
-
-                    b.Navigation("AdminResponse");
 
                     b.Navigation("Company");
 
@@ -659,11 +628,6 @@ namespace InternConnect.Context.Migrations
                     b.Navigation("Programs");
                 });
 
-            modelBuilder.Entity("InternConnect.Context.Models.AcademicYear", b =>
-                {
-                    b.Navigation("Submission");
-                });
-
             modelBuilder.Entity("InternConnect.Context.Models.Account", b =>
                 {
                     b.Navigation("Admin");
@@ -678,11 +642,6 @@ namespace InternConnect.Context.Migrations
                     b.Navigation("Logs");
                 });
 
-            modelBuilder.Entity("InternConnect.Context.Models.AdminResponse", b =>
-                {
-                    b.Navigation("Submission");
-                });
-
             modelBuilder.Entity("InternConnect.Context.Models.Authorization", b =>
                 {
                     b.Navigation("Admin");
@@ -693,11 +652,6 @@ namespace InternConnect.Context.Migrations
                     b.Navigation("Opportunities");
 
                     b.Navigation("Submission");
-                });
-
-            modelBuilder.Entity("InternConnect.Context.Models.PdfState", b =>
-                {
-                    b.Navigation("AcademicYear");
                 });
 
             modelBuilder.Entity("InternConnect.Context.Models.Program", b =>
@@ -719,6 +673,11 @@ namespace InternConnect.Context.Migrations
             modelBuilder.Entity("InternConnect.Context.Models.Student", b =>
                 {
                     b.Navigation("Submissions");
+                });
+
+            modelBuilder.Entity("InternConnect.Context.Models.Submission", b =>
+                {
+                    b.Navigation("AdminResponse");
                 });
 #pragma warning restore 612, 618
         }

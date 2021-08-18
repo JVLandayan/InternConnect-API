@@ -18,9 +18,6 @@ namespace InternConnect.Context.Entity_Configurations
             modelBuilder.Property(ay => ay.StartDate).IsRequired();
             modelBuilder.Property(ay => ay.IgaarpEmail).IsRequired();
             modelBuilder.Property(ay => ay.EndDate).IsRequired();
-            modelBuilder
-                .HasOne(ay => ay.PdfState)
-                .WithOne(s => s.AcademicYear).HasForeignKey<AcademicYear>("PdfStateId");
 
         }
 

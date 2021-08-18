@@ -17,7 +17,6 @@ namespace InternConnect.Dto.PdfState
             public string DeanName { get; set; }
             public string UstLogoFileName { get; set; }
             public string CollegeLogoFileName { get; set; }
-            public Context.Models.AcademicYear AcademicYear { get; set; }
         }
 
         public class UpdatePdfState
@@ -34,5 +33,16 @@ namespace InternConnect.Dto.PdfState
             public string CollegeLogoFileName { get; set; }
         }
 
+        public class AddPdfState
+        {
+            [Required]
+            public string IgaarpName { get; set; }
+            [Required]
+            public string DeanName { get; set; }
+            [Required]
+            public string UstLogoFileName { get; set; }
+            [Required]
+            public string CollegeLogoFileName { get; set; }
+        }
     }
 }

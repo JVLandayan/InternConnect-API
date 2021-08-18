@@ -5,8 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Main\Interfaces\" />
-    <Folder Include="Main\Repositories\" />
     <Folder Include="ThirdParty\Interfaces\" />
     <Folder Include="ThirdParty\Repositories\" />
   </ItemGroup>
@@ -28,6 +26,12 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InternConnect.Context\InternConnect.Context.csproj" />
+    <ProjectReference Include="..\InternConnect.Data\InternConnect.Data.csproj" />
+    <ProjectReference Include="..\InternConnect.Dto\InternConnect.Dto.csproj" />
   </ItemGroup>
 
 </Project>

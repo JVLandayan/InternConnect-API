@@ -15,7 +15,6 @@ namespace InternConnect.Context.Entity_Configurations
         {
             modelBuilder.HasKey(ar => ar.Id);
             modelBuilder.Property(ar => ar.Comments).IsRequired(false);
-
         }
     }
 }

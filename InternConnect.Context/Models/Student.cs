@@ -13,7 +13,6 @@ namespace InternConnect.Context.Models
         public DateTime DateAdded { get; set; }
         public string AddedBy { get; set; }
 
-
         public int SectionId { get; set; }
         public Section Section { get; set; }
 

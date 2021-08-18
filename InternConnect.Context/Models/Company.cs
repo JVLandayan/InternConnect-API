@@ -17,7 +17,6 @@ namespace InternConnect.Context.Models
         public string HeaderFileName { get; set; }
         public string LogoFileName { get; set; }
         public string Description { get; set; }
-        public int ContentId { get; set; }
         public List<Opportunity> Opportunities { get; set; }
         public Submission Submission { get; set; }
 
