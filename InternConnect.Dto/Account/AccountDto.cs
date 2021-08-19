@@ -14,12 +14,15 @@ namespace InternConnect.Dto.Account
         {
             public int Id { get; set; }
             public string Email { get; set; }
+            public Context.Models.Student Student { get; set; }
+            public Context.Models.Admin Admin { get; set; }
 
         }
         public class AddAccount
         {
             [Required]
             public string Email { get; set; }
+            public Context.Models.Admin Admin { get; set; } 
         }
         public class UpdateAccount
         {

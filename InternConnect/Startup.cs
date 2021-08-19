@@ -12,8 +12,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using InternConnect.Context;
+using InternConnect.Data;
+using InternConnect.Data.Interfaces;
+using InternConnect.Data.Repositories;
 using InternConnect.Profiles;
+using InternConnect.Service.Main.Repositories;
 using Newtonsoft.Json.Serialization;
+using InternConnect.Util;
 
 namespace InternConnect
 {
@@ -48,12 +53,16 @@ namespace InternConnect
             });
             services.AddAutoMapper(typeof(InternConnectMappings));
 
-
             //JSON Serializer
             services.AddControllers()
-                .AddNewtonsoftJson(s => {
+                .AddNewtonsoftJson(s =>
+                {
                     s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 });
+
+            services.AddAppSettingsConfig(Configuration);
+
+
 
         }
 
@@ -68,10 +77,8 @@ namespace InternConnect
             }
 
             app.UseRouting();
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
             app.UseCors("EnableCORS");
-            
+
             //JWT
             //app.UseAuthentication();
             //app.UseAuthorization();

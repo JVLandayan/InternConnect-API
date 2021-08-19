@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\InternConnect.Core\InternConnect.Service.csproj" />
     <ProjectReference Include="..\InternConnect.Data\InternConnect.Data.csproj" />
   </ItemGroup>
 

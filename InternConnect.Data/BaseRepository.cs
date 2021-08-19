@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using InternConnect.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace InternConnect.Data
@@ -11,45 +12,45 @@ namespace InternConnect.Data
     public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
 
-        protected readonly DbContext Context;
-        public BaseRepository(DbContext context)
+        private readonly DbContext _context;
+        public BaseRepository(InternConnectContext context)
         {
-            Context = context;
+            _context = context;
         }
 
         public void Add(T entity)
         {
-            Context.Set<T>().Add(entity);
+            _context.Set<T>().Add(entity);
         }
 
         public void AddRange(IEnumerable<T> entities)
         {
-            Context.Set<T>().AddRange(entities);
+            _context.Set<T>().AddRange(entities);
         }
 
         public void Remove(T entity)
         {
-            Context.Set<T>().Remove(entity);
+            _context.Set<T>().Remove(entity);
         }
 
         public void RemoveRange(IEnumerable<T> entities)
         {
-            Context.Set<T>().RemoveRange(entities);
+            _context.Set<T>().RemoveRange(entities);
         }
 
         public IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
         {
-            return Context.Set<T>().Where(predicate);
+            return _context.Set<T>().Where(predicate);
         }
 
         public T Get(int id)
         {
-            return Context.Set<T>().Find(id);
+            return _context.Set<T>().Find(id);
         }
 
         public IEnumerable<T> GetAll()
         {
-            return Context.Set<T>().ToList();
+            return _context.Set<T>().ToList();
         }
 
 
