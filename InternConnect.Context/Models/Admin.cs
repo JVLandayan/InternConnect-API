@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace InternConnect.Context.Models
 {
@@ -21,6 +23,8 @@ namespace InternConnect.Context.Models
         public Section Section { get; set; }
 
         public int AccountId { get; set; }
+        //[JsonIgnore]
+        //[IgnoreDataMember]
         public Account Account { get; set; }
 
         public List<Logs> Logs { get; set; }

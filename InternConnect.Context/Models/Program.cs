@@ -15,9 +15,9 @@ namespace InternConnect.Context.Models
 
         public List<Track> Tracks { get; set; }
         
-        public Student Student { get; set; }
+        public List<Student> Students { get; set; }
 
-        public Admin Admin { get; set; }
+        public List<Admin> Admins { get; set; }
 
     }
 }

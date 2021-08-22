@@ -9,7 +9,8 @@ namespace InternConnect.Data.Interfaces
 {
     public interface IAccountRepository : IBaseRepository<Account>
     {
-            
-    } 
+        IEnumerable<Account> GetAllAccountData();
 
+
+    }
 }

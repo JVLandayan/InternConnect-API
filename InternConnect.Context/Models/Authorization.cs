@@ -10,7 +10,8 @@ namespace InternConnect.Context.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public Admin Admin { get; set; }
+        
+        public List<Admin> Admins { get; set; }
 
     }
 }

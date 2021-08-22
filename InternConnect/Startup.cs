@@ -19,6 +19,7 @@ using InternConnect.Profiles;
 using InternConnect.Service.Main.Repositories;
 using Newtonsoft.Json.Serialization;
 using InternConnect.Util;
+using Newtonsoft.Json;
 
 namespace InternConnect
 {
@@ -58,6 +59,7 @@ namespace InternConnect
                 .AddNewtonsoftJson(s =>
                 {
                     s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    s.SerializerSettings.Formatting = Formatting.Indented;
                 });
 
             services.AddAppSettingsConfig(Configuration);

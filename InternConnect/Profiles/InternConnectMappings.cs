@@ -32,7 +32,10 @@ namespace InternConnect.Profiles
             CreateMap<AcademicYear, AcademicYearDto.UpdateAcademicYear>().ReverseMap();
 
             //Account
-            CreateMap<Account, AccountDto.AddAccount>().ReverseMap();
+            CreateMap<Account, AccountDto.MapAdmin>().ReverseMap();
+            CreateMap<Account, AccountDto.AddAccountStudent>().ReverseMap();
+            CreateMap<Account, AccountDto.AddAccountCoordinator>().ReverseMap();
+            CreateMap<Account, AccountDto.AddAccountChair>().ReverseMap();
             CreateMap<Account, AccountDto.ReadAccount>().ReverseMap();
             CreateMap<Account, AccountDto.UpdateAccount>().ReverseMap();
 

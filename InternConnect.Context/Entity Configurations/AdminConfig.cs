@@ -16,11 +16,11 @@ namespace InternConnect.Context.Entity_Configurations
 
             modelBuilder.HasKey(a => a.Id);
             modelBuilder
-                .HasOne(a => a.Authorization).WithOne(a => a.Admin).HasForeignKey<Admin>("AuthId");
+                .HasOne(a => a.Authorization).WithMany(a => a.Admins).HasForeignKey(a => a.AuthId);
             modelBuilder
-                .HasOne(a => a.Program).WithOne(p => p.Admin).HasForeignKey<Admin>("ProgramId");
+                .HasOne(a => a.Program).WithMany(p => p.Admins).HasForeignKey(a=>a.ProgramId);
             modelBuilder
-                .HasOne(a => a.Section).WithOne(s => s.Admin).HasForeignKey<Admin>("SectionId");
+                .HasOne(a => a.Section).WithMany(s => s.Admins).HasForeignKey(a=>a.SectionId);
             modelBuilder
                 .HasMany(a => a.Logs).WithOne(l => l.Admin).HasForeignKey(l => l.AdminId);
             modelBuilder

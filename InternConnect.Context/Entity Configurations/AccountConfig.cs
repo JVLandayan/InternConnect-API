@@ -18,6 +18,7 @@ namespace InternConnect.Context.Entity_Configurations
             modelBuilder.Property(a => a.Password).IsRequired();
             modelBuilder.Property(a => a.ResetKey).IsRequired();
 
+
         }
 
     }

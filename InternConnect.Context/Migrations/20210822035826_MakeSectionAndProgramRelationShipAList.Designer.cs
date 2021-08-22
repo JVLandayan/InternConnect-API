@@ -4,14 +4,16 @@ using InternConnect.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InternConnect.Context.Migrations
 {
     [DbContext(typeof(InternConnectContext))]
-    partial class InternConnectContextModelSnapshot : ModelSnapshot
+    [Migration("20210822035826_MakeSectionAndProgramRelationShipAList")]
+    partial class MakeSectionAndProgramRelationShipAList
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,7 +97,8 @@ namespace InternConnect.Context.Migrations
                     b.HasIndex("AccountId")
                         .IsUnique();
 
-                    b.HasIndex("AuthId");
+                    b.HasIndex("AuthId")
+                        .IsUnique();
 
                     b.HasIndex("ProgramId");
 
@@ -498,8 +501,8 @@ namespace InternConnect.Context.Migrations
                         .IsRequired();
 
                     b.HasOne("InternConnect.Context.Models.Authorization", "Authorization")
-                        .WithMany("Admins")
-                        .HasForeignKey("AuthId")
+                        .WithOne("Admin")
+                        .HasForeignKey("InternConnect.Context.Models.Admin", "AuthId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -637,7 +640,7 @@ namespace InternConnect.Context.Migrations
 
             modelBuilder.Entity("InternConnect.Context.Models.Authorization", b =>
                 {
-                    b.Navigation("Admins");
+                    b.Navigation("Admin");
                 });
 
             modelBuilder.Entity("InternConnect.Context.Models.Company", b =>

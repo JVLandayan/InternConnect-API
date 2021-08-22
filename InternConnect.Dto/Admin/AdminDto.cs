@@ -11,7 +11,6 @@ namespace InternConnect.Dto.Admin
     {
         public class AddAdmin
         {
-            
         }
 
         public class UpdateAdmin
@@ -33,7 +32,6 @@ namespace InternConnect.Dto.Admin
             public Context.Models.Section Section { get; set; }
 
             public int AccountId { get; set; }
-            public Context.Models.Account Account { get; set; }
 
             public List<Logs> Logs { get; set; }
             public List<Context.Models.Event> Events { get; set; }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using InternConnect.Context.Models;
+using InternConnect.Dto.Program;
+using InternConnect.Dto.Section;
 
 namespace InternConnect.Dto.Student
 {
@@ -15,9 +17,13 @@ namespace InternConnect.Dto.Student
             public DateTime DateAdded { get; set; }
             public string AddedBy { get; set; }
             public int SectionId { get; set; }
-            public Context.Models.Section Section { get; set; }
+            public SectionDto.ReadSection Section { get; set; }
             public int ProgramId { get; set; }
-            public Context.Models.Program Program { get; set; }
+            public ProgramDto.ReadProgram Program { get; set; }
+        }
+
+        public class AddStudent
+        {
 
         }
 
@@ -25,9 +31,9 @@ namespace InternConnect.Dto.Student
         {
             public int Id { get; set; }
             public int SectionId { get; set; }
-            public Context.Models.Section Section { get; set; }
+            public SectionDto.ReadSection Section { get; set; }
             public int ProgramId { get; set; }
-            public Context.Models.Program Program { get; set; }
+            public ProgramDto.ReadProgram Program { get; set; }
 
         }
 

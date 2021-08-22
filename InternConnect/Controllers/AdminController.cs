@@ -17,13 +17,13 @@ namespace InternConnect.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountsController : ControllerBase
+    public class AdminController : ControllerBase
     {
-        private readonly IAccountService _accountService;
+        private readonly IAdminService _adminService;
 
-        public AccountsController(IAccountService account, InternConnectContext context)
+        public AdminController(IAdminService admin, InternConnectContext context)
         {
-            _accountService = account;
+            _adminService = admin;
         }
 
         
@@ -37,7 +37,7 @@ namespace InternConnect.Controllers
 
         //Coordinators
         //Authorize AuthCoordinatorClaim
-        [HttpPost("coordinators")]
+        [HttpPut("admin")]
         public ActionResult<AccountDto.ReadAccount> AddCoordinators(AccountDto.AddAccountCoordinator payload)
         {
             _accountService.AddCoordinator(payload);
