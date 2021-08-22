@@ -4,11 +4,13 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data;
 using InternConnect.Dto.Account;
+using InternConnect.Dto.Submission;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
@@ -17,49 +19,44 @@ namespace InternConnect.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountsController : ControllerBase
+    public class SubmissionController : ControllerBase
     {
-        private readonly IAccountService _accountService;
+        private readonly ISubmissionService _submissionService;
 
-        public AccountsController(IAccountService account, InternConnectContext context)
+        public SubmissionController(ISubmissionService submission)
         {
-            _accountService = account;
+            _submissionService = submission;
         }
 
         
         //GET /accounts
+        [HttpGet("{id}")]
+        public ActionResult<IEnumerable<SubmissionDto.ReadSubmission>> GetSubmission(int id)
+        {
+            return Ok(_submissionService.GetSubmission(id));
+        }
+
         [HttpGet]
-        public ActionResult<IEnumerable<Account>> GetAllAccounts()
+        public ActionResult<IEnumerable<SubmissionDto.ReadSubmission>> GetAllSubmission()
         {
-            return Ok(_accountService.GetAll());
+            return Ok(_submissionService.GetAllSubmissions());
         }
 
-
-        //Coordinators
-        //Authorize AuthCoordinatorClaim
-        [HttpPost("coordinators")]
-        public ActionResult<AccountDto.ReadAccount> AddCoordinators(AccountDto.AddAccountCoordinator payload)
+        [HttpPut]
+        public ActionResult<SubmissionDto.ReadSubmission> UpdateSubmission(SubmissionDto.UpdateSubmission payload)
         {
-            _accountService.AddCoordinator(payload);
+            _submissionService.UpdateSubmission(payload);
             return Ok();
         }
 
-        //Authorize Student Claim
-        // POST accounts/student 
-        [HttpPost("student")]
-        public ActionResult<AccountDto.ReadAccount> AddStudents(AccountDto.AddAccountStudent payload)
+        [HttpPost]
+        public ActionResult AddSubmission(SubmissionDto.AddSubmission payload)
         {
-            _accountService.AddStudent(payload);
+            _submissionService.AddSubmission(payload);
             return Ok();
         }
-
         //Chairs
-        [HttpPost("chair")]
-        public ActionResult<AccountDto.ReadAccount> AddChairs(AccountDto.AddAccountChair payload)
-        {
-            _accountService.AddChair(payload);
-            return Ok();
-        }
+
 
         //[Authorize]
         //[HttpPut("{id}")]

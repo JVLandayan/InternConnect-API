@@ -9,6 +9,9 @@ using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data;
 using InternConnect.Dto.Account;
+using InternConnect.Dto.Admin;
+using InternConnect.Dto.Event;
+using InternConnect.Dto.Student;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
@@ -17,49 +20,53 @@ namespace InternConnect.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountsController : ControllerBase
+    public class EventController : ControllerBase
     {
-        private readonly IAccountService _accountService;
+        private readonly IEventService _eventsService;
 
-        public AccountsController(IAccountService account, InternConnectContext context)
+        public EventController(IEventService events)
         {
-            _accountService = account;
+            _eventsService = events;
         }
 
         
-        //GET /accounts
-        [HttpGet]
-        public ActionResult<IEnumerable<Account>> GetAllAccounts()
+        //GET /admin
+        [HttpGet("all/{adminId}")]
+        public ActionResult<IEnumerable<EventDto.ReadEvent>> GetAllEvents(int adminId)
         {
-            return Ok(_accountService.GetAll());
+            return Ok(_eventsService.GetAll(adminId));
         }
 
-
-        //Coordinators
-        //Authorize AuthCoordinatorClaim
-        [HttpPost("coordinators")]
-        public ActionResult<AccountDto.ReadAccount> AddCoordinators(AccountDto.AddAccountCoordinator payload)
+        //GET /admin/id
+        [HttpGet("{id}")]
+        public ActionResult<IEnumerable<EventDto.ReadEvent>> GetEvent(int id)
         {
-            _accountService.AddCoordinator(payload);
+            return Ok(_eventsService.GetbyId(id));
+        }
+
+        [HttpPost]
+        public ActionResult<EventDto.ReadEvent> AddEvent(EventDto.AddEvent payload)
+        {
+            _eventsService.AddEvent(payload);
             return Ok();
         }
 
-        //Authorize Student Claim
-        // POST accounts/student 
-        [HttpPost("student")]
-        public ActionResult<AccountDto.ReadAccount> AddStudents(AccountDto.AddAccountStudent payload)
+        [HttpPut("admin")]
+        public ActionResult<EventDto.ReadEvent> UpdateEvent(EventDto.UpdateEvent payload)
         {
-            _accountService.AddStudent(payload);
-            return Ok();
+            _eventsService.UpdateEvent(payload);
+            return NoContent();
         }
 
-        //Chairs
-        [HttpPost("chair")]
-        public ActionResult<AccountDto.ReadAccount> AddChairs(AccountDto.AddAccountChair payload)
-        {
-            _accountService.AddChair(payload);
-            return Ok();
-        }
+
+        //[HttpPut("admin/{id}")]
+        //public ActionResult<AccountDto.ReadAccount> UpdateSignature(AdminDto.UpdateAdmin payload, int id)
+        //{
+        //    _adminService.UpdateAdmin(payload, id);
+        //    return NoContent();
+        //}
+
+
 
         //[Authorize]
         //[HttpPut("{id}")]
@@ -101,22 +108,5 @@ namespace InternConnect.Controllers
         //    _repository.SaveChanges();
         //    return NoContent();
 
-        //}
-        //[Authorize]
-        //[HttpDelete("{id}")]
-        //public ActionResult DeleteMerch(int id)
-        //{
-        //    var photoFolderPath = _env.ContentRootPath + "/Photos/";
-        //    var teamModelFromRepo = _repository.GetTeamById(id);
-        //    if (teamModelFromRepo == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _repository.DeleteTeam(teamModelFromRepo);
-        //    System.IO.File.Delete(photoFolderPath + teamModelFromRepo.TeamsImage);
-        //    _repository.SaveChanges();
-        //    return NoContent();
-        //}
     }
 }

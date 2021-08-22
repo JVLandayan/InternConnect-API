@@ -18,22 +18,53 @@ namespace InternConnect.Util
         {
             //Data Repositories
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IAccountService, AccountService>();
+
             services.AddScoped<IAcademicYearRepository, AcademicYearRepository>();
+            services.AddScoped<IAcademicYearService, AcademicYearService>();
+
             services.AddScoped<IAdminRepository, AdminRepository>();
+            services.AddScoped<IAdminService, AdminService>();
+
             services.AddScoped<IAdminResponseRepository, AdminResponseRepository>();
+
+
             services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<ICompanyService, CompanyService>();
+
+
             services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<IEventService, EventService>();
+
             services.AddScoped<ILogsRepository, LogsRepository>();
+
             services.AddScoped<IOpportunityRepository, OpportunityRepository>();
+            services.AddScoped<IOpportunityService, OpportunityService>();
+            
+
             services.AddScoped<IPdfStateRepository, PdfStateRepository>();
+            services.AddScoped<IPdfStateService, PdfStateService>();
+
+
             services.AddScoped<IProgramRepository, ProgramRepository>();
+            services.AddScoped<IProgramService, ProgramService>();
+
             services.AddScoped<ISectionRepository, SectionRepository>();
+            services.AddScoped<ISectionService, SectionService>();
+
             services.AddScoped<IStudentRepository, StudentRepository>();
+            services.AddScoped<IStudentService, StudentService>();
+
             services.AddScoped<ISubmissionRepository, SubmissionRepository>();
+            services.AddScoped<ISubmissionService, SubmissionService>();
+
             services.AddScoped<ITrackRepository, TrackRepository>();
+            services.AddScoped<ITrackService, TrackService>();
+
             services.AddScoped<IWebStateRepository, WebStateRepository>();
+            services.AddScoped<IWebStateService, WebStateService>();
 
 
 

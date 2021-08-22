@@ -40,7 +40,7 @@ namespace InternConnect.Profiles
             CreateMap<Account, AccountDto.UpdateAccount>().ReverseMap();
 
             //Admin
-            CreateMap<Admin, AdminDto.AddAdmin>().ReverseMap();
+
             CreateMap<Admin, AdminDto.UpdateAdmin>().ReverseMap();
             CreateMap<Admin, AdminDto.ReadAdmin>().ReverseMap();
 
@@ -78,6 +78,7 @@ namespace InternConnect.Profiles
             CreateMap<Context.Models.Program, ProgramDto.ReadProgram>().ReverseMap();
             CreateMap<Context.Models.Program, ProgramDto.AddProgram>().ReverseMap();
             CreateMap<Context.Models.Program, ProgramDto.UpdateProgram>().ReverseMap();
+            CreateMap<Context.Models.Program, ProgramDto.UpdateIsoCode>().ReverseMap();
 
             //Section
             CreateMap<Section, SectionDto.AddSection>().ReverseMap();

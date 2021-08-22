@@ -9,6 +9,9 @@ using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data;
 using InternConnect.Dto.Account;
+using InternConnect.Dto.Admin;
+using InternConnect.Dto.Section;
+using InternConnect.Dto.Student;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
@@ -17,49 +20,47 @@ namespace InternConnect.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountsController : ControllerBase
+    public class SectionController : ControllerBase
     {
-        private readonly IAccountService _accountService;
+        private readonly ISectionService _sectionService;
 
-        public AccountsController(IAccountService account, InternConnectContext context)
+        public SectionController(ISectionService section)
         {
-            _accountService = account;
+            _sectionService = section;
         }
 
         
-        //GET /accounts
+        //GET /admin
         [HttpGet]
-        public ActionResult<IEnumerable<Account>> GetAllAccounts()
+        public ActionResult<IEnumerable<SectionDto.ReadSection>> GetAllSections()
         {
-            return Ok(_accountService.GetAll());
+            return Ok(_sectionService.GetAll());
+        }
+
+        //GET /admin/id
+        [HttpGet("{id}")]
+        public ActionResult<IEnumerable<SectionDto.ReadSection>> GetSection(int id)
+        {
+            return Ok(_sectionService.GetbyId(id));
         }
 
 
-        //Coordinators
-        //Authorize AuthCoordinatorClaim
-        [HttpPost("coordinators")]
-        public ActionResult<AccountDto.ReadAccount> AddCoordinators(AccountDto.AddAccountCoordinator payload)
+
+        [HttpPut]
+        public ActionResult<SectionDto.ReadSection> UpdateSection(SectionDto.UpdateSection payload)
         {
-            _accountService.AddCoordinator(payload);
+            _sectionService.UpdateSection(payload);
+            return NoContent();
+        }
+
+        [HttpPost]
+        public ActionResult<SectionDto.ReadSection> AddSection(SectionDto.AddSection payload)
+        {
+            _sectionService.AddSection(payload);
             return Ok();
         }
 
-        //Authorize Student Claim
-        // POST accounts/student 
-        [HttpPost("student")]
-        public ActionResult<AccountDto.ReadAccount> AddStudents(AccountDto.AddAccountStudent payload)
-        {
-            _accountService.AddStudent(payload);
-            return Ok();
-        }
 
-        //Chairs
-        [HttpPost("chair")]
-        public ActionResult<AccountDto.ReadAccount> AddChairs(AccountDto.AddAccountChair payload)
-        {
-            _accountService.AddChair(payload);
-            return Ok();
-        }
 
         //[Authorize]
         //[HttpPut("{id}")]
@@ -101,22 +102,5 @@ namespace InternConnect.Controllers
         //    _repository.SaveChanges();
         //    return NoContent();
 
-        //}
-        //[Authorize]
-        //[HttpDelete("{id}")]
-        //public ActionResult DeleteMerch(int id)
-        //{
-        //    var photoFolderPath = _env.ContentRootPath + "/Photos/";
-        //    var teamModelFromRepo = _repository.GetTeamById(id);
-        //    if (teamModelFromRepo == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _repository.DeleteTeam(teamModelFromRepo);
-        //    System.IO.File.Delete(photoFolderPath + teamModelFromRepo.TeamsImage);
-        //    _repository.SaveChanges();
-        //    return NoContent();
-        //}
     }
 }

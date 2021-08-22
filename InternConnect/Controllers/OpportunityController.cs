@@ -4,11 +4,14 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data;
 using InternConnect.Dto.Account;
+using InternConnect.Dto.Company;
+using InternConnect.Dto.Opportunity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
@@ -17,49 +20,56 @@ namespace InternConnect.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountsController : ControllerBase
+    public class OpportunityController : ControllerBase
     {
-        private readonly IAccountService _accountService;
+        private readonly IOpportunityService _opportunityService;
 
-        public AccountsController(IAccountService account, InternConnectContext context)
+        public OpportunityController(IOpportunityService opportunity)
         {
-            _accountService = account;
+            _opportunityService = opportunity;
         }
 
         
         //GET /accounts
-        [HttpGet]
-        public ActionResult<IEnumerable<Account>> GetAllAccounts()
+        [HttpGet("{id}")]
+        public ActionResult<IEnumerable<OpportunityDto.ReadOpportunity>> GetOpportunity(int id)
         {
-            return Ok(_accountService.GetAll());
+            return Ok(_opportunityService.GetById(id));
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<OpportunityDto.ReadOpportunity>> GetAllOpportunity()
+        {
+            return Ok(_opportunityService.GetAllOpportunities());
         }
 
 
         //Coordinators
         //Authorize AuthCoordinatorClaim
-        [HttpPost("coordinators")]
-        public ActionResult<AccountDto.ReadAccount> AddCoordinators(AccountDto.AddAccountCoordinator payload)
+        [HttpDelete("{id}")]
+        public ActionResult DeleteOpportunity(int id)
         {
-            _accountService.AddCoordinator(payload);
+            _opportunityService.DeleteOpportunity(id);
             return Ok();
         }
 
         //Authorize Student Claim
         // POST accounts/student 
-        [HttpPost("student")]
-        public ActionResult<AccountDto.ReadAccount> AddStudents(AccountDto.AddAccountStudent payload)
+        [HttpPut]
+        public ActionResult<OpportunityDto.ReadOpportunity> UpdateOpportunity(OpportunityDto.UpdateOpportunity payload)
         {
-            _accountService.AddStudent(payload);
+            _opportunityService.UpdateOpportunity(payload);
             return Ok();
         }
 
-        //Chairs
-        [HttpPost("chair")]
-        public ActionResult<AccountDto.ReadAccount> AddChairs(AccountDto.AddAccountChair payload)
+        [HttpPost]
+        public ActionResult<OpportunityDto.ReadOpportunity> AddOpportunity(OpportunityDto.AddOpportunity payload)
         {
-            _accountService.AddChair(payload);
+            _opportunityService.AddOpportunity(payload);
             return Ok();
         }
+        //Chairs
+
 
         //[Authorize]
         //[HttpPut("{id}")]

@@ -16,7 +16,7 @@ namespace InternConnect.Dto.Opportunity
             public string Position { get; set; }
             public string Introduction { get; set; }
             public int CompanyId { get; set; }
-            public Context.Models.Company Company { get; set; }
+
         }
         public class UpdateOpportunity
         {
@@ -25,7 +25,7 @@ namespace InternConnect.Dto.Opportunity
             public string Position { get; set; }
             public string Introduction { get; set; }
             public int CompanyId { get; set; }
-            public Context.Models.Company Company { get; set; }
+
         }
         public class AddOpportunity
         {
@@ -33,7 +33,7 @@ namespace InternConnect.Dto.Opportunity
             public string Position { get; set; }
             public string Introduction { get; set; }
             public int CompanyId { get; set; }
-            public Context.Models.Company Company { get; set; }
+
         }
 
 

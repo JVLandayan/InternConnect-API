@@ -4,11 +4,13 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data;
 using InternConnect.Dto.Account;
+using InternConnect.Dto.Company;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
@@ -17,49 +19,56 @@ namespace InternConnect.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountsController : ControllerBase
+    public class CompanyController : ControllerBase
     {
-        private readonly IAccountService _accountService;
+        private readonly ICompanyService _companyService;
 
-        public AccountsController(IAccountService account, InternConnectContext context)
+        public CompanyController(ICompanyService company)
         {
-            _accountService = account;
+            _companyService = company;
         }
 
         
         //GET /accounts
-        [HttpGet]
-        public ActionResult<IEnumerable<Account>> GetAllAccounts()
+        [HttpGet("{id}")]
+        public ActionResult<IEnumerable<CompanyDto.ReadCompany>> GetCompany(int id)
         {
-            return Ok(_accountService.GetAll());
+            return Ok(_companyService.GetById(id));
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<CompanyDto.ReadCompany>> GetAllCompany()
+        {
+            return Ok(_companyService.GetAllCompanies());
         }
 
 
         //Coordinators
         //Authorize AuthCoordinatorClaim
-        [HttpPost("coordinators")]
-        public ActionResult<AccountDto.ReadAccount> AddCoordinators(AccountDto.AddAccountCoordinator payload)
+        [HttpDelete("{id}")]
+        public ActionResult DeleteCompany(int id)
         {
-            _accountService.AddCoordinator(payload);
+            _companyService.DeleteCompany(id);
             return Ok();
         }
 
         //Authorize Student Claim
         // POST accounts/student 
-        [HttpPost("student")]
-        public ActionResult<AccountDto.ReadAccount> AddStudents(AccountDto.AddAccountStudent payload)
+        [HttpPut]
+        public ActionResult<CompanyDto.ReadCompany> UpdateCompany(CompanyDto.UpdateCompany payload)
         {
-            _accountService.AddStudent(payload);
+            _companyService.UpdateCompany(payload);
             return Ok();
         }
 
-        //Chairs
-        [HttpPost("chair")]
-        public ActionResult<AccountDto.ReadAccount> AddChairs(AccountDto.AddAccountChair payload)
+        [HttpPost]
+        public ActionResult<CompanyDto.ReadCompany> AddCompany(CompanyDto.AddCompany payload)
         {
-            _accountService.AddChair(payload);
+            _companyService.AddCompany(payload);
             return Ok();
         }
+        //Chairs
+
 
         //[Authorize]
         //[HttpPut("{id}")]

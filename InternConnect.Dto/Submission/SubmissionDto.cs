@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using InternConnect.Dto.AdminResponse;
 
 namespace InternConnect.Dto.Submission
 {
@@ -50,6 +51,7 @@ namespace InternConnect.Dto.Submission
             public string JobDescription { get; set; }
             public int TrackId { get; set; }
             public int StudentId { get; set; }
+            public AdminResponseDto.AddResponse AdminResponse { get; set; }
         }
 
         public class AddSubmission
@@ -69,7 +71,8 @@ namespace InternConnect.Dto.Submission
             public string EndorsementFileName { get; set; }
             public int TrackId { get; set; }
             public int CompanyId { get; set; }
-            public Context.Models.Company Company { get; set; }
+            public int StudentId { get; set; }
+
 
         }
 

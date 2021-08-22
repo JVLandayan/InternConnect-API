@@ -17,7 +17,6 @@ namespace InternConnect.Dto.Event
             public DateTime StartDate { get; set; }
             public DateTime EndDate { get; set; }
             public int AdminId { get; set; }
-            public Context.Models.Admin Admin { get; set; }
         }
         public class AddEvent
         {
@@ -29,7 +28,6 @@ namespace InternConnect.Dto.Event
             public DateTime EndDate { get; set; }
             [Required]
             public int AdminId { get; set; }
-            public Context.Models.Admin Admin { get; set; }
         }
         public class UpdateEvent
         {
@@ -41,9 +39,6 @@ namespace InternConnect.Dto.Event
             public DateTime StartDate { get; set; }
             [Required]
             public DateTime EndDate { get; set; }
-            [Required]
-            public int AdminId { get; set; }
-            public Context.Models.Admin Admin { get; set; }
 
         }
 

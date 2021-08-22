@@ -28,7 +28,7 @@ namespace InternConnect.Context.Entity_Configurations
 
 
             modelBuilder
-                .HasOne(s => s.Company).WithOne(c => c.Submission).HasForeignKey<Submission>("CompanyId");
+                .HasOne(s => s.Company).WithMany(c => c.Submissions).HasForeignKey("CompanyId");
 
             modelBuilder
                 .HasOne(s => s.AdminResponse).WithOne(ar => ar.Submission).HasForeignKey<AdminResponse>(s=>s.SubmissionId);

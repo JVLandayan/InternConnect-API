@@ -9,6 +9,12 @@ using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data;
 using InternConnect.Dto.Account;
+using InternConnect.Dto.Admin;
+using InternConnect.Dto.PdfState;
+using InternConnect.Dto.Section;
+using InternConnect.Dto.Student;
+using InternConnect.Dto.Track;
+using InternConnect.Dto.WebState;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
@@ -17,49 +23,33 @@ namespace InternConnect.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountsController : ControllerBase
+    public class PdfStateController : ControllerBase
     {
-        private readonly IAccountService _accountService;
+        private readonly IPdfStateService _pdfStateService;
 
-        public AccountsController(IAccountService account, InternConnectContext context)
+        public PdfStateController(IPdfStateService pdfState)
         {
-            _accountService = account;
+            _pdfStateService = pdfState;
         }
 
-        
-        //GET /accounts
-        [HttpGet]
-        public ActionResult<IEnumerable<Account>> GetAllAccounts()
+        //GET /admin
+
+        //GET /admin/id
+        [HttpGet("{id}")]
+        public ActionResult<IEnumerable<PdfStateDto.ReadPdfState>> GetPdfState(int id)
         {
-            return Ok(_accountService.GetAll());
+            return Ok(_pdfStateService.GetPdfState(id));
         }
 
 
-        //Coordinators
-        //Authorize AuthCoordinatorClaim
-        [HttpPost("coordinators")]
-        public ActionResult<AccountDto.ReadAccount> AddCoordinators(AccountDto.AddAccountCoordinator payload)
+        [HttpPut]
+        public ActionResult<PdfStateDto.ReadPdfState> UpdatePdfState(PdfStateDto.UpdatePdfState payload)
         {
-            _accountService.AddCoordinator(payload);
-            return Ok();
+            _pdfStateService.UpdatePdfState(payload);
+            return NoContent();
         }
 
-        //Authorize Student Claim
-        // POST accounts/student 
-        [HttpPost("student")]
-        public ActionResult<AccountDto.ReadAccount> AddStudents(AccountDto.AddAccountStudent payload)
-        {
-            _accountService.AddStudent(payload);
-            return Ok();
-        }
 
-        //Chairs
-        [HttpPost("chair")]
-        public ActionResult<AccountDto.ReadAccount> AddChairs(AccountDto.AddAccountChair payload)
-        {
-            _accountService.AddChair(payload);
-            return Ok();
-        }
 
         //[Authorize]
         //[HttpPut("{id}")]
@@ -101,22 +91,5 @@ namespace InternConnect.Controllers
         //    _repository.SaveChanges();
         //    return NoContent();
 
-        //}
-        //[Authorize]
-        //[HttpDelete("{id}")]
-        //public ActionResult DeleteMerch(int id)
-        //{
-        //    var photoFolderPath = _env.ContentRootPath + "/Photos/";
-        //    var teamModelFromRepo = _repository.GetTeamById(id);
-        //    if (teamModelFromRepo == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _repository.DeleteTeam(teamModelFromRepo);
-        //    System.IO.File.Delete(photoFolderPath + teamModelFromRepo.TeamsImage);
-        //    _repository.SaveChanges();
-        //    return NoContent();
-        //}
     }
 }

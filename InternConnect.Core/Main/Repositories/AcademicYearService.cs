@@ -5,41 +5,40 @@ using InternConnect.Dto.AcademicYear;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using AutoMapper;
+using InternConnect.Context;
 
 namespace InternConnect.Service.Main.Repositories
 {
-    public class AcademicYearService
+    public interface IAcademicYearService
     {
-        private readonly IAcademicYearRepository _ayrepository;
-        private readonly IMapper _mapper;
-        private readonly IPdfStateRepository _psRepository;
+        public void UpdateAcademicYear(AcademicYearDto.UpdateAcademicYear payload);
+        public AcademicYearDto.ReadAcademicYear GetAcademicYear(int id);
+    }
 
-        public AcademicYearService(IAcademicYearRepository academicYear, IPdfStateRepository pdfState  ,IMapper mapper)
+    public class AcademicYearService : IAcademicYearService
+
+    {
+    private readonly IAcademicYearRepository _academicYearRepository;
+    private readonly InternConnectContext _context;
+    private readonly IMapper _mapper;
+
+    public AcademicYearService(IAcademicYearRepository academicYear, IMapper mapper, InternConnectContext context)
+    {
+        _academicYearRepository = academicYear;
+        _context = context;
+        _mapper = mapper;
+    }
+
+        public AcademicYearDto.ReadAcademicYear GetAcademicYear(int id)
         {
-            _ayrepository = academicYear;
-            _psRepository = pdfState;
-            _mapper = mapper;
+            return _mapper.Map<AcademicYearDto.ReadAcademicYear>(_academicYearRepository.Get(id));
         }
 
-        //public void Add(AcademicYearDto.AddAcademicYear dto)
-        //{
-
-        //    _psRepository.Add(_mapper.Map<PdfState>(dto.DocState));
-
-            
-        //    _mapper.Map<AcademicYear>(dto);
-
-        //}
-
-        public void Update(AcademicYearDto.UpdateAcademicYear dto)
+        public void UpdateAcademicYear(AcademicYearDto.UpdateAcademicYear payload)
         {
-            var model = _ayrepository.Get(dto.Id);
+            var academicYearData = _academicYearRepository.Get(payload.Id);
+            _mapper.Map(payload, academicYearData);
+            _context.SaveChanges();
         }
-
-        //public AcademicYear GetbyId(AcademicYearDto.ReadAcademicYear dto)
-        //{
-
-        //    return
-        //}
     }
 }

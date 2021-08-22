@@ -9,6 +9,9 @@ using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data;
 using InternConnect.Dto.Account;
+using InternConnect.Dto.Admin;
+using InternConnect.Dto.Program;
+using InternConnect.Dto.Student;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
@@ -17,49 +20,61 @@ namespace InternConnect.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountsController : ControllerBase
+    public class ProgramController : ControllerBase
     {
-        private readonly IAccountService _accountService;
+        private readonly IProgramService _programService;
 
-        public AccountsController(IAccountService account, InternConnectContext context)
+        public ProgramController(IProgramService program, InternConnectContext context)
         {
-            _accountService = account;
+            _programService = program;
         }
 
         
-        //GET /accounts
+        //GET /admin
         [HttpGet]
-        public ActionResult<IEnumerable<Account>> GetAllAccounts()
+        public ActionResult<IEnumerable<ProgramDto.ReadProgram>> GetAllPrograms()
         {
-            return Ok(_accountService.GetAll());
+            return Ok(_programService.GetAll());
         }
 
-
-        //Coordinators
-        //Authorize AuthCoordinatorClaim
-        [HttpPost("coordinators")]
-        public ActionResult<AccountDto.ReadAccount> AddCoordinators(AccountDto.AddAccountCoordinator payload)
+        //GET /admin/id
+        [HttpGet("{id}")]
+        public ActionResult<IEnumerable<ProgramDto.ReadProgram>> GetProgram(int id)
         {
-            _accountService.AddCoordinator(payload);
+            return Ok(_programService.GetById(id));
+        }
+
+        [HttpPost]
+        public ActionResult<ProgramDto.ReadProgram> AddProgram(ProgramDto.AddProgram payload)
+        {
+            _programService.AddProgram(payload);
             return Ok();
         }
 
-        //Authorize Student Claim
-        // POST accounts/student 
-        [HttpPost("student")]
-        public ActionResult<AccountDto.ReadAccount> AddStudents(AccountDto.AddAccountStudent payload)
+        [HttpPut("ISO")]
+        public ActionResult<ProgramDto.ReadProgram> UpdateIsoCode(ProgramDto.UpdateIsoCode payload)
         {
-            _accountService.AddStudent(payload);
+            _programService.UpdateIsoCode(payload);
             return Ok();
         }
 
-        //Chairs
-        [HttpPost("chair")]
-        public ActionResult<AccountDto.ReadAccount> AddChairs(AccountDto.AddAccountChair payload)
+        [HttpPut("program")]
+        public ActionResult<ProgramDto.ReadProgram> UpdateProgram(ProgramDto.UpdateProgram payload)
         {
-            _accountService.AddChair(payload);
+            _programService.UpdateProgram(payload);
             return Ok();
         }
+
+
+
+        //[HttpPut("admin/{id}")]
+        //public ActionResult<AccountDto.ReadAccount> UpdateSignature(AdminDto.UpdateAdmin payload, int id)
+        //{
+        //    _adminService.UpdateAdmin(payload, id);
+        //    return NoContent();
+        //}
+
+
 
         //[Authorize]
         //[HttpPut("{id}")]
@@ -101,22 +116,5 @@ namespace InternConnect.Controllers
         //    _repository.SaveChanges();
         //    return NoContent();
 
-        //}
-        //[Authorize]
-        //[HttpDelete("{id}")]
-        //public ActionResult DeleteMerch(int id)
-        //{
-        //    var photoFolderPath = _env.ContentRootPath + "/Photos/";
-        //    var teamModelFromRepo = _repository.GetTeamById(id);
-        //    if (teamModelFromRepo == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _repository.DeleteTeam(teamModelFromRepo);
-        //    System.IO.File.Delete(photoFolderPath + teamModelFromRepo.TeamsImage);
-        //    _repository.SaveChanges();
-        //    return NoContent();
-        //}
     }
 }

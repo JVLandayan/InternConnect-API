@@ -9,6 +9,7 @@ using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data;
 using InternConnect.Dto.Account;
+using InternConnect.Dto.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
@@ -27,39 +28,30 @@ namespace InternConnect.Controllers
         }
 
         
-        //GET /accounts
+        //GET /admin
         [HttpGet]
-        public ActionResult<IEnumerable<Account>> GetAllAccounts()
+        public ActionResult<IEnumerable<AdminDto.ReadAdmin>> GetAllAdmin()
         {
-            return Ok(_accountService.GetAll());
+            return Ok(_adminService.GetAll());
+        }
+
+        //GET /admin/id
+        [HttpGet("{id}")]
+        public ActionResult<IEnumerable<AdminDto.ReadAdmin>> GetAdmin(int id)
+        {
+            return Ok(_adminService.GetById(id));
         }
 
 
-        //Coordinators
-        //Authorize AuthCoordinatorClaim
-        [HttpPut("admin")]
-        public ActionResult<AccountDto.ReadAccount> AddCoordinators(AccountDto.AddAccountCoordinator payload)
+
+        [HttpPut("admin/{id}")]
+        public ActionResult<AccountDto.ReadAccount> UpdateSignature(AdminDto.UpdateAdmin payload, int id)
         {
-            _accountService.AddCoordinator(payload);
-            return Ok();
+            _adminService.UpdateAdmin(payload, id);
+            return NoContent();
         }
 
-        //Authorize Student Claim
-        // POST accounts/student 
-        [HttpPost("student")]
-        public ActionResult<AccountDto.ReadAccount> AddCoordinators(AccountDto.AddAccountStudent payload)
-        {
-            _accountService.AddStudent(payload);
-            return Ok();
-        }
 
-        //Chairs
-        [HttpPost("chair")]
-        public ActionResult<AccountDto.ReadAccount> AddChairs(AccountDto.AddAccountChair payload)
-        {
-            _accountService.AddChair(payload);
-            return Ok();
-        }
 
         //[Authorize]
         //[HttpPut("{id}")]
@@ -101,22 +93,5 @@ namespace InternConnect.Controllers
         //    _repository.SaveChanges();
         //    return NoContent();
 
-        //}
-        //[Authorize]
-        //[HttpDelete("{id}")]
-        //public ActionResult DeleteMerch(int id)
-        //{
-        //    var photoFolderPath = _env.ContentRootPath + "/Photos/";
-        //    var teamModelFromRepo = _repository.GetTeamById(id);
-        //    if (teamModelFromRepo == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _repository.DeleteTeam(teamModelFromRepo);
-        //    System.IO.File.Delete(photoFolderPath + teamModelFromRepo.TeamsImage);
-        //    _repository.SaveChanges();
-        //    return NoContent();
-        //}
     }
 }
