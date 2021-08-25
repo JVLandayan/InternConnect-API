@@ -18,7 +18,6 @@ namespace InternConnect.Context.Models
         public string LogoFileName { get; set; }
         public string Description { get; set; }
         public List<Opportunity> Opportunities { get; set; }
-        public List<Submission> Submissions { get; set; }
 
     }
 }

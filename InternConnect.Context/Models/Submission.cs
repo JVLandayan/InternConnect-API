@@ -26,7 +26,6 @@ namespace InternConnect.Context.Models
         public int StudentId { get; set; }
         public Student Student { get; set; }
         public int CompanyId { get; set; }
-        public Company Company { get; set; }
         public AdminResponse AdminResponse { get; set; }
 
 

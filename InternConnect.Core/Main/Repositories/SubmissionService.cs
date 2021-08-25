@@ -36,15 +36,16 @@ namespace InternConnect.Service.Main.Repositories
         public void AddSubmission(SubmissionDto.AddSubmission payload)
         {
             var submissionData = _mapper.Map<Submission>(payload);
-            var adminResponse = new AdminResponse()
-            {
-                AcceptedByChair = null,
-                AcceptedByDean = null,
-                AcceptedByCoordinator = null,
-                Comments = "",
-                CompanyAgrees = null,
-                EmailSentByCoordinator = null,
-            };
+            var adminResponse = new AdminResponse();
+            //{
+            //    AcceptedByChair = null,
+            //    AcceptedByDean = null,
+            //    AcceptedByCoordinator = null,
+            //    Comments = "",
+            //    CompanyAgrees = null,
+            //    EmailSentByCoordinator = null,
+            //};
+            adminResponse.Comments = "";
             submissionData.AdminResponse = adminResponse;
 
 

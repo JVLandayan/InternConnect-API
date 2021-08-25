@@ -20,11 +20,29 @@ namespace InternConnect.Dto.AdminResponse
             public string Comments { get; set; }
         }
 
-        public class UpdateCoordinatorResponse
+        public class UpdateAcceptanceOfCoordinatorResponse
         {
+            [Required]
             public int Id { get; set; }
+            [Required]
             public bool AcceptedByCoordinator { get; set; }
+            public string Comments { get; set; }
+        }
+
+        public class UpdateEmailSentResponse
+        {
+            [Required]
+            public int Id { get; set; }
+            [Required]
             public bool EmailSentByCoordinator { get; set; }
+            public string Comments { get; set; }
+        }
+
+        public class UpdateCompanyAgreesResponse
+        {
+            [Required]
+            public int Id { get; set; }
+            [Required]
             public bool CompanyAgrees { get; set; }
             public string Comments { get; set; }
         }
@@ -55,7 +73,7 @@ namespace InternConnect.Dto.AdminResponse
             public bool EmailSentByCoordinator { get; set; }
             public bool CompanyAgrees { get; set; }
             public string Comments { get; set; }
-            public Context.Models.Submission Submission { get; set; }
+            public int SubmissionId { get; set; }
 
         }
     }

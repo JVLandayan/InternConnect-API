@@ -26,10 +26,6 @@ namespace InternConnect.Context.Entity_Configurations
             modelBuilder.Property(s => s.ContactPersonPosition).IsRequired();
             modelBuilder.Property(s => s.IsoCode).IsRequired();
 
-
-            modelBuilder
-                .HasOne(s => s.Company).WithMany(c => c.Submissions).HasForeignKey("CompanyId");
-
             modelBuilder
                 .HasOne(s => s.AdminResponse).WithOne(ar => ar.Submission).HasForeignKey<AdminResponse>(s=>s.SubmissionId);
 

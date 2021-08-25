@@ -29,9 +29,10 @@ namespace InternConnect.Util
             services.AddScoped<IAdminService, AdminService>();
 
             services.AddScoped<IAdminResponseRepository, AdminResponseRepository>();
+            services.AddScoped<IAdminResponseService, AdminResponseService>();
 
 
-            services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<ICompanyRepository, CompanyRepository>();    
             services.AddScoped<ICompanyService, CompanyService>();
 
 
@@ -39,6 +40,7 @@ namespace InternConnect.Util
             services.AddScoped<IEventService, EventService>();
 
             services.AddScoped<ILogsRepository, LogsRepository>();
+            services.AddScoped<ILogsService, LogsService>();
 
             services.AddScoped<IOpportunityRepository, OpportunityRepository>();
             services.AddScoped<IOpportunityService, OpportunityService>();

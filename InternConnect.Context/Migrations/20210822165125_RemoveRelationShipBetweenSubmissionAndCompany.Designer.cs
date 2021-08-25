@@ -4,14 +4,16 @@ using InternConnect.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InternConnect.Context.Migrations
 {
     [DbContext(typeof(InternConnectContext))]
-    partial class InternConnectContextModelSnapshot : ModelSnapshot
+    [Migration("20210822165125_RemoveRelationShipBetweenSubmissionAndCompany")]
+    partial class RemoveRelationShipBetweenSubmissionAndCompany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -235,8 +237,12 @@ namespace InternConnect.Context.Migrations
                     b.Property<DateTime>("DateStamped")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SubmissionId")
-                        .HasColumnType("int");
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubmissionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

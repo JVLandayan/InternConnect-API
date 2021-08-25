@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using InternConnect.Dto.AdminResponse;
+using InternConnect.Dto.Student;
 
 namespace InternConnect.Dto.Submission
 {
     public class SubmissionDto
     {
-
         public class ReadSubmission
         {
             public int Id { get; set; }
@@ -28,11 +28,7 @@ namespace InternConnect.Dto.Submission
             public string EndorsementFileName { get; set; }
             public int TrackId { get; set; }
             public int StudentId { get; set; }
-            public Context.Models.Student Student { get; set; }
             public int CompanyId { get; set; }
-            public Context.Models.Company Company { get; set; }
-            public int AdminResponseId { get; set; }
-            public Context.Models.AdminResponse AdminResponse { get; set; }
         }
 
         public class UpdateSubmission

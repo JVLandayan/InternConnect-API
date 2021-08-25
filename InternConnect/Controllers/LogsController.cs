@@ -10,6 +10,7 @@ using InternConnect.Context.Models;
 using InternConnect.Data;
 using InternConnect.Dto.Account;
 using InternConnect.Dto.Admin;
+using InternConnect.Dto.AdminLogs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
@@ -18,39 +19,22 @@ namespace InternConnect.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdminController : ControllerBase
+    public class LogsController : ControllerBase
     {
-        private readonly IAdminService _adminService;
+        private readonly ILogsService _logsService;
 
-        public AdminController(IAdminService admin, InternConnectContext context)
+        public LogsController(ILogsService logs)
         {
-            _adminService = admin;
+            _logsService = logs;
         }
 
         
         //GET /admin
-        [HttpGet]
-        public ActionResult<IEnumerable<AdminDto.ReadAdmin>> GetAllAdmin()
+        [HttpGet("adminId")]
+        public ActionResult<IEnumerable<LogsDto.ReadLogs>> GetAllAdmin(int adminId)
         {
-            return Ok(_adminService.GetAll());
+            return Ok(_logsService.GetLogs(adminId));
         }
-
-        //GET /admin/id
-        [HttpGet("{id}")]
-        public ActionResult<IEnumerable<AdminDto.ReadAdmin>> GetAdmin(int id)
-        {
-            return Ok(_adminService.GetById(id));
-        }
-
-
-
-        [HttpPut("signature/{id}")]
-        public ActionResult<AccountDto.ReadAccount> UpdateSignature(AdminDto.UpdateAdmin payload, int id)
-        {
-            _adminService.UpdateAdmin(payload, id);
-            return NoContent();
-        }
-
 
 
         //[Authorize]

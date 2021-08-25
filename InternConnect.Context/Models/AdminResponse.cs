@@ -17,5 +17,7 @@ namespace InternConnect.Context.Models
         public string Comments { get; set; }
         public int SubmissionId { get; set; }
         public Submission Submission { get; set; }
+
+
     }
 }

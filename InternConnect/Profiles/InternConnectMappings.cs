@@ -47,7 +47,11 @@ namespace InternConnect.Profiles
             //AdminResponse
             CreateMap<AdminResponse, AdminResponseDto.ReadResponse>().ReverseMap();
             CreateMap<AdminResponse, AdminResponseDto.UpdateChairResponse>().ReverseMap();
-            CreateMap<AdminResponse, AdminResponseDto.UpdateCoordinatorResponse>().ReverseMap();
+
+            CreateMap<AdminResponse, AdminResponseDto.UpdateEmailSentResponse>().ReverseMap();
+            CreateMap<AdminResponse, AdminResponseDto.UpdateAcceptanceOfCoordinatorResponse>().ReverseMap();
+            CreateMap<AdminResponse, AdminResponseDto.UpdateCompanyAgreesResponse>().ReverseMap();
+
             CreateMap<AdminResponse, AdminResponseDto.UpdateDeanResponse>().ReverseMap();
 
             //Company
