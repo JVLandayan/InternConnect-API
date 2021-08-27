@@ -26,12 +26,17 @@ namespace InternConnect.Controllers
             _accountService = account;
         }
 
-        
         //GET /accounts
         [HttpGet]
         public ActionResult<IEnumerable<Account>> GetAllAccounts()
         {
             return Ok(_accountService.GetAll());
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<IEnumerable<Account>> GetAccount(int id)
+        {
+            return Ok(_accountService.GetById(id));
         }
 
 

@@ -12,7 +12,7 @@ namespace InternConnect.Service.Main.Repositories
     {
         public void AddSection(SectionDto.AddSection payload);
         public void UpdateSection(SectionDto.UpdateSection payload);
-        public SectionDto.ReadSection GetbyId(int id);
+        public SectionDto.ReadSection GetById(int id);
         public IEnumerable<SectionDto.ReadSection> GetAll();
     }
     public class SectionService : ISectionService
@@ -46,7 +46,7 @@ namespace InternConnect.Service.Main.Repositories
 
         }
 
-        public SectionDto.ReadSection GetbyId(int id)
+        public SectionDto.ReadSection GetById(int id)
         {
             return _mapper.Map<SectionDto.ReadSection>(_sectionRepository.Get(id));
         }

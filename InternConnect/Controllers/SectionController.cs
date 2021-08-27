@@ -41,7 +41,7 @@ namespace InternConnect.Controllers
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<SectionDto.ReadSection>> GetSection(int id)
         {
-            return Ok(_sectionService.GetbyId(id));
+            return Ok(_sectionService.GetById(id));
         }
 
 
