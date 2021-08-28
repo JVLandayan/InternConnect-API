@@ -1,19 +1,7 @@
-﻿using InternConnect.Service.Main.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using InternConnect.Context;
-using InternConnect.Context.Models;
-using InternConnect.Data;
-using InternConnect.Dto.Account;
-using InternConnect.Dto.Admin;
+﻿using System.Collections.Generic;
 using InternConnect.Dto.AdminLogs;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.EntityFrameworkCore;
+using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
 {
@@ -28,7 +16,7 @@ namespace InternConnect.Controllers
             _logsService = logs;
         }
 
-        
+
         //GET /admin
         [HttpGet("adminId")]
         public ActionResult<IEnumerable<LogsDto.ReadLogs>> GetAllAdmin(int adminId)
@@ -76,6 +64,5 @@ namespace InternConnect.Controllers
         //    _repository.UpdateTeam(teamModelFromRepo);
         //    _repository.SaveChanges();
         //    return NoContent();
-
     }
 }

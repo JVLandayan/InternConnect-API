@@ -107,7 +107,8 @@ namespace InternConnect.Context.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProgramId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -274,8 +275,7 @@ namespace InternConnect.Context.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SubmissionId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SubmissionId = table.Column<int>(type: "int", nullable: false),
                     DateStamped = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AdminId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -316,12 +316,6 @@ namespace InternConnect.Context.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Submissions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Submissions_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Submissions_Students_StudentId",
                         column: x => x.StudentId,
@@ -370,22 +364,17 @@ namespace InternConnect.Context.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Admins_AuthId",
                 table: "Admins",
-                column: "AuthId",
-                unique: true);
+                column: "AuthId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Admins_ProgramId",
                 table: "Admins",
-                column: "ProgramId",
-                unique: true,
-                filter: "[ProgramId] IS NOT NULL");
+                column: "ProgramId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Admins_SectionId",
                 table: "Admins",
-                column: "SectionId",
-                unique: true,
-                filter: "[SectionId] IS NOT NULL");
+                column: "SectionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_AdminId",
@@ -411,20 +400,12 @@ namespace InternConnect.Context.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Students_ProgramId",
                 table: "Students",
-                column: "ProgramId",
-                unique: true);
+                column: "ProgramId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Students_SectionId",
                 table: "Students",
-                column: "SectionId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Submissions_CompanyId",
-                table: "Submissions",
-                column: "CompanyId",
-                unique: true);
+                column: "SectionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Submissions_StudentId",

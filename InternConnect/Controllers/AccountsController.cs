@@ -1,17 +1,9 @@
-﻿using InternConnect.Service.Main.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using InternConnect.Context;
 using InternConnect.Context.Models;
-using InternConnect.Data;
 using InternConnect.Dto.Account;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.EntityFrameworkCore;
+using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
 {
@@ -21,7 +13,7 @@ namespace InternConnect.Controllers
     {
         private readonly IAccountService _accountService;
 
-        public AccountsController(IAccountService account, InternConnectContext context)
+        public AccountsController(IAccountService account)
         {
             _accountService = account;
         }
@@ -40,8 +32,7 @@ namespace InternConnect.Controllers
         }
 
 
-        //Coordinators
-        //Authorize AuthCoordinatorClaim
+
         [HttpPost("coordinators")]
         public ActionResult<AccountDto.ReadAccount> AddCoordinators(AccountDto.AddAccountCoordinator payload)
         {
@@ -49,8 +40,6 @@ namespace InternConnect.Controllers
             return Ok();
         }
 
-        //Authorize Student Claim
-        // POST accounts/student 
         [HttpPost("student")]
         public ActionResult<AccountDto.ReadAccount> AddStudents(AccountDto.AddAccountStudent payload)
         {
@@ -63,6 +52,13 @@ namespace InternConnect.Controllers
         public ActionResult<AccountDto.ReadAccount> AddChairs(AccountDto.AddAccountChair payload)
         {
             _accountService.AddChair(payload);
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult DeleteAccount(int id)
+        {
+            _accountService.Delete(id);
             return Ok();
         }
 

@@ -1,23 +1,7 @@
-﻿using InternConnect.Service.Main.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using InternConnect.Context;
-using InternConnect.Context.Models;
-using InternConnect.Data;
+﻿using System.Collections.Generic;
 using InternConnect.Dto.AcademicYear;
-using InternConnect.Dto.Account;
-using InternConnect.Dto.Admin;
-using InternConnect.Dto.Section;
-using InternConnect.Dto.Student;
-using InternConnect.Dto.Track;
-using InternConnect.Dto.WebState;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.EntityFrameworkCore;
+using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
 {
@@ -43,12 +27,12 @@ namespace InternConnect.Controllers
 
 
         [HttpPut]
-        public ActionResult<AcademicYearDto.ReadAcademicYear> UpdateAcademicYear(AcademicYearDto.UpdateAcademicYear payload)
+        public ActionResult<AcademicYearDto.ReadAcademicYear> UpdateAcademicYear(
+            AcademicYearDto.UpdateAcademicYear payload)
         {
             _academicYearService.UpdateAcademicYear(payload);
             return NoContent();
         }
-
 
 
         //[Authorize]
@@ -90,6 +74,5 @@ namespace InternConnect.Controllers
         //    _repository.UpdateTeam(teamModelFromRepo);
         //    _repository.SaveChanges();
         //    return NoContent();
-
     }
 }

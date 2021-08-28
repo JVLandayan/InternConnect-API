@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using InternConnect.Dto.AdminResponse;
-using InternConnect.Dto.Student;
 
 namespace InternConnect.Dto.Submission
 {
@@ -43,7 +38,7 @@ namespace InternConnect.Dto.Submission
             public string ContactPerson { get; set; }
             public string ContactPersonEmail { get; set; }
             public string ContactPersonPosition { get; set; }
-            public string AcceptanceLetterFileName { get; set;}
+            public string AcceptanceLetterFileName { get; set; }
             public string JobDescription { get; set; }
             public int TrackId { get; set; }
             public int StudentId { get; set; }
@@ -68,10 +63,6 @@ namespace InternConnect.Dto.Submission
             public int TrackId { get; set; }
             public int CompanyId { get; set; }
             public int StudentId { get; set; }
-
-
         }
-
-
     }
 }

@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace InternConnect.Context.Models
 {
@@ -22,8 +18,5 @@ namespace InternConnect.Context.Models
 
         public int ProgramId { get; set; }
         public Program Program { get; set; }
-
-
-
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using InternConnect.Context.Models;
+﻿using InternConnect.Context.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -18,16 +12,13 @@ namespace InternConnect.Context.Entity_Configurations
             modelBuilder
                 .HasOne(s => s.Account).WithOne(s => s.Student).HasForeignKey<Student>("AccountId");
             modelBuilder
-                .HasOne(s => s.Section).WithMany(s => s.Students).HasForeignKey(s=>s.SectionId);
+                .HasOne(s => s.Section).WithMany(s => s.Students).HasForeignKey(s => s.SectionId);
             modelBuilder
-                .HasMany(s => s.Submissions).WithOne(s => s.Student).HasForeignKey(s=>s.StudentId);
+                .HasMany(s => s.Submissions).WithOne(s => s.Student).HasForeignKey(s => s.StudentId);
             modelBuilder
                 .HasOne(p => p.Program).WithMany(s => s.Students).HasForeignKey(s => s.ProgramId);
             modelBuilder.Property(s => s.DateAdded).IsRequired();
             modelBuilder.Property(s => s.AddedBy).IsRequired();
         }
-
-
-
     }
 }

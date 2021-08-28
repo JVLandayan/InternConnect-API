@@ -1,18 +1,16 @@
 ﻿using AutoMapper;
 using InternConnect.Context;
-using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
 using InternConnect.Dto.PdfState;
-using Microsoft.EntityFrameworkCore;
 
-namespace InternConnect.Service.Main.Repositories
+namespace InternConnect.Service.Main
 {
     public interface IPdfStateService
     {
         public void UpdatePdfState(PdfStateDto.UpdatePdfState payload);
         public PdfStateDto.ReadPdfState GetPdfState(int id);
-
     }
+
     public class PdfStateService : IPdfStateService
     {
         private readonly InternConnectContext _context;
@@ -25,6 +23,7 @@ namespace InternConnect.Service.Main.Repositories
             _mapper = mapper;
             _pdfStateRepository = pdfState;
         }
+
         public PdfStateDto.ReadPdfState GetPdfState(int id)
         {
             return _mapper.Map<PdfStateDto.ReadPdfState>(_pdfStateRepository.Get(id));
@@ -37,6 +36,4 @@ namespace InternConnect.Service.Main.Repositories
             _context.SaveChanges();
         }
     }
-
-
 }

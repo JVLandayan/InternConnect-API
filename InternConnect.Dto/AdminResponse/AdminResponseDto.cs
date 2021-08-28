@@ -1,10 +1,4 @@
-﻿using InternConnect.Context.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace InternConnect.Dto.AdminResponse
 {
@@ -22,45 +16,46 @@ namespace InternConnect.Dto.AdminResponse
 
         public class UpdateAcceptanceOfCoordinatorResponse
         {
-            [Required]
-            public int Id { get; set; }
-            [Required]
-            public bool AcceptedByCoordinator { get; set; }
+            [Required] public int Id { get; set; }
+
+            [Required] public bool AcceptedByCoordinator { get; set; }
+
             public string Comments { get; set; }
         }
 
         public class UpdateEmailSentResponse
         {
-            [Required]
-            public int Id { get; set; }
-            [Required]
-            public bool EmailSentByCoordinator { get; set; }
+            [Required] public int Id { get; set; }
+
+            [Required] public bool EmailSentByCoordinator { get; set; }
+
             public string Comments { get; set; }
         }
 
         public class UpdateCompanyAgreesResponse
         {
-            [Required]
-            public int Id { get; set; }
-            [Required]
-            public bool CompanyAgrees { get; set; }
+            [Required] public int Id { get; set; }
+
+            [Required] public bool CompanyAgrees { get; set; }
+
             public string Comments { get; set; }
         }
 
         public class UpdateDeanResponse
         {
-            [Required]
-            public int Id { get; set; }
-            [Required]
-            public bool AcceptedByDean { get; set; }
+            [Required] public int Id { get; set; }
+
+            [Required] public bool AcceptedByDean { get; set; }
+
             public string Comments { get; set; }
         }
+
         public class UpdateChairResponse
         {
-            [Required]
-            public int Id { get; set; }
-            [Required]
-            public bool AcceptedByChair { get; set; }
+            [Required] public int Id { get; set; }
+
+            [Required] public bool AcceptedByChair { get; set; }
+
             public string Comments { get; set; }
         }
 
@@ -74,7 +69,6 @@ namespace InternConnect.Dto.AdminResponse
             public bool CompanyAgrees { get; set; }
             public string Comments { get; set; }
             public int SubmissionId { get; set; }
-
         }
     }
 }

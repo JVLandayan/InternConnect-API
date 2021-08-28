@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using InternConnect.Context.Models;
+﻿using InternConnect.Context.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,7 +6,6 @@ namespace InternConnect.Context.Entity_Configurations
 {
     public class LogsConfig : IEntityTypeConfiguration<Logs>
     {
-
         public void Configure(EntityTypeBuilder<Logs> modelBuilder)
         {
             modelBuilder.HasKey(l => l.Id);
@@ -19,6 +13,5 @@ namespace InternConnect.Context.Entity_Configurations
             modelBuilder.Property(l => l.SubmissionId).IsRequired();
             modelBuilder.Property(l => l.AdminId).IsRequired();
         }
-
     }
 }

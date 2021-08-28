@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace InternConnect.Dto.WebState
+﻿namespace InternConnect.Dto.WebState
 {
     public class WebStateDto
     {
@@ -27,6 +21,5 @@ namespace InternConnect.Dto.WebState
             public string LogoFileName { get; set; }
             public string CoverPhotoFileName { get; set; }
         }
-
     }
 }

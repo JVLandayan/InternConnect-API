@@ -5,9 +5,8 @@ using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
 using InternConnect.Dto.Company;
-using Microsoft.EntityFrameworkCore;
 
-namespace InternConnect.Service.Main.Repositories
+namespace InternConnect.Service.Main
 {
     public interface ICompanyService
     {
@@ -17,20 +16,21 @@ namespace InternConnect.Service.Main.Repositories
         public IEnumerable<CompanyDto.ReadCompany> GetAllCompanies();
         public void DeleteCompany(int id);
     }
+
     public class CompanyService : ICompanyService
     {
-        private readonly IMapper _mapper;
         private readonly ICompanyRepository _companyRepository;
         private readonly InternConnectContext _context;
+        private readonly IMapper _mapper;
         private readonly IOpportunityRepository _opportunityRepository;
 
-        public CompanyService(IMapper mapper, ICompanyRepository company, InternConnectContext context, IOpportunityRepository opportunity)
+        public CompanyService(IMapper mapper, ICompanyRepository company, InternConnectContext context,
+            IOpportunityRepository opportunity)
         {
             _mapper = mapper;
             _companyRepository = company;
             _context = context;
             _opportunityRepository = opportunity;
-
         }
 
         public void AddCompany(CompanyDto.AddCompany payload)
@@ -50,13 +50,11 @@ namespace InternConnect.Service.Main.Repositories
         {
             var companyList = _companyRepository.GetAll();
             var mappedList = new List<CompanyDto.ReadCompany>();
-            foreach (var company in companyList)
-            {
-                mappedList.Add(_mapper.Map<CompanyDto.ReadCompany>(company));
-            }
+            foreach (var company in companyList) mappedList.Add(_mapper.Map<CompanyDto.ReadCompany>(company));
 
             return mappedList;
-;        }
+            ;
+        }
 
         public CompanyDto.ReadCompany GetById(int id)
         {

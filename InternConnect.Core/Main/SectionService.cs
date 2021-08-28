@@ -4,9 +4,8 @@ using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
 using InternConnect.Dto.Section;
-using Microsoft.EntityFrameworkCore;
 
-namespace InternConnect.Service.Main.Repositories
+namespace InternConnect.Service.Main
 {
     public interface ISectionService
     {
@@ -15,10 +14,11 @@ namespace InternConnect.Service.Main.Repositories
         public SectionDto.ReadSection GetById(int id);
         public IEnumerable<SectionDto.ReadSection> GetAll();
     }
+
     public class SectionService : ISectionService
     {
-        private readonly IMapper _mapper;
         private readonly InternConnectContext _context;
+        private readonly IMapper _mapper;
         private readonly ISectionRepository _sectionRepository;
 
         public SectionService(IMapper mapper, InternConnectContext context, ISectionRepository section)
@@ -27,6 +27,7 @@ namespace InternConnect.Service.Main.Repositories
             _context = context;
             _sectionRepository = section;
         }
+
         public void AddSection(SectionDto.AddSection payload)
         {
             _sectionRepository.Add(_mapper.Map<Section>(payload));
@@ -37,13 +38,9 @@ namespace InternConnect.Service.Main.Repositories
         {
             var sectionData = _sectionRepository.GetAll();
             var mappedData = new List<SectionDto.ReadSection>();
-            foreach (var section in sectionData)
-            {
-                mappedData.Add(_mapper.Map<SectionDto.ReadSection>(section));
-            }
+            foreach (var section in sectionData) mappedData.Add(_mapper.Map<SectionDto.ReadSection>(section));
 
             return mappedData;
-
         }
 
         public SectionDto.ReadSection GetById(int id)

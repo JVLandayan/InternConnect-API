@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace InternConnect.Dto.AdminLogs
 {
@@ -27,6 +23,5 @@ namespace InternConnect.Dto.AdminLogs
             public int AdminId { get; set; }
             public Context.Models.Admin Admin { get; set; }
         }
-
     }
 }

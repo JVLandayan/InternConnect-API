@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace InternConnect.Context.Models
+﻿namespace InternConnect.Context.Models
 {
     public class Opportunity
     {
@@ -14,7 +8,5 @@ namespace InternConnect.Context.Models
         public string Introduction { get; set; }
         public int CompanyId { get; set; }
         public Company Company { get; set; }
-
-
     }
 }

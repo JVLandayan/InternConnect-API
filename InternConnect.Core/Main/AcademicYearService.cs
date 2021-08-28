@@ -1,13 +1,9 @@
-﻿using System;
-using InternConnect.Context.Models;
+﻿using AutoMapper;
+using InternConnect.Context;
 using InternConnect.Data.Interfaces;
 using InternConnect.Dto.AcademicYear;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using AutoMapper;
-using InternConnect.Context;
 
-namespace InternConnect.Service.Main.Repositories
+namespace InternConnect.Service.Main
 {
     public interface IAcademicYearService
     {
@@ -18,16 +14,16 @@ namespace InternConnect.Service.Main.Repositories
     public class AcademicYearService : IAcademicYearService
 
     {
-    private readonly IAcademicYearRepository _academicYearRepository;
-    private readonly InternConnectContext _context;
-    private readonly IMapper _mapper;
+        private readonly IAcademicYearRepository _academicYearRepository;
+        private readonly InternConnectContext _context;
+        private readonly IMapper _mapper;
 
-    public AcademicYearService(IAcademicYearRepository academicYear, IMapper mapper, InternConnectContext context)
-    {
-        _academicYearRepository = academicYear;
-        _context = context;
-        _mapper = mapper;
-    }
+        public AcademicYearService(IAcademicYearRepository academicYear, IMapper mapper, InternConnectContext context)
+        {
+            _academicYearRepository = academicYear;
+            _context = context;
+            _mapper = mapper;
+        }
 
         public AcademicYearDto.ReadAcademicYear GetAcademicYear(int id)
         {

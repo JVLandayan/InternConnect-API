@@ -5,9 +5,8 @@ using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
 using InternConnect.Dto.Event;
-using Microsoft.EntityFrameworkCore;
 
-namespace InternConnect.Service.Main.Repositories
+namespace InternConnect.Service.Main
 {
     public interface IEventService
     {
@@ -16,11 +15,12 @@ namespace InternConnect.Service.Main.Repositories
         public void AddEvent(EventDto.AddEvent payload);
         public void UpdateEvent(EventDto.UpdateEvent payload);
     }
+
     public class EventService : IEventService
     {
-        private readonly IMapper _mapper;
         private readonly InternConnectContext _context;
         private readonly IEventRepository _eventsRepository;
+        private readonly IMapper _mapper;
 
         public EventService(IMapper mapper, InternConnectContext context, IEventRepository events)
         {
@@ -28,6 +28,7 @@ namespace InternConnect.Service.Main.Repositories
             _context = context;
             _eventsRepository = events;
         }
+
         public void AddEvent(EventDto.AddEvent payload)
         {
             _eventsRepository.Add(_mapper.Map<Event>(payload));
@@ -36,13 +37,10 @@ namespace InternConnect.Service.Main.Repositories
 
         public IEnumerable<EventDto.ReadEvent> GetAll(int adminId)
         {
-            var eventsList = _eventsRepository.GetAll().Where(e=>e.AdminId == adminId);
+            var eventsList = _eventsRepository.GetAll().Where(e => e.AdminId == adminId);
             var mappedList = new List<EventDto.ReadEvent>();
 
-            foreach (var eventElement in eventsList)
-            {
-                mappedList.Add(_mapper.Map<EventDto.ReadEvent>(eventElement));
-            }
+            foreach (var eventElement in eventsList) mappedList.Add(_mapper.Map<EventDto.ReadEvent>(eventElement));
 
             return mappedList;
         }

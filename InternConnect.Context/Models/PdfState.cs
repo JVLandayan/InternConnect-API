@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace InternConnect.Context.Models
+﻿namespace InternConnect.Context.Models
 {
     public class PdfState
     {
@@ -13,8 +7,5 @@ namespace InternConnect.Context.Models
         public string DeanName { get; set; }
         public string UstLogoFileName { get; set; }
         public string CollegeLogoFileName { get; set; }
-
     }
-
-    
 }

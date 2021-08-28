@@ -1,21 +1,7 @@
-﻿using InternConnect.Service.Main.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using InternConnect.Context;
-using InternConnect.Context.Models;
-using InternConnect.Data;
-using InternConnect.Dto.Account;
-using InternConnect.Dto.Admin;
-using InternConnect.Dto.Section;
-using InternConnect.Dto.Student;
+﻿using System.Collections.Generic;
 using InternConnect.Dto.Track;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.EntityFrameworkCore;
+using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
 {
@@ -30,7 +16,7 @@ namespace InternConnect.Controllers
             _trackService = track;
         }
 
-        
+
         //GET /admin
         [HttpGet]
         public ActionResult<IEnumerable<TrackDto.ReadTrack>> GetAllTrack()
@@ -44,7 +30,6 @@ namespace InternConnect.Controllers
         {
             return Ok(_trackService.GetTrack(id));
         }
-
 
 
         [HttpPut]
@@ -61,6 +46,12 @@ namespace InternConnect.Controllers
             return Ok();
         }
 
+        [HttpDelete("{id}")]
+        public ActionResult DeleteTrack(int id)
+        {
+            _trackService.DeleteTrack(id);
+            return Ok();
+        }
 
 
         //[Authorize]
@@ -102,6 +93,5 @@ namespace InternConnect.Controllers
         //    _repository.UpdateTeam(teamModelFromRepo);
         //    _repository.SaveChanges();
         //    return NoContent();
-
     }
 }

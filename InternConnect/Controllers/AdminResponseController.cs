@@ -1,19 +1,7 @@
-﻿using InternConnect.Service.Main.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using InternConnect.Context;
-using InternConnect.Context.Models;
-using InternConnect.Data;
-using InternConnect.Dto.Account;
-using InternConnect.Dto.Admin;
+﻿using System.Collections.Generic;
 using InternConnect.Dto.AdminResponse;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.EntityFrameworkCore;
+using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
 {
@@ -42,40 +30,63 @@ namespace InternConnect.Controllers
 
 
         [HttpPut("coordinator/{adminId}")]
-        public ActionResult<AdminResponseDto.ReadResponse> UpdateAcceptanceByCoordinator(AdminResponseDto.UpdateAcceptanceOfCoordinatorResponse payload,int adminId)
+        public ActionResult<AdminResponseDto.ReadResponse> UpdateAcceptanceByCoordinator(
+            AdminResponseDto.UpdateAcceptanceOfCoordinatorResponse payload, int adminId)
         {
-            _adminResponseService.UpdateAcceptanceByCoordinator(payload, adminId);
+            if (payload.AcceptedByCoordinator)
+            {
+                _adminResponseService.UpdateAcceptanceByCoordinator(payload, adminId);
+            }
+
             return NoContent();
         }
 
         [HttpPut("coordinator/email")]
-        public ActionResult<AdminResponseDto.ReadResponse> UpdateEmailSent(AdminResponseDto.UpdateEmailSentResponse payload)
+        public ActionResult<AdminResponseDto.ReadResponse> UpdateEmailSent(
+            AdminResponseDto.UpdateEmailSentResponse payload)
         {
-            _adminResponseService.UpdateEmailSent(payload);
+            if (payload.EmailSentByCoordinator)
+            {
+                _adminResponseService.UpdateEmailSent(payload);
+            }
             return NoContent();
         }
 
         [HttpPut("coordinator/company")]
-        public ActionResult<AdminResponseDto.ReadResponse> UpdateCompanyAgrees(AdminResponseDto.UpdateCompanyAgreesResponse payload)
+        public ActionResult<AdminResponseDto.ReadResponse> UpdateCompanyAgrees(
+            AdminResponseDto.UpdateCompanyAgreesResponse payload)
         {
-            _adminResponseService.UpdateCompanyAgrees(payload);
+            if (payload.CompanyAgrees)
+            {
+                _adminResponseService.UpdateCompanyAgrees(payload);
+            }
+            
             return NoContent();
         }
 
         [HttpPut("chair")]
-        public ActionResult<AdminResponseDto.ReadResponse> UpdateAcceptanceByChair(AdminResponseDto.UpdateChairResponse payload)
+        public ActionResult<AdminResponseDto.ReadResponse> UpdateAcceptanceByChair(
+            AdminResponseDto.UpdateChairResponse payload)
         {
-            _adminResponseService.UpdateAcceptanceByChair(payload);
+            if (payload.AcceptedByChair)
+            {
+                _adminResponseService.UpdateAcceptanceByChair(payload);
+            }
+            
             return NoContent();
         }
 
         [HttpPut("dean/{adminId}")]
-        public ActionResult<AdminResponseDto.ReadResponse> UpdateAcceptanceByDean(AdminResponseDto.UpdateDeanResponse payload, int adminId)
+        public ActionResult<AdminResponseDto.ReadResponse> UpdateAcceptanceByDean(
+            AdminResponseDto.UpdateDeanResponse payload, int adminId)
         {
-            _adminResponseService.UpdateAcceptanceByDean(payload,adminId);
+            if (payload.AcceptedByDean)
+            {
+                _adminResponseService.UpdateAcceptanceByDean(payload, adminId);
+            }
+            
             return NoContent();
         }
-
 
 
         //public void UpdateAcceptanceByCoordinator(AdminResponseDto.UpdateAcceptanceOfCoordinatorResponse payload);
@@ -126,6 +137,5 @@ namespace InternConnect.Controllers
         //    _repository.UpdateTeam(teamModelFromRepo);
         //    _repository.SaveChanges();
         //    return NoContent();
-
     }
 }

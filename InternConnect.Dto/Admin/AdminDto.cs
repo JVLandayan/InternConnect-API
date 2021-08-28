@@ -1,17 +1,10 @@
-﻿using InternConnect.Context.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using InternConnect.Dto.Program;
-using InternConnect.Dto.Section;
+﻿using System.Collections.Generic;
+using InternConnect.Context.Models;
 
 namespace InternConnect.Dto.Admin
 {
     public class AdminDto
     {
-
         public class UpdateAdmin
         {
             public string StampFileName { get; set; }
@@ -27,7 +20,6 @@ namespace InternConnect.Dto.Admin
             public int AccountId { get; set; }
             public List<Logs> Logs { get; set; }
             public List<Context.Models.Event> Events { get; set; }
-
         }
     }
 }

@@ -4,11 +4,9 @@ using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
 using InternConnect.Dto.Opportunity;
-using Microsoft.EntityFrameworkCore;
 
-namespace InternConnect.Service.Main.Repositories
+namespace InternConnect.Service.Main
 {
-
     public interface IOpportunityService
     {
         public void AddOpportunity(OpportunityDto.AddOpportunity payload);
@@ -16,12 +14,12 @@ namespace InternConnect.Service.Main.Repositories
         public OpportunityDto.ReadOpportunity GetById(int id);
         public IEnumerable<OpportunityDto.ReadOpportunity> GetAllOpportunities();
         public void DeleteOpportunity(int id);
-
     }
+
     public class OpportunityService : IOpportunityService
     {
-        private readonly IMapper _mapper;
         private readonly InternConnectContext _context;
+        private readonly IMapper _mapper;
         private readonly IOpportunityRepository _opportunityRepository;
 
         public OpportunityService(InternConnectContext context, IMapper mapper, IOpportunityRepository opportunity)
@@ -30,6 +28,7 @@ namespace InternConnect.Service.Main.Repositories
             _context = context;
             _opportunityRepository = opportunity;
         }
+
         public void AddOpportunity(OpportunityDto.AddOpportunity payload)
         {
             _opportunityRepository.Add(_mapper.Map<Opportunity>(payload));
@@ -47,9 +46,7 @@ namespace InternConnect.Service.Main.Repositories
             var opportunityList = _opportunityRepository.GetAll();
             var mappedList = new List<OpportunityDto.ReadOpportunity>();
             foreach (var opportunity in opportunityList)
-            {
                 mappedList.Add(_mapper.Map<OpportunityDto.ReadOpportunity>(opportunity));
-            }
 
             return mappedList;
         }

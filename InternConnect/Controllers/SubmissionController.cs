@@ -1,19 +1,7 @@
-﻿using InternConnect.Service.Main.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using InternConnect.Context;
-using InternConnect.Context.Models;
-using InternConnect.Data;
-using InternConnect.Dto.Account;
+﻿using System.Collections.Generic;
 using InternConnect.Dto.Submission;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.EntityFrameworkCore;
+using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
 {
@@ -28,7 +16,7 @@ namespace InternConnect.Controllers
             _submissionService = submission;
         }
 
-        
+
         //GET /accounts
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<SubmissionDto.ReadSubmission>> GetSubmission(int id)
@@ -49,10 +37,10 @@ namespace InternConnect.Controllers
             return Ok();
         }
 
-        [HttpPost]
-        public ActionResult AddSubmission(SubmissionDto.AddSubmission payload)
+        [HttpPost("{sectionId}")]
+        public ActionResult AddSubmission(SubmissionDto.AddSubmission payload, int sectionId)
         {
-            _submissionService.AddSubmission(payload);
+            _submissionService.AddSubmission(payload, sectionId);
             return Ok();
         }
         //Chairs

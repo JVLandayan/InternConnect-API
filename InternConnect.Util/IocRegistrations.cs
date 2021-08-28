@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using InternConnect.Data;
+﻿using InternConnect.Data;
 using InternConnect.Data.Interfaces;
 using InternConnect.Data.Repositories;
-using InternConnect.Service.Main.Repositories;
+using InternConnect.Service.Main;
+using InternConnect.Service.ThirdParty;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,7 +10,8 @@ namespace InternConnect.Util
 {
     public static class IocRegistrations
     {
-        public static IServiceCollection AddAppSettingsConfig(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddAppSettingsConfig(this IServiceCollection services,
+            IConfiguration configuration)
         {
             //Data Repositories
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
@@ -32,7 +29,7 @@ namespace InternConnect.Util
             services.AddScoped<IAdminResponseService, AdminResponseService>();
 
 
-            services.AddScoped<ICompanyRepository, CompanyRepository>();    
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<ICompanyService, CompanyService>();
 
 
@@ -44,7 +41,7 @@ namespace InternConnect.Util
 
             services.AddScoped<IOpportunityRepository, OpportunityRepository>();
             services.AddScoped<IOpportunityService, OpportunityService>();
-            
+
 
             services.AddScoped<IPdfStateRepository, PdfStateRepository>();
             services.AddScoped<IPdfStateService, PdfStateService>();
@@ -69,8 +66,8 @@ namespace InternConnect.Util
             services.AddScoped<IWebStateService, WebStateService>();
 
 
-
             //Services-ThirdParties
+            services.AddScoped<IMailerService, MailerService>();
 
             return services;
         }

@@ -1,23 +1,7 @@
-﻿using InternConnect.Service.Main.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using InternConnect.Context;
-using InternConnect.Context.Models;
-using InternConnect.Data;
-using InternConnect.Dto.Account;
-using InternConnect.Dto.Admin;
+﻿using System.Collections.Generic;
 using InternConnect.Dto.PdfState;
-using InternConnect.Dto.Section;
-using InternConnect.Dto.Student;
-using InternConnect.Dto.Track;
-using InternConnect.Dto.WebState;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.EntityFrameworkCore;
+using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
 {
@@ -48,7 +32,6 @@ namespace InternConnect.Controllers
             _pdfStateService.UpdatePdfState(payload);
             return NoContent();
         }
-
 
 
         //[Authorize]
@@ -90,6 +73,5 @@ namespace InternConnect.Controllers
         //    _repository.UpdateTeam(teamModelFromRepo);
         //    _repository.SaveChanges();
         //    return NoContent();
-
     }
 }

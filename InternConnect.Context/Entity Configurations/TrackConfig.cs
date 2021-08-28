@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using InternConnect.Context.Models;
+﻿using InternConnect.Context.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -17,8 +12,6 @@ namespace InternConnect.Context.Entity_Configurations
             modelBuilder.Property(t => t.Name).IsRequired();
             modelBuilder
                 .HasOne(t => t.Programs).WithMany(p => p.Tracks).HasForeignKey(p => p.ProgramId);
-
         }
-
     }
 }

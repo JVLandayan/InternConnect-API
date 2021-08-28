@@ -1,19 +1,8 @@
-﻿using InternConnect.Service.Main.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using InternConnect.Context;
-using InternConnect.Context.Models;
-using InternConnect.Data;
-using InternConnect.Dto.Account;
-using InternConnect.Dto.Admin;
 using InternConnect.Dto.Student;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.EntityFrameworkCore;
+using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
 {
@@ -23,12 +12,12 @@ namespace InternConnect.Controllers
     {
         private readonly IStudentService _studentService;
 
-        public StudentController(IStudentService student, InternConnectContext context)
+        public StudentController(IStudentService student)
         {
             _studentService = student;
         }
 
-        
+
         //GET /admin
         [HttpGet]
         public ActionResult<IEnumerable<StudentDto.ReadStudent>> GetAllStudent()
@@ -44,14 +33,12 @@ namespace InternConnect.Controllers
         }
 
 
-
         //[HttpPut("admin/{id}")]
         //public ActionResult<AccountDto.ReadAccount> UpdateSignature(AdminDto.UpdateAdmin payload, int id)
         //{
         //    _adminService.UpdateAdmin(payload, id);
         //    return NoContent();
         //}
-
 
 
         //[Authorize]
@@ -93,6 +80,5 @@ namespace InternConnect.Controllers
         //    _repository.UpdateTeam(teamModelFromRepo);
         //    _repository.SaveChanges();
         //    return NoContent();
-
     }
 }

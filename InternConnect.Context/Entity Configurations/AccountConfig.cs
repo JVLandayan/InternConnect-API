@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using InternConnect.Context.Models;
+﻿using InternConnect.Context.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace InternConnect.Context.Entity_Configurations
 {
@@ -17,9 +12,6 @@ namespace InternConnect.Context.Entity_Configurations
             modelBuilder.Property(a => a.Email).IsRequired();
             modelBuilder.Property(a => a.Password).IsRequired();
             modelBuilder.Property(a => a.ResetKey).IsRequired();
-
-
         }
-
     }
 }

@@ -1,23 +1,22 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using InternConnect.Context;
-using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
 using InternConnect.Dto.Student;
-using Microsoft.EntityFrameworkCore;
 
-namespace InternConnect.Service.Main.Repositories
+namespace InternConnect.Service.Main
 {
     public interface IStudentService
     {
         public StudentDto.ReadStudent GetById(int id);
         public IEnumerable<StudentDto.ReadStudent> GetAll();
     }
+
     public class StudentService : IStudentService
     {
-        private readonly IStudentRepository _studentRepository;
-        private readonly IMapper _mapper;
         private readonly InternConnectContext _context;
+        private readonly IMapper _mapper;
+        private readonly IStudentRepository _studentRepository;
 
         public StudentService(IStudentRepository student, IMapper mapper, InternConnectContext context)
         {
@@ -31,10 +30,7 @@ namespace InternConnect.Service.Main.Repositories
             var studentList = _studentRepository.GetAll();
             var mappedList = new List<StudentDto.ReadStudent>();
 
-            foreach (var student in studentList)
-            {
-                mappedList.Add(_mapper.Map<StudentDto.ReadStudent>(student));
-            }
+            foreach (var student in studentList) mappedList.Add(_mapper.Map<StudentDto.ReadStudent>(student));
 
             return mappedList;
         }

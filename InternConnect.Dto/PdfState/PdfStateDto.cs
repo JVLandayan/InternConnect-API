@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace InternConnect.Dto.PdfState
 {
     public class PdfStateDto
     {
-
         public class ReadPdfState
         {
             public int Id { get; set; }
@@ -21,28 +15,26 @@ namespace InternConnect.Dto.PdfState
 
         public class UpdatePdfState
         {
-            [Required]
-            public int Id { get; set; }
-            [Required]
-            public string IgaarpName { get; set; }
-            [Required]
-            public string DeanName { get; set; }
-            [Required]
-            public string UstLogoFileName { get; set; }
-            [Required]
-            public string CollegeLogoFileName { get; set; }
+            [Required] public int Id { get; set; }
+
+            [Required] public string IgaarpName { get; set; }
+
+            [Required] public string DeanName { get; set; }
+
+            [Required] public string UstLogoFileName { get; set; }
+
+            [Required] public string CollegeLogoFileName { get; set; }
         }
 
         public class AddPdfState
         {
-            [Required]
-            public string IgaarpName { get; set; }
-            [Required]
-            public string DeanName { get; set; }
-            [Required]
-            public string UstLogoFileName { get; set; }
-            [Required]
-            public string CollegeLogoFileName { get; set; }
+            [Required] public string IgaarpName { get; set; }
+
+            [Required] public string DeanName { get; set; }
+
+            [Required] public string UstLogoFileName { get; set; }
+
+            [Required] public string CollegeLogoFileName { get; set; }
         }
     }
 }

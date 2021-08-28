@@ -1,18 +1,16 @@
-﻿using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
 using InternConnect.Context;
-using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
 using InternConnect.Dto.WebState;
-using Microsoft.EntityFrameworkCore;
 
-namespace InternConnect.Service.Main.Repositories
+namespace InternConnect.Service.Main
 {
     public interface IWebStateService
     {
         public void UpdateWebState(WebStateDto.UpdateWebState payload);
         public WebStateDto.ReadWebState GetWebState(int id);
     }
+
     public class WebStateService : IWebStateService
     {
         private readonly InternConnectContext _context;
@@ -25,6 +23,7 @@ namespace InternConnect.Service.Main.Repositories
             _mapper = mapper;
             _webStateRepository = webState;
         }
+
         public WebStateDto.ReadWebState GetWebState(int id)
         {
             return _mapper.Map<WebStateDto.ReadWebState>(_webStateRepository.Get(id));

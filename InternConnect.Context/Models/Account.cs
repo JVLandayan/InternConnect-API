@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace InternConnect.Context.Models
+﻿namespace InternConnect.Context.Models
 {
     public class Account
     {
@@ -15,7 +9,5 @@ namespace InternConnect.Context.Models
 
         public Student Student { get; set; }
         public Admin Admin { get; set; }
-
-
     }
 }

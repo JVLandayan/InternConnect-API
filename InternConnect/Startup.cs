@@ -16,7 +16,6 @@ using InternConnect.Data;
 using InternConnect.Data.Interfaces;
 using InternConnect.Data.Repositories;
 using InternConnect.Profiles;
-using InternConnect.Service.Main.Repositories;
 using Newtonsoft.Json.Serialization;
 using InternConnect.Util;
 using Newtonsoft.Json;

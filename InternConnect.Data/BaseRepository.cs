@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using InternConnect.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,8 +9,8 @@ namespace InternConnect.Data
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
-
         protected readonly DbContext Context;
+
         public BaseRepository(InternConnectContext context)
         {
             Context = context;
@@ -52,7 +50,5 @@ namespace InternConnect.Data
         {
             return Context.Set<T>().ToList();
         }
-
-
     }
 }

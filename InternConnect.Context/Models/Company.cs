@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace InternConnect.Context.Models
 {
@@ -18,6 +14,5 @@ namespace InternConnect.Context.Models
         public string LogoFileName { get; set; }
         public string Description { get; set; }
         public List<Opportunity> Opportunities { get; set; }
-
     }
 }

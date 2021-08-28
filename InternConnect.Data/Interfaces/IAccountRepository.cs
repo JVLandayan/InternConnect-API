@@ -1,16 +1,10 @@
-﻿using InternConnect.Context.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using InternConnect.Context.Models;
 
 namespace InternConnect.Data.Interfaces
 {
     public interface IAccountRepository : IBaseRepository<Account>
     {
         IEnumerable<Account> GetAllAccountData();
-
-
     }
 }

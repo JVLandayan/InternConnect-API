@@ -1,15 +1,13 @@
 ﻿using System;
-using InternConnect.Context.Models;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using InternConnect.Context;
+using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
 using InternConnect.Dto.Account;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace InternConnect.Service.Main.Repositories
+namespace InternConnect.Service.Main
 {
     public interface IAccountService
     {
@@ -17,19 +15,21 @@ namespace InternConnect.Service.Main.Repositories
         public void AddStudent(AccountDto.AddAccountStudent payload);
         public void AddChair(AccountDto.AddAccountChair payload);
         public void AddRange(List<Account> entity);
-        public void Delete(Account entity, int id);
+        public void Delete(int id);
         public void DeleteRange(List<Account> entities);
         public List<AccountDto.ReadAccount> GetAll();
         public Account GetById(int id);
     }
+
     public class AccountService : IAccountService
     {
         private readonly IAccountRepository _accountRepository;
-        private readonly IMapper _mapper;
         private readonly IAdminRepository _adminRepository;
         private readonly InternConnectContext _context;
+        private readonly IMapper _mapper;
 
-        public AccountService(IAccountRepository account, IMapper mapper, IAdminRepository admin, InternConnectContext context)
+        public AccountService(IAccountRepository account, IMapper mapper, IAdminRepository admin,
+            InternConnectContext context)
         {
             _accountRepository = account;
             _mapper = mapper;
@@ -57,7 +57,6 @@ namespace InternConnect.Service.Main.Repositories
             accountData.Student = studentData;
             _accountRepository.Add(accountData);
             _context.SaveChanges();
-
         }
 
         public void AddCoordinator(AccountDto.AddAccountCoordinator entity)
@@ -79,7 +78,6 @@ namespace InternConnect.Service.Main.Repositories
             _accountRepository.Add(accountData);
 
             _context.SaveChanges();
-
         }
 
         public void AddChair(AccountDto.AddAccountChair entity)
@@ -107,7 +105,7 @@ namespace InternConnect.Service.Main.Repositories
             _accountRepository.AddRange(entities);
         }
 
-        public void Delete(Account entity, int id)
+        public void Delete(int id)
         {
             var accountData = GetById(id);
             _accountRepository.Remove(accountData);
@@ -121,15 +119,12 @@ namespace InternConnect.Service.Main.Repositories
         public List<AccountDto.ReadAccount> GetAll()
         {
             var accountData = _accountRepository.GetAllAccountData().ToList();
-            List<AccountDto.ReadAccount> mappedData = new List<AccountDto.ReadAccount>();
-            foreach (var account in accountData)
-            {
-                mappedData.Add(_mapper.Map<Account, AccountDto.ReadAccount>(account));
-            }
+            var mappedData = new List<AccountDto.ReadAccount>();
+            foreach (var account in accountData) mappedData.Add(_mapper.Map<Account, AccountDto.ReadAccount>(account));
 
             return mappedData;
         }
-         
+
         public Account GetById(int id)
         {
             return _accountRepository.Get(id);

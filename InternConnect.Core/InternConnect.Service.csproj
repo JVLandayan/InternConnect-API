@@ -5,8 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ThirdParty\Interfaces\" />
-    <Folder Include="ThirdParty\Repositories\" />
+    <Folder Include="Main\Repositories\" />
   </ItemGroup>
 
   <ItemGroup>

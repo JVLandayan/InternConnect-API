@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace InternConnect.Context.Models
 {
@@ -10,8 +6,7 @@ namespace InternConnect.Context.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        
-        public List<Admin> Admins { get; set; }
 
+        public List<Admin> Admins { get; set; }
     }
 }

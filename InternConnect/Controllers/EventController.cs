@@ -1,20 +1,7 @@
-﻿using InternConnect.Service.Main.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using InternConnect.Context;
-using InternConnect.Context.Models;
-using InternConnect.Data;
-using InternConnect.Dto.Account;
-using InternConnect.Dto.Admin;
+﻿using System.Collections.Generic;
 using InternConnect.Dto.Event;
-using InternConnect.Dto.Student;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.EntityFrameworkCore;
+using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
 {
@@ -29,7 +16,7 @@ namespace InternConnect.Controllers
             _eventsService = events;
         }
 
-        
+
         //GET /admin
         [HttpGet("all/{adminId}")]
         public ActionResult<IEnumerable<EventDto.ReadEvent>> GetAllEvents(int adminId)
@@ -65,7 +52,6 @@ namespace InternConnect.Controllers
         //    _adminService.UpdateAdmin(payload, id);
         //    return NoContent();
         //}
-
 
 
         //[Authorize]
@@ -107,6 +93,5 @@ namespace InternConnect.Controllers
         //    _repository.UpdateTeam(teamModelFromRepo);
         //    _repository.SaveChanges();
         //    return NoContent();
-
     }
 }

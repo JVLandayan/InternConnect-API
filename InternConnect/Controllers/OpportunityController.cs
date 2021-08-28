@@ -1,20 +1,7 @@
-﻿using InternConnect.Service.Main.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using InternConnect.Context;
-using InternConnect.Context.Models;
-using InternConnect.Data;
-using InternConnect.Dto.Account;
-using InternConnect.Dto.Company;
+﻿using System.Collections.Generic;
 using InternConnect.Dto.Opportunity;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.EntityFrameworkCore;
+using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
 {
@@ -29,7 +16,7 @@ namespace InternConnect.Controllers
             _opportunityService = opportunity;
         }
 
-        
+
         //GET /accounts
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<OpportunityDto.ReadOpportunity>> GetOpportunity(int id)

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using InternConnect.Dto.Program;
-
-namespace InternConnect.Dto.Track
+﻿namespace InternConnect.Dto.Track
 {
     public class TrackDto
     {
@@ -28,7 +21,5 @@ namespace InternConnect.Dto.Track
             public string Name { get; set; }
             public int ProgramId { get; set; }
         }
-
-
     }
 }

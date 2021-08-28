@@ -4,9 +4,8 @@ using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
 using InternConnect.Dto.Program;
-using Microsoft.EntityFrameworkCore;
 
-namespace InternConnect.Service.Main.Repositories
+namespace InternConnect.Service.Main
 {
     public interface IProgramService
     {
@@ -16,10 +15,11 @@ namespace InternConnect.Service.Main.Repositories
         public ProgramDto.ReadProgram GetById(int id);
         public void UpdateIsoCode(ProgramDto.UpdateIsoCode payload);
     }
+
     public class ProgramService : IProgramService
     {
-        private readonly IMapper _mapper;
         private readonly InternConnectContext _context;
+        private readonly IMapper _mapper;
         private readonly IProgramRepository _programRepository;
 
         public ProgramService(InternConnectContext context, IMapper mapper, IProgramRepository program)
@@ -39,10 +39,7 @@ namespace InternConnect.Service.Main.Repositories
         {
             var programData = _programRepository.GetAll();
             var mappedData = new List<ProgramDto.ReadProgram>();
-            foreach (var program in programData)
-            {
-                mappedData.Add(_mapper.Map<ProgramDto.ReadProgram>(program));
-            }
+            foreach (var program in programData) mappedData.Add(_mapper.Map<ProgramDto.ReadProgram>(program));
 
             return mappedData;
         }

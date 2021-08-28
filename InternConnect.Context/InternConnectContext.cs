@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using InternConnect.Context.Entity_Configurations;
+﻿using InternConnect.Context.Entity_Configurations;
 using InternConnect.Context.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,8 +8,8 @@ namespace InternConnect.Context
     {
         public InternConnectContext(DbContextOptions<InternConnectContext> opt) : base(opt)
         {
-
         }
+
         public DbSet<AcademicYear> AcademicYear { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Admin> Admins { get; set; }
@@ -34,7 +29,6 @@ namespace InternConnect.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
             modelBuilder.ApplyConfiguration(new AccountConfig());
             modelBuilder.ApplyConfiguration(new StudentConfig());
             modelBuilder.ApplyConfiguration(new AdminConfig());
@@ -51,21 +45,6 @@ namespace InternConnect.Context
             modelBuilder.ApplyConfiguration(new CompanyConfig());
             modelBuilder.ApplyConfiguration(new OpportunityConfig());
             modelBuilder.ApplyConfiguration(new AdminResponseConfig());
-
-
-
-
-
-
-
-
-
-
-
-
-
         }
     }
-
-    
 }
