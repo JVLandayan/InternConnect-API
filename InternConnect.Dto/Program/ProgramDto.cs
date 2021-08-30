@@ -27,6 +27,12 @@ namespace InternConnect.Dto.Program
             public int IsoCode { get; set; }
         }
 
+        public class UpdateNumberOfHours
+        {
+            public int Id { get; set; }
+            public int NumberOfHours { get; set; }
+        }
+
         public class AddProgram
         {
             public string Name { get; set; }

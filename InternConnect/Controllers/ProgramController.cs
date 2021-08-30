@@ -53,6 +53,13 @@ namespace InternConnect.Controllers
             return Ok();
         }
 
+        [HttpPut("hours")]
+        public ActionResult<ProgramDto.ReadProgram> UpdateHours(ProgramDto.UpdateNumberOfHours payload)
+        {
+            _programService.UpdateNumberOfHours(payload);
+            return Ok();
+        }
+
 
         //[HttpPut("admin/{id}")]
         //public ActionResult<AccountDto.ReadAccount> UpdateSignature(AdminDto.UpdateAdmin payload, int id)

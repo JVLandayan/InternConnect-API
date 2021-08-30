@@ -7,7 +7,10 @@ namespace InternConnect.Context.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public int IsoCode { get; set; }
+        public int? NumberOfHours { get; set; }
+
+        public int? IsoCode { get; set; }
+
 
         public List<Track> Tracks { get; set; }
 

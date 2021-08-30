@@ -50,7 +50,7 @@ namespace InternConnect.Service.Main
             _logsRepository.Add(new Logs
                 {DateStamped = DateTime.Now, AdminId = adminId, SubmissionId = responseData.SubmissionId});
             _context.SaveChanges();
-            _mailerService.NotifyChair(responseData.SubmissionId, adminId);
+            _mailerService.NotifyChair(responseData.SubmissionId, adminId, payload.AcceptedByCoordinator);
         }
 
         public void UpdateCompanyAgrees(AdminResponseDto.UpdateCompanyAgreesResponse payload)
@@ -77,7 +77,7 @@ namespace InternConnect.Service.Main
             _logsRepository.Add(new Logs
                 {DateStamped = DateTime.Now, AdminId = adminId, SubmissionId = responseData.SubmissionId});
             _context.SaveChanges();
-            _mailerService.NotifyCoordAndIgaarp(responseData.SubmissionId);
+            _mailerService.NotifyCoordAndIgaarp(responseData.SubmissionId, payload.AcceptedByDean);
         }
 
 
@@ -86,7 +86,7 @@ namespace InternConnect.Service.Main
             var responseData = _adminResponseRepository.Get(payload.Id);
             _mapper.Map(payload, responseData);
             _context.SaveChanges();
-            _mailerService.NotifyDean(responseData.SubmissionId);
+            _mailerService.NotifyDean(responseData.SubmissionId, payload.AcceptedByChair);
         }
 
         public IEnumerable<AdminResponseDto.ReadResponse> GetAllEntriesByStep(int stepNumber)

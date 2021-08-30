@@ -46,8 +46,9 @@ namespace InternConnect.Service.Main
             adminResponse.Comments = "";
             submissionData.AdminResponse = adminResponse;
             _submissionRepository.Add(submissionData);
-            _mailerService.NotifyCoordinator(sectionId);
             _context.SaveChanges();
+            _mailerService.NotifyCoordinator(sectionId);
+
         }
 
         public IEnumerable<SubmissionDto.ReadSubmission> GetAllSubmissions()

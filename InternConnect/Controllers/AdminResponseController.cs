@@ -33,10 +33,9 @@ namespace InternConnect.Controllers
         public ActionResult<AdminResponseDto.ReadResponse> UpdateAcceptanceByCoordinator(
             AdminResponseDto.UpdateAcceptanceOfCoordinatorResponse payload, int adminId)
         {
-            if (payload.AcceptedByCoordinator)
-            {
+
                 _adminResponseService.UpdateAcceptanceByCoordinator(payload, adminId);
-            }
+         
 
             return NoContent();
         }
@@ -45,10 +44,9 @@ namespace InternConnect.Controllers
         public ActionResult<AdminResponseDto.ReadResponse> UpdateEmailSent(
             AdminResponseDto.UpdateEmailSentResponse payload)
         {
-            if (payload.EmailSentByCoordinator)
-            {
+
                 _adminResponseService.UpdateEmailSent(payload);
-            }
+            
             return NoContent();
         }
 
@@ -56,10 +54,9 @@ namespace InternConnect.Controllers
         public ActionResult<AdminResponseDto.ReadResponse> UpdateCompanyAgrees(
             AdminResponseDto.UpdateCompanyAgreesResponse payload)
         {
-            if (payload.CompanyAgrees)
-            {
+
                 _adminResponseService.UpdateCompanyAgrees(payload);
-            }
+
             
             return NoContent();
         }
@@ -68,10 +65,9 @@ namespace InternConnect.Controllers
         public ActionResult<AdminResponseDto.ReadResponse> UpdateAcceptanceByChair(
             AdminResponseDto.UpdateChairResponse payload)
         {
-            if (payload.AcceptedByChair)
-            {
+
                 _adminResponseService.UpdateAcceptanceByChair(payload);
-            }
+
             
             return NoContent();
         }
@@ -80,10 +76,9 @@ namespace InternConnect.Controllers
         public ActionResult<AdminResponseDto.ReadResponse> UpdateAcceptanceByDean(
             AdminResponseDto.UpdateDeanResponse payload, int adminId)
         {
-            if (payload.AcceptedByDean)
-            {
+
                 _adminResponseService.UpdateAcceptanceByDean(payload, adminId);
-            }
+
             
             return NoContent();
         }

@@ -83,6 +83,7 @@ namespace InternConnect.Profiles
             CreateMap<Context.Models.Program, ProgramDto.AddProgram>().ReverseMap();
             CreateMap<Context.Models.Program, ProgramDto.UpdateProgram>().ReverseMap();
             CreateMap<Context.Models.Program, ProgramDto.UpdateIsoCode>().ReverseMap();
+            CreateMap<Context.Models.Program, ProgramDto.UpdateNumberOfHours>().ReverseMap();
 
             //Section
             CreateMap<Section, SectionDto.AddSection>().ReverseMap();
