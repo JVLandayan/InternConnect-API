@@ -11,6 +11,7 @@ namespace InternConnect.Dto.Program
             public string Name { get; set; }
 
             public int? IsoCode { get; set; }
+            public int? NumberOfHours { get; set; }
 
             public List<TrackDto.ReadTrack> Tracks { get; set; }
         }

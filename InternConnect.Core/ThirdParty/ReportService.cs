@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
+using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -110,7 +111,7 @@ namespace InternConnect.Service.ThirdParty
                 #endregion
 
                 #region Repositories
-                var submissionList = _submissionRepository.GetAllRelatedData();
+                var submissionList = _submissionRepository.GetAllRelatedData().ToList();
                 var sectionList = _sectionRepository.GetAll().ToList();
                 var programList = _programRepository.GetAll().ToList();
                 var companyList = _companyRepository.GetAll().ToList();
@@ -119,9 +120,15 @@ namespace InternConnect.Service.ThirdParty
 
                 #endregion
 
+                var mappedSubmissionList = new List<Submission>();
+                foreach (var id in idList)
+                {
+                    mappedSubmissionList.Add(submissionList.First(s=>s.Id == id));
+                }
+
                 #region Body
                 int index = 1;
-                foreach (var submission in submissionList)
+                foreach (var submission in mappedSubmissionList)
                 {
                     worksheet.Cell(1 + index, 1).Value = accountList.Find(s=>s.Id == submission.Student.AccountId).Email; //_accountRepository.Get(_studentRepository.Get(_submissionRepository.Get(submission.Id).StudentId).AccountId).Email;
                     worksheet.Cell(1 + index, 2).Value = submission.IsoCode;

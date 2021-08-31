@@ -69,6 +69,7 @@ namespace InternConnect.Util
             //Services-ThirdParties
             services.AddScoped<IMailerService, MailerService>();
             services.AddScoped<IReportService, ReportService>();
+            services.AddScoped<IPdfService, PdfService>();
 
             return services;
         }

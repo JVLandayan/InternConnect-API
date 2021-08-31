@@ -10,7 +10,7 @@ namespace InternConnect.Controllers
     [ApiController]
     public class GenerateExcelController : ControllerBase
     {
-        private IReportService _reportService;
+        private readonly IReportService _reportService;
 
         public GenerateExcelController(IReportService reportService)
         {
@@ -20,6 +20,11 @@ namespace InternConnect.Controllers
         [HttpGet]
         public IActionResult GenerateExcel([FromQuery] int[] ids)
         {
+            if (ids.Length == 0)
+            {
+                return NotFound("Submission not found");
+            }
+
             return _reportService.GenerateExcel(ids, this);
         }
 
