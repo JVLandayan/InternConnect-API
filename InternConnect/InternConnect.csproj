@@ -37,4 +37,11 @@
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="images\company\" />
+    <Folder Include="images\logo\" />
+    <Folder Include="images\signatures\" />
+    <Folder Include="files\" />
+  </ItemGroup>
+
 </Project>

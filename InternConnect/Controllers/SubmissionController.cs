@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using InternConnect.Dto.Submission;
 using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
@@ -10,10 +13,12 @@ namespace InternConnect.Controllers
     public class SubmissionController : ControllerBase
     {
         private readonly ISubmissionService _submissionService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public SubmissionController(ISubmissionService submission)
+        public SubmissionController(ISubmissionService submission, IWebHostEnvironment webHostEnvironment )
         {
             _submissionService = submission;
+            _webHostEnvironment = webHostEnvironment;
         }
 
 
@@ -41,6 +46,34 @@ namespace InternConnect.Controllers
         public ActionResult AddSubmission(SubmissionDto.AddSubmission payload, int sectionId)
         {
             _submissionService.AddSubmission(payload, sectionId);
+            #region FileUpload
+            //try
+            //{
+            //    var files = HttpContext.Request.Form.Files;
+            //    if (files != null && files.Count > 0)
+            //    {
+            //        foreach (var file in files)
+            //        {
+            //            FileInfo fi = new FileInfo(file.FileName);
+            //            var newfilename = payload.StudentNumber + DateTime.Now.TimeOfDay.Milliseconds;
+            //            var path = Path.Combine("", _webHostEnvironment.ContentRootPath + "/files" + newfilename);
+            //            using (var stream = new FileStream(path, FileMode.Create))
+            //            {
+            //                file.CopyTo(stream);
+            //            }
+
+            //        }
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e);
+            //    throw;
+            //}
+
+
+            #endregion
+
             return Ok();
         }
         //Chairs

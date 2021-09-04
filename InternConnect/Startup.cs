@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,7 @@ using InternConnect.Data.Repositories;
 using InternConnect.Profiles;
 using Newtonsoft.Json.Serialization;
 using InternConnect.Util;
+using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
 
 namespace InternConnect
@@ -84,6 +86,26 @@ namespace InternConnect
             //app.UseAuthentication();
             //app.UseAuthorization();
             //app.UseMiddleware<JwtMiddleware>();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "files")),
+                RequestPath = "/files"
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "images/signatures")),
+                RequestPath = "/images/signatures"
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "images/logo")),
+                RequestPath = "/images/logo"
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "images/company")),
+                RequestPath = "/images/company"
+            });
 
 
             app.UseAuthorization();
