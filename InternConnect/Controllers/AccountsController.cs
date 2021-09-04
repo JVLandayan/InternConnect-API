@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Dto.Account;
@@ -25,10 +26,17 @@ namespace InternConnect.Controllers
             return Ok(_accountService.GetAll());
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetAccount")]
         public ActionResult<IEnumerable<Account>> GetAccount(int id)
         {
-            return Ok(_accountService.GetById(id));
+            try
+            {
+                return Ok(_accountService.GetById(id));
+            }
+            catch (Exception e)
+            {
+                return NotFound(new { message = "Account doesn't exist" });
+            }
         }
 
 

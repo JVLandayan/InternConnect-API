@@ -14,9 +14,9 @@ namespace InternConnect.Service.Main
         public void AddCoordinator(AccountDto.AddAccountCoordinator entity);
         public void AddStudent(AccountDto.AddAccountStudent payload);
         public void AddChair(AccountDto.AddAccountChair payload);
-        public void AddRange(List<Account> entity);
+        //public void AddRange(List<Account> entity);
         public void Delete(int id);
-        public void DeleteRange(List<Account> entities);
+        //public void DeleteRange(List<Account> entities);
         public List<AccountDto.ReadAccount> GetAll();
         public Account GetById(int id);
     }
@@ -61,13 +61,17 @@ namespace InternConnect.Service.Main
 
         public void AddCoordinator(AccountDto.AddAccountCoordinator entity)
         {
+
+            if (entity.Email == _accountRepository.GetAll().First(a => a.Email == entity.Email).Email)
+            {
+                return;
+            }
             var accountData = new Account
             {
                 Email = entity.Email,
                 Password = Guid.NewGuid().ToString(),
                 ResetKey = Guid.NewGuid().ToString()
             };
-
             var adminData = new Admin
             {
                 AuthId = 3,
@@ -76,15 +80,18 @@ namespace InternConnect.Service.Main
             };
             accountData.Admin = adminData;
             _accountRepository.Add(accountData);
-
             _context.SaveChanges();
         }
 
         public void AddChair(AccountDto.AddAccountChair entity)
         {
+            if (entity.Email == _accountRepository.GetAll().First(a => a.Email == entity.Email).Email)
+            {
+                return;
+            }
             var accountData = new Account
             {
-                Email = entity.Email,
+                Email = entity.Email.ToUpper(),
                 Password = Guid.NewGuid().ToString(),
                 ResetKey = Guid.NewGuid().ToString()
             };
@@ -100,21 +107,12 @@ namespace InternConnect.Service.Main
         }
 
 
-        public void AddRange(List<Account> entities)
-        {
-            _accountRepository.AddRange(entities);
-        }
-
         public void Delete(int id)
         {
             var accountData = GetById(id);
             _accountRepository.Remove(accountData);
         }
 
-        public void DeleteRange(List<Account> entities)
-        {
-            _accountRepository.RemoveRange(entities);
-        }
 
         public List<AccountDto.ReadAccount> GetAll()
         {

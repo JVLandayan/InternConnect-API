@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using InternConnect.Context;
 using InternConnect.Context.Models;
@@ -12,6 +13,8 @@ namespace InternConnect.Service.Main
         public void AddOpportunity(OpportunityDto.AddOpportunity payload);
         public void UpdateOpportunity(OpportunityDto.UpdateOpportunity payload);
         public OpportunityDto.ReadOpportunity GetById(int id);
+
+        public IEnumerable<OpportunityDto.ReadOpportunity> GetByCompanyId(int companyId);
         public IEnumerable<OpportunityDto.ReadOpportunity> GetAllOpportunities();
         public void DeleteOpportunity(int id);
     }
@@ -44,6 +47,16 @@ namespace InternConnect.Service.Main
         public IEnumerable<OpportunityDto.ReadOpportunity> GetAllOpportunities()
         {
             var opportunityList = _opportunityRepository.GetAll();
+            var mappedList = new List<OpportunityDto.ReadOpportunity>();
+            foreach (var opportunity in opportunityList)
+                mappedList.Add(_mapper.Map<OpportunityDto.ReadOpportunity>(opportunity));
+
+            return mappedList;
+        }
+
+        public IEnumerable<OpportunityDto.ReadOpportunity> GetByCompanyId(int companyId)
+        {
+            var opportunityList = _opportunityRepository.GetAll().Where(o=>o.CompanyId == companyId);
             var mappedList = new List<OpportunityDto.ReadOpportunity>();
             foreach (var opportunity in opportunityList)
                 mappedList.Add(_mapper.Map<OpportunityDto.ReadOpportunity>(opportunity));
