@@ -14,7 +14,7 @@ namespace InternConnect.Service.Main
         public IEnumerable<ProgramDto.ReadProgram> GetAll();
         public ProgramDto.ReadProgram GetById(int id);
         public void UpdateIsoCode(ProgramDto.UpdateIsoCode payload);
-        public void UpdateNumberOfHours (ProgramDto.UpdateNumberOfHours payload);
+        public void UpdateNumberOfHours(ProgramDto.UpdateNumberOfHours payload);
     }
 
     public class ProgramService : IProgramService

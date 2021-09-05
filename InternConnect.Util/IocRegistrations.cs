@@ -71,6 +71,7 @@ namespace InternConnect.Util
             services.AddScoped<IReportService, ReportService>();
             services.AddScoped<IPdfService, PdfService>();
             services.AddScoped<IUploadService, UploadService>();
+            services.AddScoped<IAuthService, AuthService>();
 
             return services;
         }

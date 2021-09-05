@@ -11,9 +11,9 @@
         //Student
         public string StudentName { get; set; }
         public string StudentSection { get; set; }
-        public string StudentTrack{ get; set; }
+        public string StudentTrack { get; set; }
         public string StudentProgram { get; set; }
-        
+
         //Contact Person
         public string ContactPersonFirstName { get; set; }
         public string ContactPersonLastName { get; set; }
@@ -30,10 +30,5 @@
         public string CurriculumHours { get; set; }
         public string UniversityLogo { get; set; }
         public string CollegeLogo { get; set; }
-
-
-
-
-
     }
 }

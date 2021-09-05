@@ -15,9 +15,9 @@ namespace InternConnect.Service.Main
 
     public class AdminService : IAdminService
     {
+        private readonly IAdminRepository _adminRepository;
         private readonly InternConnectContext _context;
         private readonly IMapper _mapper;
-        private readonly IAdminRepository _adminRepository;
 
         public AdminService(IMapper mapper, IAdminRepository repository, InternConnectContext context)
         {

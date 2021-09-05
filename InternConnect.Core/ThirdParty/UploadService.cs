@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using InternConnect.Context.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -31,26 +27,24 @@ namespace InternConnect.Service.ThirdParty
             {
                 if (uploadedFile.files.Length > 0)
                 {
-                    string path = _webHostEnvironment.ContentRootPath + "\\files\\";
-                    string fileExtension = Path.GetExtension(uploadedFile.files.FileName);
-                    string fileName = DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + Guid.NewGuid().ToString() + fileExtension;
-                    if (!Directory.Exists(path))
-                    {
-                        Directory.CreateDirectory(path);
-                    }
+                    var path = _webHostEnvironment.ContentRootPath + "\\files\\";
+                    var fileExtension = Path.GetExtension(uploadedFile.files.FileName);
+                    var fileName = DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + Guid.NewGuid() + fileExtension;
+                    if (!Directory.Exists(path)) Directory.CreateDirectory(path);
 
-                    using (FileStream fileStream = System.IO.File.Create(Path.Combine(path, fileName)))
+                    using (var fileStream = File.Create(Path.Combine(path, fileName)))
                     {
                         uploadedFile.files.CopyTo(fileStream);
                         fileStream.Flush();
                         return fileName;
                     }
                 }
+
                 return "uploading error";
             }
             catch (Exception e)
             {
-                return e.Message.ToString();
+                return e.Message;
             }
         }
 
@@ -61,42 +55,29 @@ namespace InternConnect.Service.ThirdParty
                 if (uploadedFile.files.Length > 0)
                 {
                     string path;
-                    string fileExtension = Path.GetExtension(uploadedFile.files.FileName);
-                    string fileName = DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + Guid.NewGuid().ToString() + fileExtension;
+                    var fileExtension = Path.GetExtension(uploadedFile.files.FileName);
+                    var fileName = DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + Guid.NewGuid() + fileExtension;
                     if (entity == "company")
-                    {
                         path = _webHostEnvironment.ContentRootPath + "\\images\\company\\";
-                    }
                     else if (entity == "logo")
-                    {
                         path = _webHostEnvironment.ContentRootPath + "\\images\\logo\\";
-                    }
                     else
-                    {
                         path = _webHostEnvironment.ContentRootPath + "\\images\\signatures\\";
-                    }
-                    if (!Directory.Exists(path))
-                    {
-                        Directory.CreateDirectory(path);
-                    }
-                    using (FileStream fileStream = File.Create(Path.Combine(path, fileName)))
+                    if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+                    using (var fileStream = File.Create(Path.Combine(path, fileName)))
                     {
                         uploadedFile.files.CopyTo(fileStream);
                         fileStream.Flush();
                         return fileName;
                     }
                 }
+
                 return "Uploading Error";
             }
             catch (Exception e)
             {
-                return e.Message.ToString();
+                return e.Message;
             }
-
-
-            
-
-
         }
     }
 }

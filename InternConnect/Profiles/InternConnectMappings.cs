@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using InternConnect.Context.Models;
 using InternConnect.Dto.AcademicYear;
 using InternConnect.Dto.Account;
@@ -108,7 +104,6 @@ namespace InternConnect.Profiles
             CreateMap<WebState, WebStateDto.AddWebState>().ReverseMap();
             CreateMap<WebState, WebStateDto.UpdateWebState>().ReverseMap();
             CreateMap<WebState, WebStateDto.ReadWebState>().ReverseMap();
-
         }
     }
 }

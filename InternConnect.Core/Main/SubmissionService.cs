@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using InternConnect.Context;
 using InternConnect.Context.Models;
@@ -7,7 +6,6 @@ using InternConnect.Data.Interfaces;
 using InternConnect.Dto.AdminResponse;
 using InternConnect.Dto.Submission;
 using InternConnect.Service.ThirdParty;
-using Microsoft.AspNetCore.Http;
 
 namespace InternConnect.Service.Main
 {
@@ -22,14 +20,15 @@ namespace InternConnect.Service.Main
     public class SubmissionService : ISubmissionService
     {
         private readonly IAdminResponseRepository _adminResponseRepository;
-        private readonly IMailerService _mailerService;
-        private readonly IStudentService _studentService;
         private readonly InternConnectContext _context;
+        private readonly IMailerService _mailerService;
         private readonly IMapper _mapper;
+        private readonly IStudentService _studentService;
         private readonly ISubmissionRepository _submissionRepository;
 
         public SubmissionService(ISubmissionRepository submission, IMapper mapper,
-            InternConnectContext context, IAdminResponseRepository adminResponse, IMailerService mailerService, IStudentService studentService)
+            InternConnectContext context, IAdminResponseRepository adminResponse, IMailerService mailerService,
+            IStudentService studentService)
         {
             _mapper = mapper;
             _context = context;

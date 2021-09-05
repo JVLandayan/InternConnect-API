@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
 
 namespace InternConnect.Service.ThirdParty
@@ -28,6 +29,10 @@ namespace InternConnect.Service.ThirdParty
         public void NotifyStudentCompanyApproves(int submissionId);
 
         //reset password
+        public void ForgotPassword(Account accountData);
+
+        //Onboard
+        public void Onboard(Account accountData);
     }
 
     public class MailerService : IMailerService
@@ -51,11 +56,11 @@ namespace InternConnect.Service.ThirdParty
 
         public SmtpClient SmtpConfiguration()
         {
-            var client = new SmtpClient("mail.eco-tigers.com", 8889);
-            client.EnableSsl = false;
+            var client = new SmtpClient("smtp.gmail.com", 587);
+            client.EnableSsl = true;
             client.DeliveryMethod = SmtpDeliveryMethod.Network;
             client.UseDefaultCredentials = false;
-            client.Credentials = new NetworkCredential("postmaster@eco-tigers.com", "landayan24");
+            client.Credentials = new NetworkCredential("internconnectsmtp@gmail.com", "internconnect101");
             return client;
         }
 
@@ -199,6 +204,31 @@ namespace InternConnect.Service.ThirdParty
             toStudent.Subject = "Student Submission For Letter";
             toStudent.Body = "Send to Student last step";
             client.Send(toStudent);
+        }
+
+        public void ForgotPassword(Account accountData)
+        {
+            var message = "http://localhost:5000/" + $"login?email={accountData.Email}&resetkey={accountData.ResetKey}";
+            var client = SmtpConfiguration();
+            var toAccount = new MailMessage();
+            toAccount.To.Add(accountData.Email);
+            toAccount.From = new MailAddress("internconnectsmtp@gmail.com");
+            toAccount.Subject = "Reset Password Link";
+            toAccount.Body = message;
+            client.Send(toAccount);
+        }
+
+        public void Onboard(Account accountData)
+        {
+            var message = "http://localhost:5000/" +
+                          $"onboard?email={accountData.Email}&resetkey={accountData.ResetKey}";
+            var client = SmtpConfiguration();
+            var toAccount = new MailMessage();
+            toAccount.To.Add(accountData.Email);
+            toAccount.From = new MailAddress("postmaster@eco-tigers.com");
+            toAccount.Subject = "Reset Password Link";
+            toAccount.Body = message;
+            client.Send(toAccount);
         }
     }
 }

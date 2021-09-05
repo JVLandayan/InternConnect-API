@@ -59,7 +59,7 @@ namespace InternConnect.Service.Main
 
         public IEnumerable<OpportunityDto.ReadOpportunity> GetByCompanyId(int companyId)
         {
-            var opportunityList = _opportunityRepository.GetAll().Where(o=>o.CompanyId == companyId);
+            var opportunityList = _opportunityRepository.GetAll().Where(o => o.CompanyId == companyId);
             var mappedList = new List<OpportunityDto.ReadOpportunity>();
             foreach (var opportunity in opportunityList)
                 mappedList.Add(_mapper.Map<OpportunityDto.ReadOpportunity>(opportunity));

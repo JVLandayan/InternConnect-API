@@ -40,7 +40,6 @@ namespace InternConnect.Service.Main
             _context.SaveChanges();
 
             return _mapper.Map<CompanyDto.ReadCompany>(payloadData);
-
         }
 
         public void DeleteCompany(int id)
