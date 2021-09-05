@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using InternConnect.Dto.Section;
 using InternConnect.Service.Main;
 using Microsoft.AspNetCore.Mvc;
@@ -25,10 +26,18 @@ namespace InternConnect.Controllers
         }
 
         //GET /admin/id
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetSection")]
         public ActionResult<IEnumerable<SectionDto.ReadSection>> GetSection(int id)
         {
-            return Ok(_sectionService.GetById(id));
+            try
+            {
+                return Ok(_sectionService.GetById(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Section doesn't exist");
+            }
+            
         }
 
 
@@ -42,8 +51,8 @@ namespace InternConnect.Controllers
         [HttpPost]
         public ActionResult<SectionDto.ReadSection> AddSection(SectionDto.AddSection payload)
         {
-            _sectionService.AddSection(payload);
-            return Ok();
+            var sectionData = _sectionService.AddSection(payload);
+            return CreatedAtRoute(nameof(GetSection), new { Id = sectionData.Id }, sectionData);
         }
 
 

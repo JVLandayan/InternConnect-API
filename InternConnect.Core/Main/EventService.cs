@@ -12,7 +12,7 @@ namespace InternConnect.Service.Main
     {
         public IEnumerable<EventDto.ReadEvent> GetAll(int adminId);
         public EventDto.ReadEvent GetbyId(int id);
-        public void AddEvent(EventDto.AddEvent payload);
+        public EventDto.ReadEvent AddEvent(EventDto.AddEvent payload);
         public void UpdateEvent(EventDto.UpdateEvent payload);
     }
 
@@ -29,10 +29,13 @@ namespace InternConnect.Service.Main
             _eventsRepository = events;
         }
 
-        public void AddEvent(EventDto.AddEvent payload)
+        public EventDto.ReadEvent AddEvent(EventDto.AddEvent payload)
         {
-            _eventsRepository.Add(_mapper.Map<Event>(payload));
+            var payloadData = _mapper.Map<Event>(payload);
+            _eventsRepository.Add(payloadData);
             _context.SaveChanges();
+
+            return _mapper.Map<EventDto.ReadEvent>(payloadData);
         }
 
         public IEnumerable<EventDto.ReadEvent> GetAll(int adminId)

@@ -9,7 +9,7 @@ namespace InternConnect.Service.Main
 {
     public interface IProgramService
     {
-        public void AddProgram(ProgramDto.AddProgram payload);
+        public ProgramDto.ReadProgram AddProgram(ProgramDto.AddProgram payload);
         public void UpdateProgram(ProgramDto.UpdateProgram payload);
         public IEnumerable<ProgramDto.ReadProgram> GetAll();
         public ProgramDto.ReadProgram GetById(int id);
@@ -30,10 +30,12 @@ namespace InternConnect.Service.Main
             _programRepository = program;
         }
 
-        public void AddProgram(ProgramDto.AddProgram payload)
+        public ProgramDto.ReadProgram AddProgram(ProgramDto.AddProgram payload)
         {
-            _programRepository.Add(_mapper.Map<Program>(payload));
+            var payloadData = _mapper.Map<Program>(payload);
+            _programRepository.Add(payloadData);
             _context.SaveChanges();
+            return _mapper.Map<ProgramDto.ReadProgram>(payloadData);
         }
 
         public IEnumerable<ProgramDto.ReadProgram> GetAll()

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using InternConnect.Context;
 using InternConnect.Dto.Program;
 using InternConnect.Service.Main;
@@ -26,38 +27,46 @@ namespace InternConnect.Controllers
         }
 
         //GET /admin/id
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetProgram")]
         public ActionResult<IEnumerable<ProgramDto.ReadProgram>> GetProgram(int id)
         {
-            return Ok(_programService.GetById(id));
+            try
+            {
+                return Ok(_programService.GetById(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Program doesn't exist");
+            }
+            
         }
 
         [HttpPost]
         public ActionResult<ProgramDto.ReadProgram> AddProgram(ProgramDto.AddProgram payload)
         {
-            _programService.AddProgram(payload);
-            return Ok();
+            var programData = _programService.AddProgram(payload);
+            return CreatedAtRoute(nameof(GetProgram), new { Id = programData.Id }, programData);
         }
 
         [HttpPut("ISO")]
         public ActionResult<ProgramDto.ReadProgram> UpdateIsoCode(ProgramDto.UpdateIsoCode payload)
         {
             _programService.UpdateIsoCode(payload);
-            return Ok();
+            return NoContent();
         }
 
         [HttpPut("program")]
         public ActionResult<ProgramDto.ReadProgram> UpdateProgram(ProgramDto.UpdateProgram payload)
         {
             _programService.UpdateProgram(payload);
-            return Ok();
+            return NoContent();
         }
 
         [HttpPut("hours")]
         public ActionResult<ProgramDto.ReadProgram> UpdateHours(ProgramDto.UpdateNumberOfHours payload)
         {
             _programService.UpdateNumberOfHours(payload);
-            return Ok();
+            return NoContent();
         }
 
 

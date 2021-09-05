@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using InternConnect.Context;
 using InternConnect.Dto.Student;
 using InternConnect.Service.Main;
@@ -29,7 +30,15 @@ namespace InternConnect.Controllers
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<StudentDto.ReadStudent>> GetStudent(int id)
         {
-            return Ok(_studentService.GetById(id));
+            try
+            {
+                return Ok(_studentService.GetById(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Student doesn't exist");
+            }
+            
         }
 
 

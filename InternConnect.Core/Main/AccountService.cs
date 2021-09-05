@@ -6,14 +6,15 @@ using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
 using InternConnect.Dto.Account;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Service.Main
 {
     public interface IAccountService
     {
-        public void AddCoordinator(AccountDto.AddAccountCoordinator entity);
-        public void AddStudent(AccountDto.AddAccountStudent payload);
-        public void AddChair(AccountDto.AddAccountChair payload);
+        public AccountDto.ReadAccount AddCoordinator(AccountDto.AddAccountCoordinator entity);
+        public AccountDto.ReadAccount AddStudent(AccountDto.AddAccountStudent payload);
+        public AccountDto.ReadAccount AddChair(AccountDto.AddAccountChair payload);
         //public void AddRange(List<Account> entity);
         public void Delete(int id);
         //public void DeleteRange(List<Account> entities);
@@ -38,8 +39,14 @@ namespace InternConnect.Service.Main
         }
 
 
-        public void AddStudent(AccountDto.AddAccountStudent payload)
+        public AccountDto.ReadAccount AddStudent(AccountDto.AddAccountStudent payload)
         {
+
+            if (_accountRepository.GetAll().FirstOrDefault(a => a.Email == payload.Email) != null)
+            {
+                return new AccountDto.ReadAccount();
+            }
+
             var accountData = new Account
             {
                 Email = payload.Email,
@@ -57,14 +64,15 @@ namespace InternConnect.Service.Main
             accountData.Student = studentData;
             _accountRepository.Add(accountData);
             _context.SaveChanges();
+            return _mapper.Map<AccountDto.ReadAccount>(accountData);
         }
 
-        public void AddCoordinator(AccountDto.AddAccountCoordinator entity)
+        public AccountDto.ReadAccount AddCoordinator(AccountDto.AddAccountCoordinator entity)
         {
 
-            if (entity.Email == _accountRepository.GetAll().First(a => a.Email == entity.Email).Email)
+            if (_accountRepository.GetAll().FirstOrDefault(a => a.Email == entity.Email) != null)
             {
-                return;
+                return new AccountDto.ReadAccount();
             }
             var accountData = new Account
             {
@@ -81,13 +89,14 @@ namespace InternConnect.Service.Main
             accountData.Admin = adminData;
             _accountRepository.Add(accountData);
             _context.SaveChanges();
+            return _mapper.Map<AccountDto.ReadAccount>(accountData);
         }
 
-        public void AddChair(AccountDto.AddAccountChair entity)
+        public AccountDto.ReadAccount AddChair(AccountDto.AddAccountChair entity)
         {
-            if (entity.Email == _accountRepository.GetAll().First(a => a.Email == entity.Email).Email)
+            if (_accountRepository.GetAll().FirstOrDefault(a => a.Email == entity.Email) != null)
             {
-                return;
+                return new AccountDto.ReadAccount();
             }
             var accountData = new Account
             {
@@ -104,6 +113,7 @@ namespace InternConnect.Service.Main
             _accountRepository.Add(accountData);
 
             _context.SaveChanges();
+            return _mapper.Map<AccountDto.ReadAccount>(accountData);
         }
 
 

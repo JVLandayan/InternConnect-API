@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using InternConnect.Dto.Opportunity;
 using InternConnect.Service.Main;
 using Microsoft.AspNetCore.Mvc;
@@ -18,10 +19,18 @@ namespace InternConnect.Controllers
 
 
         //GET /accounts
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetOpportunity")]
         public ActionResult<IEnumerable<OpportunityDto.ReadOpportunity>> GetOpportunity(int id)
         {
-            return Ok(_opportunityService.GetById(id));
+            try
+            {
+                return Ok(_opportunityService.GetById(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Opportunity doesn't exist");
+            }
+            
         }
 
         [HttpGet("{companyId}")]
@@ -37,8 +46,6 @@ namespace InternConnect.Controllers
         }
 
 
-        //Coordinators
-        //Authorize AuthCoordinatorClaim
         [HttpDelete("{id}")]
         public ActionResult DeleteOpportunity(int id)
         {
@@ -46,20 +53,18 @@ namespace InternConnect.Controllers
             return Ok();
         }
 
-        //Authorize Student Claim
-        // POST accounts/student 
         [HttpPut]
         public ActionResult<OpportunityDto.ReadOpportunity> UpdateOpportunity(OpportunityDto.UpdateOpportunity payload)
         {
             _opportunityService.UpdateOpportunity(payload);
-            return Ok();
+            return NoContent();
         }
 
         [HttpPost]
         public ActionResult<OpportunityDto.ReadOpportunity> AddOpportunity(OpportunityDto.AddOpportunity payload)
         {
-            _opportunityService.AddOpportunity(payload);
-            return Ok();
+            var opportunityData =_opportunityService.AddOpportunity(payload);
+            return CreatedAtRoute(nameof(GetOpportunity), new { Id = opportunityData.Id }, opportunityData);
         }
         //Chairs
 

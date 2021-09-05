@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using InternConnect.Dto.Company;
 using InternConnect.Service.Main;
 using Microsoft.AspNetCore.Mvc;
@@ -18,10 +19,17 @@ namespace InternConnect.Controllers
 
 
         //GET /accounts
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetCompany")]
         public ActionResult<IEnumerable<CompanyDto.ReadCompany>> GetCompany(int id)
         {
-            return Ok(_companyService.GetById(id));
+            try
+            {
+                return Ok(_companyService.GetById(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Company doesn't exist");
+            }
         }
 
         [HttpGet]
@@ -36,8 +44,15 @@ namespace InternConnect.Controllers
         [HttpDelete("{id}")]
         public ActionResult DeleteCompany(int id)
         {
-            _companyService.DeleteCompany(id);
-            return Ok();
+            try
+            {
+                _companyService.DeleteCompany(id);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Company doesn't exist");
+            }
         }
 
         //Authorize Student Claim
@@ -46,14 +61,14 @@ namespace InternConnect.Controllers
         public ActionResult<CompanyDto.ReadCompany> UpdateCompany(CompanyDto.UpdateCompany payload)
         {
             _companyService.UpdateCompany(payload);
-            return Ok();
+            return NoContent();
         }
 
         [HttpPost]
         public ActionResult<CompanyDto.ReadCompany> AddCompany(CompanyDto.AddCompany payload)
         {
-            _companyService.AddCompany(payload);
-            return Ok();
+            var companyData = _companyService.AddCompany(payload);
+            return CreatedAtRoute(nameof(GetCompany), new {companyData.Id}, companyData);
         }
         //Chairs
 

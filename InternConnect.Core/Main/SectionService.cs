@@ -9,7 +9,7 @@ namespace InternConnect.Service.Main
 {
     public interface ISectionService
     {
-        public void AddSection(SectionDto.AddSection payload);
+        public SectionDto.ReadSection AddSection(SectionDto.AddSection payload);
         public void UpdateSection(SectionDto.UpdateSection payload);
         public SectionDto.ReadSection GetById(int id);
         public IEnumerable<SectionDto.ReadSection> GetAll();
@@ -28,10 +28,12 @@ namespace InternConnect.Service.Main
             _sectionRepository = section;
         }
 
-        public void AddSection(SectionDto.AddSection payload)
+        public SectionDto.ReadSection AddSection(SectionDto.AddSection payload)
         {
-            _sectionRepository.Add(_mapper.Map<Section>(payload));
+            var payloadData = _mapper.Map<Section>(payload);
+            _sectionRepository.Add(payloadData);
             _context.SaveChanges();
+            return _mapper.Map<SectionDto.ReadSection>(payloadData);
         }
 
         public IEnumerable<SectionDto.ReadSection> GetAll()

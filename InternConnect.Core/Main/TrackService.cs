@@ -9,7 +9,7 @@ namespace InternConnect.Service.Main
 {
     public interface ITrackService
     {
-        public void AddTrack(TrackDto.AddTrack payload);
+        public TrackDto.ReadTrack AddTrack(TrackDto.AddTrack payload);
         public void UpdateTrack(TrackDto.UpdateTrack payload);
         public TrackDto.ReadTrack GetTrack(int id);
         public IEnumerable<TrackDto.ReadTrack> GetAllTracks();
@@ -29,10 +29,12 @@ namespace InternConnect.Service.Main
             _trackRepository = track;
         }
 
-        public void AddTrack(TrackDto.AddTrack payload)
+        public TrackDto.ReadTrack AddTrack(TrackDto.AddTrack payload)
         {
-            _trackRepository.Add(_mapper.Map<Track>(payload));
+            var payloadData = _mapper.Map<Track>(payload);
+            _trackRepository.Add(payloadData);
             _context.SaveChanges();
+            return _mapper.Map<TrackDto.ReadTrack>(payloadData);
         }
 
         public IEnumerable<TrackDto.ReadTrack> GetAllTracks()

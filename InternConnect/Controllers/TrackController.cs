@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using InternConnect.Dto.Track;
 using InternConnect.Service.Main;
 using Microsoft.AspNetCore.Mvc;
@@ -25,10 +26,18 @@ namespace InternConnect.Controllers
         }
 
         //GET /admin/id
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetTrack")]
         public ActionResult<IEnumerable<TrackDto.ReadTrack>> GetTrack(int id)
         {
-            return Ok(_trackService.GetTrack(id));
+            try
+            {
+                return Ok(_trackService.GetTrack(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Track doesn't exist");
+            }
+
         }
 
 
@@ -42,15 +51,23 @@ namespace InternConnect.Controllers
         [HttpPost]
         public ActionResult<TrackDto.ReadTrack> AddTrack(TrackDto.AddTrack payload)
         {
-            _trackService.AddTrack(payload);
-            return Ok();
+            var trackData = _trackService.AddTrack(payload);
+            return CreatedAtRoute(nameof(GetTrack), new { Id = trackData.Id }, trackData);
         }
 
         [HttpDelete("{id}")]
         public ActionResult DeleteTrack(int id)
         {
-            _trackService.DeleteTrack(id);
-            return Ok();
+            try
+            {
+                _trackService.DeleteTrack(id);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Track doesn't exist");
+            }
+
         }
 
 

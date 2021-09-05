@@ -44,88 +44,44 @@ namespace InternConnect.Controllers
         [HttpPost("coordinators")]
         public ActionResult<AccountDto.ReadAccount> AddCoordinators(AccountDto.AddAccountCoordinator payload)
         {
-            _accountService.AddCoordinator(payload);
-            return Ok();
+            var accountData = _accountService.AddCoordinator(payload);
+            if (accountData.Id  == 0)
+            {
+                return BadRequest("Email already exists");
+            }
+            return CreatedAtRoute(nameof(GetAccount), new { Id = accountData.Id }, accountData);
         }
 
         [HttpPost("student")]
         public ActionResult<AccountDto.ReadAccount> AddStudents(AccountDto.AddAccountStudent payload)
         {
-            _accountService.AddStudent(payload);
-            return Ok();
+           var accountData =  _accountService.AddStudent(payload);
+           if (accountData.Id == 0)
+           {
+               return BadRequest("Email already exists");
+           }
+           return CreatedAtRoute(nameof(GetAccount), new { Id = accountData.Id }, accountData);
         }
 
         //Chairs
         [HttpPost("chair")]
         public ActionResult<AccountDto.ReadAccount> AddChairs(AccountDto.AddAccountChair payload)
         {
-            _accountService.AddChair(payload);
-            return Ok();
+            var accountData = _accountService.AddChair(payload);
+            if (accountData.Id == 0)
+            {
+                return BadRequest("Email already exists");
+            }
+            return CreatedAtRoute(nameof(GetAccount), new { Id = accountData.Id }, accountData);
         }
 
         [HttpDelete("{id}")]
         public ActionResult DeleteAccount(int id)
         {
             _accountService.Delete(id);
-            return Ok();
+            return NoContent();
         }
 
-        //[Authorize]
-        //[HttpPut("{id}")]
-
-        //public ActionResult UpdateTeam(int id, TeamsUpdateDto teamsUpdateDto)
-        //{
-        //    var teamsModelFromRepo = _repository.GetTeamById(id);
-
-        //    if (teamsModelFromRepo == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    _mapper.Map(teamsUpdateDto, teamsModelFromRepo);
-        //    _repository.UpdateTeam(teamsModelFromRepo);
-        //    _repository.SaveChanges();
-
-        //    return NoContent();
-
-        //}
-        //[Authorize]
-        //[HttpPatch("{id}")]
-
-        //public ActionResult PartialTeamsUpdate(int id, JsonPatchDocument<TeamsUpdateDto> patchDoc)
-        //{
-        //    var teamModelFromRepo = _repository.GetTeamById(id);
-        //    if (teamModelFromRepo == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var teamToPatch = _mapper.Map<TeamsUpdateDto>(teamModelFromRepo);
-        //    patchDoc.ApplyTo(teamToPatch, ModelState);
-        //    if (!TryValidateModel(teamToPatch))
-        //    {
-        //        return ValidationProblem();
-        //    }
-        //    _mapper.Map(teamToPatch, teamModelFromRepo);
-        //    _repository.UpdateTeam(teamModelFromRepo);
-        //    _repository.SaveChanges();
-        //    return NoContent();
-
-        //}
-        //[Authorize]
-        //[HttpDelete("{id}")]
-        //public ActionResult DeleteMerch(int id)
-        //{
-        //    var photoFolderPath = _env.ContentRootPath + "/Photos/";
-        //    var teamModelFromRepo = _repository.GetTeamById(id);
-        //    if (teamModelFromRepo == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _repository.DeleteTeam(teamModelFromRepo);
-        //    System.IO.File.Delete(photoFolderPath + teamModelFromRepo.TeamsImage);
-        //    _repository.SaveChanges();
-        //    return NoContent();
-        //}
+        
     }
 }

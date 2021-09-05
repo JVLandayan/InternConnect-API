@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using InternConnect.Dto.Event;
 using InternConnect.Service.Main;
 using Microsoft.AspNetCore.Mvc;
@@ -25,17 +26,25 @@ namespace InternConnect.Controllers
         }
 
         //GET /admin/id
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetEvent")]
         public ActionResult<IEnumerable<EventDto.ReadEvent>> GetEvent(int id)
         {
-            return Ok(_eventsService.GetbyId(id));
+            try
+            {
+                return Ok(_eventsService.GetbyId(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Event doesn't exist");
+            }
+
         }
 
         [HttpPost]
         public ActionResult<EventDto.ReadEvent> AddEvent(EventDto.AddEvent payload)
         {
-            _eventsService.AddEvent(payload);
-            return Ok();
+            var eventData = _eventsService.AddEvent(payload);
+            return CreatedAtRoute(nameof(GetEvent), new { Id = eventData.Id }, eventData);
         }
 
         [HttpPut("admin")]

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using InternConnect.Context;
 using InternConnect.Dto.Account;
 using InternConnect.Dto.Admin;
@@ -30,15 +31,31 @@ namespace InternConnect.Controllers
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<AdminDto.ReadAdmin>> GetAdmin(int id)
         {
-            return Ok(_adminService.GetById(id));
+            try
+            {
+                return Ok(_adminService.GetById(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Admin doesn't exist");
+            }
+
         }
 
 
         [HttpPut("signature/{id}")]
         public ActionResult<AccountDto.ReadAccount> UpdateSignature(AdminDto.UpdateAdmin payload, int id)
         {
-            _adminService.UpdateAdmin(payload, id);
-            return NoContent();
+            try
+            {
+                _adminService.UpdateAdmin(payload, id);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Something went wrong");
+            }
+
         }
 
 

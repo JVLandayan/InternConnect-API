@@ -10,7 +10,7 @@ namespace InternConnect.Service.Main
 {
     public interface IOpportunityService
     {
-        public void AddOpportunity(OpportunityDto.AddOpportunity payload);
+        public OpportunityDto.ReadOpportunity AddOpportunity(OpportunityDto.AddOpportunity payload);
         public void UpdateOpportunity(OpportunityDto.UpdateOpportunity payload);
         public OpportunityDto.ReadOpportunity GetById(int id);
 
@@ -32,10 +32,13 @@ namespace InternConnect.Service.Main
             _opportunityRepository = opportunity;
         }
 
-        public void AddOpportunity(OpportunityDto.AddOpportunity payload)
+        public OpportunityDto.ReadOpportunity AddOpportunity(OpportunityDto.AddOpportunity payload)
         {
-            _opportunityRepository.Add(_mapper.Map<Opportunity>(payload));
+            var payloadData = _mapper.Map<Opportunity>(payload);
+            _opportunityRepository.Add(payloadData);
             _context.SaveChanges();
+
+            return _mapper.Map<OpportunityDto.ReadOpportunity>(payloadData);
         }
 
         public void DeleteOpportunity(int id)

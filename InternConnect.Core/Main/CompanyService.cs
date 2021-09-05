@@ -10,7 +10,7 @@ namespace InternConnect.Service.Main
 {
     public interface ICompanyService
     {
-        public void AddCompany(CompanyDto.AddCompany payload);
+        public CompanyDto.ReadCompany AddCompany(CompanyDto.AddCompany payload);
         public void UpdateCompany(CompanyDto.UpdateCompany payload);
         public CompanyDto.ReadCompany GetById(int id);
         public IEnumerable<CompanyDto.ReadCompany> GetAllCompanies();
@@ -33,10 +33,14 @@ namespace InternConnect.Service.Main
             _opportunityRepository = opportunity;
         }
 
-        public void AddCompany(CompanyDto.AddCompany payload)
+        public CompanyDto.ReadCompany AddCompany(CompanyDto.AddCompany payload)
         {
-            _companyRepository.Add(_mapper.Map<Company>(payload));
+            var payloadData = _mapper.Map<Company>(payload);
+            _companyRepository.Add(payloadData);
             _context.SaveChanges();
+
+            return _mapper.Map<CompanyDto.ReadCompany>(payloadData);
+
         }
 
         public void DeleteCompany(int id)

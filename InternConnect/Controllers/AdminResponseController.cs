@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using InternConnect.Dto.AdminResponse;
 using InternConnect.Service.Main;
 using Microsoft.AspNetCore.Mvc;
@@ -17,15 +18,23 @@ namespace InternConnect.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<AdminResponseDto.ReadResponse>> GetAllEntriesByStep()
+        public ActionResult<IEnumerable<AdminResponseDto.ReadResponse>> GetAllEntries()
         {
             return Ok(_adminResponseService.GetAllEntries());
         }
 
         [HttpGet("admin/{stepNum}")]
-        public ActionResult<IEnumerable<AdminResponseDto.ReadResponse>> GetAllAdmin(int stepNum)
+        public ActionResult<IEnumerable<AdminResponseDto.ReadResponse>> GetAllEntriesByStep(int stepNum)
         {
-            return Ok(_adminResponseService.GetAllEntriesByStep(stepNum));
+            try
+            {
+                return Ok(_adminResponseService.GetAllEntriesByStep(stepNum));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+            
         }
 
 
@@ -33,10 +42,7 @@ namespace InternConnect.Controllers
         public ActionResult<AdminResponseDto.ReadResponse> UpdateAcceptanceByCoordinator(
             AdminResponseDto.UpdateAcceptanceOfCoordinatorResponse payload, int adminId)
         {
-
-                _adminResponseService.UpdateAcceptanceByCoordinator(payload, adminId);
-         
-
+            _adminResponseService.UpdateAcceptanceByCoordinator(payload, adminId);
             return NoContent();
         }
 
@@ -44,9 +50,8 @@ namespace InternConnect.Controllers
         public ActionResult<AdminResponseDto.ReadResponse> UpdateEmailSent(
             AdminResponseDto.UpdateEmailSentResponse payload)
         {
+            _adminResponseService.UpdateEmailSent(payload);
 
-                _adminResponseService.UpdateEmailSent(payload);
-            
             return NoContent();
         }
 
@@ -54,10 +59,9 @@ namespace InternConnect.Controllers
         public ActionResult<AdminResponseDto.ReadResponse> UpdateCompanyAgrees(
             AdminResponseDto.UpdateCompanyAgreesResponse payload)
         {
+            _adminResponseService.UpdateCompanyAgrees(payload);
 
-                _adminResponseService.UpdateCompanyAgrees(payload);
 
-            
             return NoContent();
         }
 
@@ -65,10 +69,9 @@ namespace InternConnect.Controllers
         public ActionResult<AdminResponseDto.ReadResponse> UpdateAcceptanceByChair(
             AdminResponseDto.UpdateChairResponse payload)
         {
+            _adminResponseService.UpdateAcceptanceByChair(payload);
 
-                _adminResponseService.UpdateAcceptanceByChair(payload);
 
-            
             return NoContent();
         }
 
@@ -76,10 +79,9 @@ namespace InternConnect.Controllers
         public ActionResult<AdminResponseDto.ReadResponse> UpdateAcceptanceByDean(
             AdminResponseDto.UpdateDeanResponse payload, int adminId)
         {
+            _adminResponseService.UpdateAcceptanceByDean(payload, adminId);
 
-                _adminResponseService.UpdateAcceptanceByDean(payload, adminId);
 
-            
             return NoContent();
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using InternConnect.Dto.WebState;
 using InternConnect.Service.Main;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,15 @@ namespace InternConnect.Controllers
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<WebStateDto.ReadWebState>> GetWebState(int id)
         {
-            return Ok(_webStateService.GetWebState(id));
+            try
+            {
+                return Ok(_webStateService.GetWebState(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest("State doesn't exist");
+            }
+
         }
 
 

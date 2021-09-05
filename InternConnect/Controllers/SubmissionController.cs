@@ -23,10 +23,18 @@ namespace InternConnect.Controllers
 
 
         //GET /accounts
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetSubmission")]
         public ActionResult<IEnumerable<SubmissionDto.ReadSubmission>> GetSubmission(int id)
         {
-            return Ok(_submissionService.GetSubmission(id));
+            try
+            {
+                return Ok(_submissionService.GetSubmission(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Submission doesn't exist");
+            }
+
         }
 
         [HttpGet]
@@ -39,102 +47,14 @@ namespace InternConnect.Controllers
         public ActionResult<SubmissionDto.ReadSubmission> UpdateSubmission(SubmissionDto.UpdateSubmission payload)
         {
             _submissionService.UpdateSubmission(payload);
-            return Ok();
+            return NoContent();
         }
 
         [HttpPost("{sectionId}")]
         public ActionResult AddSubmission(SubmissionDto.AddSubmission payload, int sectionId)
         {
-            _submissionService.AddSubmission(payload, sectionId);
-            #region FileUpload
-            //try
-            //{
-            //    var files = HttpContext.Request.Form.Files;
-            //    if (files != null && files.Count > 0)
-            //    {
-            //        foreach (var file in files)
-            //        {
-            //            FileInfo fi = new FileInfo(file.FileName);
-            //            var newfilename = payload.StudentNumber + DateTime.Now.TimeOfDay.Milliseconds;
-            //            var path = Path.Combine("", _webHostEnvironment.ContentRootPath + "/files" + newfilename);
-            //            using (var stream = new FileStream(path, FileMode.Create))
-            //            {
-            //                file.CopyTo(stream);
-            //            }
-
-            //        }
-            //    }
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e);
-            //    throw;
-            //}
-
-
-            #endregion
-
-            return Ok();
+            var submissionData =_submissionService.AddSubmission(payload, sectionId);
+            return CreatedAtRoute(nameof(GetSubmission), new { Id = submissionData.Id }, submissionData);
         }
-        //Chairs
-
-
-        //[Authorize]
-        //[HttpPut("{id}")]
-
-        //public ActionResult UpdateTeam(int id, TeamsUpdateDto teamsUpdateDto)
-        //{
-        //    var teamsModelFromRepo = _repository.GetTeamById(id);
-
-        //    if (teamsModelFromRepo == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    _mapper.Map(teamsUpdateDto, teamsModelFromRepo);
-        //    _repository.UpdateTeam(teamsModelFromRepo);
-        //    _repository.SaveChanges();
-
-        //    return NoContent();
-
-        //}
-        //[Authorize]
-        //[HttpPatch("{id}")]
-
-        //public ActionResult PartialTeamsUpdate(int id, JsonPatchDocument<TeamsUpdateDto> patchDoc)
-        //{
-        //    var teamModelFromRepo = _repository.GetTeamById(id);
-        //    if (teamModelFromRepo == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var teamToPatch = _mapper.Map<TeamsUpdateDto>(teamModelFromRepo);
-        //    patchDoc.ApplyTo(teamToPatch, ModelState);
-        //    if (!TryValidateModel(teamToPatch))
-        //    {
-        //        return ValidationProblem();
-        //    }
-        //    _mapper.Map(teamToPatch, teamModelFromRepo);
-        //    _repository.UpdateTeam(teamModelFromRepo);
-        //    _repository.SaveChanges();
-        //    return NoContent();
-
-        //}
-        //[Authorize]
-        //[HttpDelete("{id}")]
-        //public ActionResult DeleteMerch(int id)
-        //{
-        //    var photoFolderPath = _env.ContentRootPath + "/Photos/";
-        //    var teamModelFromRepo = _repository.GetTeamById(id);
-        //    if (teamModelFromRepo == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _repository.DeleteTeam(teamModelFromRepo);
-        //    System.IO.File.Delete(photoFolderPath + teamModelFromRepo.TeamsImage);
-        //    _repository.SaveChanges();
-        //    return NoContent();
-        //}
     }
 }

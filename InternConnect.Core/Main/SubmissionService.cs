@@ -13,7 +13,7 @@ namespace InternConnect.Service.Main
 {
     public interface ISubmissionService
     {
-        public void AddSubmission(SubmissionDto.AddSubmission payload, int id);
+        public SubmissionDto.ReadSubmission AddSubmission(SubmissionDto.AddSubmission payload, int id);
         public void UpdateSubmission(SubmissionDto.UpdateSubmission payload);
         public SubmissionDto.ReadSubmission GetSubmission(int id);
         public IEnumerable<SubmissionDto.ReadSubmission> GetAllSubmissions();
@@ -39,18 +39,16 @@ namespace InternConnect.Service.Main
             _studentService = studentService;
         }
 
-        public void AddSubmission(SubmissionDto.AddSubmission payload, int sectionId)
+        public SubmissionDto.ReadSubmission AddSubmission(SubmissionDto.AddSubmission payload, int sectionId)
         {
             var submissionData = _mapper.Map<Submission>(payload);
             var adminResponse = new AdminResponse();
-
-
             adminResponse.Comments = "";
             submissionData.AdminResponse = adminResponse;
             _submissionRepository.Add(submissionData);
             _context.SaveChanges();
             _mailerService.NotifyCoordinator(sectionId);
-
+            return _mapper.Map<SubmissionDto.ReadSubmission>(submissionData);
         }
 
         public IEnumerable<SubmissionDto.ReadSubmission> GetAllSubmissions()

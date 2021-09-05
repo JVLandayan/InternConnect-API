@@ -1,4 +1,5 @@
-﻿    using System.Collections.Generic;
+﻿    using System;
+    using System.Collections.Generic;
 using InternConnect.Dto.AcademicYear;
 using InternConnect.Service.Main;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,15 @@ namespace InternConnect.Controllers
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<AcademicYearDto.ReadAcademicYear>> GetAcademicYear(int id)
         {
-            return Ok(_academicYearService.GetAcademicYear(id));
+            try
+            {
+                return Ok(_academicYearService.GetAcademicYear(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Academic Year isn't set");
+            }
+            
         }
 
 
@@ -30,8 +39,16 @@ namespace InternConnect.Controllers
         public ActionResult<AcademicYearDto.ReadAcademicYear> UpdateAcademicYear(
             AcademicYearDto.UpdateAcademicYear payload)
         {
-            _academicYearService.UpdateAcademicYear(payload);
-            return NoContent();
+            try
+            {
+                _academicYearService.UpdateAcademicYear(payload);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+
         }
 
 

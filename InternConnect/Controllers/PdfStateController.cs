@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using InternConnect.Dto.PdfState;
 using InternConnect.Service.Main;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,15 @@ namespace InternConnect.Controllers
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<PdfStateDto.ReadPdfState>> GetPdfState(int id)
         {
-            return Ok(_pdfStateService.GetPdfState(id));
+            try
+            {
+                return Ok(_pdfStateService.GetPdfState(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Something's wrong");
+            }
+            
         }
 
 

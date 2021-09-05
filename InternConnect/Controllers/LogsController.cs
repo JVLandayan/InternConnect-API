@@ -19,7 +19,7 @@ namespace InternConnect.Controllers
 
         //GET /admin
         [HttpGet("adminId")]
-        public ActionResult<IEnumerable<LogsDto.ReadLogs>> GetAllAdmin(int adminId)
+        public ActionResult<IEnumerable<LogsDto.ReadLogs>> GetLogs(int adminId)
         {
             return Ok(_logsService.GetLogs(adminId));
         }
