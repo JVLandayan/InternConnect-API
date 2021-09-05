@@ -57,7 +57,7 @@ namespace InternConnect.Controllers
 
         //Chairs
         [HttpPost("chair")]
-        public ActionResult<AccountDto.ReadAccount> AddChairs(AccountDto.AddAccountChair payload)
+        public ActionResult<AccountDto.ReadAccount> AddChair(AccountDto.AddAccountChair payload)
         {
             var accountData = _accountService.AddChair(payload);
             if (accountData.Id == 0) return BadRequest("Email already exists");
