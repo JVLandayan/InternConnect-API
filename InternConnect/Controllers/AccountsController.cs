@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Dto.Account;
 using InternConnect.Service.Main;
@@ -35,32 +34,25 @@ namespace InternConnect.Controllers
             }
             catch (Exception e)
             {
-                return NotFound(new { message = "Account doesn't exist" });
+                return NotFound(new {message = "Account doesn't exist"});
             }
         }
-
 
 
         [HttpPost("coordinators")]
         public ActionResult<AccountDto.ReadAccount> AddCoordinators(AccountDto.AddAccountCoordinator payload)
         {
             var accountData = _accountService.AddCoordinator(payload);
-            if (accountData.Id  == 0)
-            {
-                return BadRequest("Email already exists");
-            }
-            return CreatedAtRoute(nameof(GetAccount), new { Id = accountData.Id }, accountData);
+            if (accountData.Id == 0) return BadRequest("Email already exists");
+            return CreatedAtRoute(nameof(GetAccount), new {accountData.Id}, accountData);
         }
 
         [HttpPost("student")]
         public ActionResult<AccountDto.ReadAccount> AddStudents(AccountDto.AddAccountStudent payload)
         {
-           var accountData =  _accountService.AddStudent(payload);
-           if (accountData.Id == 0)
-           {
-               return BadRequest("Email already exists");
-           }
-           return CreatedAtRoute(nameof(GetAccount), new { Id = accountData.Id }, accountData);
+            var accountData = _accountService.AddStudent(payload);
+            if (accountData.Id == 0) return BadRequest("Email already exists");
+            return CreatedAtRoute(nameof(GetAccount), new {accountData.Id}, accountData);
         }
 
         //Chairs
@@ -68,11 +60,8 @@ namespace InternConnect.Controllers
         public ActionResult<AccountDto.ReadAccount> AddChairs(AccountDto.AddAccountChair payload)
         {
             var accountData = _accountService.AddChair(payload);
-            if (accountData.Id == 0)
-            {
-                return BadRequest("Email already exists");
-            }
-            return CreatedAtRoute(nameof(GetAccount), new { Id = accountData.Id }, accountData);
+            if (accountData.Id == 0) return BadRequest("Email already exists");
+            return CreatedAtRoute(nameof(GetAccount), new {accountData.Id}, accountData);
         }
 
         [HttpDelete("{id}")]
@@ -81,7 +70,5 @@ namespace InternConnect.Controllers
             _accountService.Delete(id);
             return NoContent();
         }
-
-        
     }
 }

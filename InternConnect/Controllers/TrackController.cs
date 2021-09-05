@@ -37,7 +37,6 @@ namespace InternConnect.Controllers
             {
                 return BadRequest("Track doesn't exist");
             }
-
         }
 
 
@@ -52,7 +51,7 @@ namespace InternConnect.Controllers
         public ActionResult<TrackDto.ReadTrack> AddTrack(TrackDto.AddTrack payload)
         {
             var trackData = _trackService.AddTrack(payload);
-            return CreatedAtRoute(nameof(GetTrack), new { Id = trackData.Id }, trackData);
+            return CreatedAtRoute(nameof(GetTrack), new {trackData.Id}, trackData);
         }
 
         [HttpDelete("{id}")]
@@ -67,48 +66,6 @@ namespace InternConnect.Controllers
             {
                 return BadRequest("Track doesn't exist");
             }
-
         }
-
-
-        //[Authorize]
-        //[HttpPut("{id}")]
-
-        //public ActionResult UpdateTeam(int id, TeamsUpdateDto teamsUpdateDto)
-        //{
-        //    var teamsModelFromRepo = _repository.GetTeamById(id);
-
-        //    if (teamsModelFromRepo == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    _mapper.Map(teamsUpdateDto, teamsModelFromRepo);
-        //    _repository.UpdateTeam(teamsModelFromRepo);
-        //    _repository.SaveChanges();
-
-        //    return NoContent();
-
-        //}
-        //[Authorize]
-        //[HttpPatch("{id}")]
-
-        //public ActionResult PartialTeamsUpdate(int id, JsonPatchDocument<TeamsUpdateDto> patchDoc)
-        //{
-        //    var teamModelFromRepo = _repository.GetTeamById(id);
-        //    if (teamModelFromRepo == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var teamToPatch = _mapper.Map<TeamsUpdateDto>(teamModelFromRepo);
-        //    patchDoc.ApplyTo(teamToPatch, ModelState);
-        //    if (!TryValidateModel(teamToPatch))
-        //    {
-        //        return ValidationProblem();
-        //    }
-        //    _mapper.Map(teamToPatch, teamModelFromRepo);
-        //    _repository.UpdateTeam(teamModelFromRepo);
-        //    _repository.SaveChanges();
-        //    return NoContent();
     }
 }

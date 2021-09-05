@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using InternConnect.Dto.Submission;
 using InternConnect.Service.Main;
 using Microsoft.AspNetCore.Hosting;
@@ -15,7 +14,7 @@ namespace InternConnect.Controllers
         private readonly ISubmissionService _submissionService;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public SubmissionController(ISubmissionService submission, IWebHostEnvironment webHostEnvironment )
+        public SubmissionController(ISubmissionService submission, IWebHostEnvironment webHostEnvironment)
         {
             _submissionService = submission;
             _webHostEnvironment = webHostEnvironment;
@@ -34,7 +33,6 @@ namespace InternConnect.Controllers
             {
                 return BadRequest("Submission doesn't exist");
             }
-
         }
 
         [HttpGet]
@@ -53,8 +51,8 @@ namespace InternConnect.Controllers
         [HttpPost("{sectionId}")]
         public ActionResult AddSubmission(SubmissionDto.AddSubmission payload, int sectionId)
         {
-            var submissionData =_submissionService.AddSubmission(payload, sectionId);
-            return CreatedAtRoute(nameof(GetSubmission), new { Id = submissionData.Id }, submissionData);
+            var submissionData = _submissionService.AddSubmission(payload, sectionId);
+            return CreatedAtRoute(nameof(GetSubmission), new {submissionData.Id}, submissionData);
         }
     }
 }

@@ -34,7 +34,6 @@ namespace InternConnect.Controllers
             {
                 return BadRequest(e);
             }
-            
         }
 
 

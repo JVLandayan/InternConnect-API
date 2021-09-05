@@ -37,7 +37,6 @@ namespace InternConnect.Controllers
             {
                 return BadRequest("Section doesn't exist");
             }
-            
         }
 
 
@@ -52,48 +51,7 @@ namespace InternConnect.Controllers
         public ActionResult<SectionDto.ReadSection> AddSection(SectionDto.AddSection payload)
         {
             var sectionData = _sectionService.AddSection(payload);
-            return CreatedAtRoute(nameof(GetSection), new { Id = sectionData.Id }, sectionData);
+            return CreatedAtRoute(nameof(GetSection), new {sectionData.Id}, sectionData);
         }
-
-
-        //[Authorize]
-        //[HttpPut("{id}")]
-
-        //public ActionResult UpdateTeam(int id, TeamsUpdateDto teamsUpdateDto)
-        //{
-        //    var teamsModelFromRepo = _repository.GetTeamById(id);
-
-        //    if (teamsModelFromRepo == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    _mapper.Map(teamsUpdateDto, teamsModelFromRepo);
-        //    _repository.UpdateTeam(teamsModelFromRepo);
-        //    _repository.SaveChanges();
-
-        //    return NoContent();
-
-        //}
-        //[Authorize]
-        //[HttpPatch("{id}")]
-
-        //public ActionResult PartialTeamsUpdate(int id, JsonPatchDocument<TeamsUpdateDto> patchDoc)
-        //{
-        //    var teamModelFromRepo = _repository.GetTeamById(id);
-        //    if (teamModelFromRepo == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var teamToPatch = _mapper.Map<TeamsUpdateDto>(teamModelFromRepo);
-        //    patchDoc.ApplyTo(teamToPatch, ModelState);
-        //    if (!TryValidateModel(teamToPatch))
-        //    {
-        //        return ValidationProblem();
-        //    }
-        //    _mapper.Map(teamToPatch, teamModelFromRepo);
-        //    _repository.UpdateTeam(teamModelFromRepo);
-        //    _repository.SaveChanges();
-        //    return NoContent();
     }
 }
