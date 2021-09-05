@@ -1,4 +1,6 @@
-﻿namespace InternConnect.Dto.Opportunity
+﻿using InternConnect.Dto.Company;
+
+namespace InternConnect.Dto.Opportunity
 {
     public class OpportunityDto
     {
@@ -9,6 +11,7 @@
             public string Position { get; set; }
             public string Introduction { get; set; }
             public int CompanyId { get; set; }
+            public CompanyDto.ReadCompany Company { get; set; }
         }
 
         public class UpdateOpportunity

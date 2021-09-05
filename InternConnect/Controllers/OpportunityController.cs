@@ -38,6 +38,9 @@ namespace InternConnect.Controllers
             return Ok(_opportunityService.GetByCompanyId(companyId));
         }
 
+
+
+
         [HttpGet]
         public ActionResult<IEnumerable<OpportunityDto.ReadOpportunity>> GetAllOpportunity()
         {
