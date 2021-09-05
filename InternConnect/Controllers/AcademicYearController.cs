@@ -1,6 +1,7 @@
 ﻿    using System;
     using System.Collections.Generic;
-using InternConnect.Dto.AcademicYear;
+    using System.Net;
+    using InternConnect.Dto.AcademicYear;
 using InternConnect.Service.Main;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,12 +26,23 @@ namespace InternConnect.Controllers
         {
             try
             {
-                return Ok(_academicYearService.GetAcademicYear(id));
+                if (_academicYearService.GetAcademicYear() != null)
+                {
+                    return Ok(_academicYearService.GetAcademicYear());
+                }
+
+                    throw new Exception();
+
+                
+
+
             }
             catch (Exception e)
             {
                 return BadRequest("Academic Year isn't set");
             }
+
+
             
         }
 

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using AutoMapper;
 using InternConnect.Context;
 using InternConnect.Data.Interfaces;
 using InternConnect.Dto.AcademicYear;
@@ -8,7 +9,7 @@ namespace InternConnect.Service.Main
     public interface IAcademicYearService
     {
         public void UpdateAcademicYear(AcademicYearDto.UpdateAcademicYear payload);
-        public AcademicYearDto.ReadAcademicYear GetAcademicYear(int id);
+        public AcademicYearDto.ReadAcademicYear GetAcademicYear();
     }
 
     public class AcademicYearService : IAcademicYearService
@@ -25,9 +26,9 @@ namespace InternConnect.Service.Main
             _mapper = mapper;
         }
 
-        public AcademicYearDto.ReadAcademicYear GetAcademicYear(int id)
+        public AcademicYearDto.ReadAcademicYear GetAcademicYear()
         {
-            return _mapper.Map<AcademicYearDto.ReadAcademicYear>(_academicYearRepository.Get(id));
+            return _mapper.Map<AcademicYearDto.ReadAcademicYear>(_academicYearRepository.GetAll().First());
         }
 
         public void UpdateAcademicYear(AcademicYearDto.UpdateAcademicYear payload)

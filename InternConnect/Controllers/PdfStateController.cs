@@ -20,16 +20,16 @@ namespace InternConnect.Controllers
         //GET /admin
 
         //GET /admin/id
-        [HttpGet("{id}")]
-        public ActionResult<IEnumerable<PdfStateDto.ReadPdfState>> GetPdfState(int id)
+        [HttpGet]
+        public ActionResult<IEnumerable<PdfStateDto.ReadPdfState>> GetPdfState()
         {
             try
             {
-                return Ok(_pdfStateService.GetPdfState(id));
+                return Ok(_pdfStateService.GetPdfState());
             }
             catch (Exception e)
             {
-                return BadRequest("Something's wrong");
+                return BadRequest("Pdf state isn't set");
             }
             
         }

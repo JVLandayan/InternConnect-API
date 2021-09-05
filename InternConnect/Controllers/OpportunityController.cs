@@ -33,7 +33,7 @@ namespace InternConnect.Controllers
             
         }
 
-        [HttpGet("{companyId}")]
+        [HttpGet("company/{companyId}")]
         public ActionResult<IEnumerable<OpportunityDto.ReadOpportunity>> GetOpportunitiesForEachCompany(int companyId)
         {
             return Ok(_opportunityService.GetByCompanyId(companyId));

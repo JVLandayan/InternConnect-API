@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using AutoMapper;
 using InternConnect.Context;
 using InternConnect.Data.Interfaces;
 using InternConnect.Dto.PdfState;
@@ -8,7 +9,7 @@ namespace InternConnect.Service.Main
     public interface IPdfStateService
     {
         public void UpdatePdfState(PdfStateDto.UpdatePdfState payload);
-        public PdfStateDto.ReadPdfState GetPdfState(int id);
+        public PdfStateDto.ReadPdfState GetPdfState();
     }
 
     public class PdfStateService : IPdfStateService
@@ -24,9 +25,9 @@ namespace InternConnect.Service.Main
             _pdfStateRepository = pdfState;
         }
 
-        public PdfStateDto.ReadPdfState GetPdfState(int id)
+        public PdfStateDto.ReadPdfState GetPdfState()
         {
-            return _mapper.Map<PdfStateDto.ReadPdfState>(_pdfStateRepository.Get(id));
+            return _mapper.Map<PdfStateDto.ReadPdfState>(_pdfStateRepository.GetAll().First());
         }
 
         public void UpdatePdfState(PdfStateDto.UpdatePdfState payload)
