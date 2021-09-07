@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using InternConnect.Dto.Program;
 using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
@@ -19,6 +20,7 @@ namespace InternConnect.Controllers
 
 
         //GET /admin
+        [Authorize]
         [HttpGet]
         public ActionResult<IEnumerable<ProgramDto.ReadProgram>> GetAllPrograms()
         {
@@ -26,6 +28,7 @@ namespace InternConnect.Controllers
         }
 
         //GET /admin/id
+        [Authorize]
         [HttpGet("{id}", Name = "GetProgram")]
         public ActionResult<IEnumerable<ProgramDto.ReadProgram>> GetProgram(int id)
         {
@@ -38,21 +41,21 @@ namespace InternConnect.Controllers
                 return BadRequest("Program doesn't exist");
             }
         }
-
+        [Authorize(Roles = "Dean")]
         [HttpPost]
         public ActionResult<ProgramDto.ReadProgram> AddProgram(ProgramDto.AddProgram payload)
         {
             var programData = _programService.AddProgram(payload);
             return CreatedAtRoute(nameof(GetProgram), new {programData.Id}, programData);
         }
-
+        [Authorize(Roles = "Dean,Chair")]
         [HttpPut("ISO")]
         public ActionResult<ProgramDto.ReadProgram> UpdateIsoCode(ProgramDto.UpdateIsoCode payload)
         {
             _programService.UpdateIsoCode(payload);
             return NoContent();
         }
-
+        [Authorize(Roles = "Dean")]
         [HttpPut("program")]
         public ActionResult<ProgramDto.ReadProgram> UpdateProgram(ProgramDto.UpdateProgram payload)
         {
@@ -60,6 +63,7 @@ namespace InternConnect.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Dean,Chair")]
         [HttpPut("hours")]
         public ActionResult<ProgramDto.ReadProgram> UpdateHours(ProgramDto.UpdateNumberOfHours payload)
         {

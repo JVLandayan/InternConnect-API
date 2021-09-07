@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using InternConnect.Dto.Opportunity;
 using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
@@ -47,21 +48,21 @@ namespace InternConnect.Controllers
             return Ok(_opportunityService.GetAllOpportunities());
         }
 
-
+        [Authorize(Roles = "Dean,Chair,Tech Coordinator")]
         [HttpDelete("{id}")]
         public ActionResult DeleteOpportunity(int id)
         {
             _opportunityService.DeleteOpportunity(id);
             return Ok();
         }
-
+        [Authorize(Roles = "Dean,Chair,Tech Coordinator")]
         [HttpPut]
         public ActionResult<OpportunityDto.ReadOpportunity> UpdateOpportunity(OpportunityDto.UpdateOpportunity payload)
         {
             _opportunityService.UpdateOpportunity(payload);
             return NoContent();
         }
-
+        [Authorize(Roles = "Dean,Chair,Tech Coordinator")]
         [HttpPost]
         public ActionResult<OpportunityDto.ReadOpportunity> AddOpportunity(OpportunityDto.AddOpportunity payload)
         {

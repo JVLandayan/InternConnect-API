@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using InternConnect.Dto.PdfState;
 using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
@@ -20,6 +21,7 @@ namespace InternConnect.Controllers
         //GET /admin
 
         //GET /admin/id
+        [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
         [HttpGet]
         public ActionResult<IEnumerable<PdfStateDto.ReadPdfState>> GetPdfState()
         {
@@ -33,7 +35,7 @@ namespace InternConnect.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Dean")]
         [HttpPut]
         public ActionResult<PdfStateDto.ReadPdfState> UpdatePdfState(PdfStateDto.UpdatePdfState payload)
         {

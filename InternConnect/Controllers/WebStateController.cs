@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using InternConnect.Dto.WebState;
 using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
@@ -33,7 +34,7 @@ namespace InternConnect.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Dean,Chair,Tech Coordinator")]
         [HttpPut]
         public ActionResult<WebStateDto.ReadWebState> UpdateWebState(WebStateDto.UpdateWebState payload)
         {

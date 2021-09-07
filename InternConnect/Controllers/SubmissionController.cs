@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using InternConnect.Dto.Submission;
 using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +23,7 @@ namespace InternConnect.Controllers
 
 
         //GET /accounts
+        [Authorize]
         [HttpGet("{id}", Name = "GetSubmission")]
         public ActionResult<IEnumerable<SubmissionDto.ReadSubmission>> GetSubmission(int id)
         {
@@ -35,12 +37,13 @@ namespace InternConnect.Controllers
             }
         }
 
+        [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
         [HttpGet]
         public ActionResult<IEnumerable<SubmissionDto.ReadSubmission>> GetAllSubmission()
         {
             return Ok(_submissionService.GetAllSubmissions());
         }
-
+        [Authorize(Roles = "Student")]
         [HttpPut]
         public ActionResult<SubmissionDto.ReadSubmission> UpdateSubmission(SubmissionDto.UpdateSubmission payload)
         {
@@ -48,6 +51,7 @@ namespace InternConnect.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Student")]
         [HttpPost("{sectionId}")]
         public ActionResult AddSubmission(SubmissionDto.AddSubmission payload, int sectionId,int programId)
         {

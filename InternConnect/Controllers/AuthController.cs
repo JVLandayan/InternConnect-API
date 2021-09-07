@@ -1,5 +1,7 @@
 ﻿using InternConnect.Dto.Account;
 using InternConnect.Service.ThirdParty;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
@@ -17,11 +19,12 @@ namespace InternConnect.Controllers
 
 
         [HttpPost("login")]
-        public ActionResult Authenticate()
+        public ActionResult Authenticate(AuthenticationModel payload)
         {
-            return Ok();
+            var sessionData =  _authService.Authenticate(payload);
+            return Ok(sessionData);
         }
-
+        
         [HttpPost("forgotpassword")]
         public ActionResult ForgotPassword(string email)
         {

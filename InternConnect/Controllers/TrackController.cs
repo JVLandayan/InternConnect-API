@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using InternConnect.Dto.Track;
 using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
@@ -17,15 +18,14 @@ namespace InternConnect.Controllers
             _trackService = track;
         }
 
-
-        //GET /admin
+        [Authorize]
         [HttpGet]
         public ActionResult<IEnumerable<TrackDto.ReadTrack>> GetAllTrack()
         {
             return Ok(_trackService.GetAllTracks());
         }
 
-        //GET /admin/id
+        [Authorize]
         [HttpGet("{id}", Name = "GetTrack")]
         public ActionResult<IEnumerable<TrackDto.ReadTrack>> GetTrack(int id)
         {
@@ -39,21 +39,21 @@ namespace InternConnect.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Dean,Chair")]
         [HttpPut]
         public ActionResult<TrackDto.ReadTrack> UpdateTrack(TrackDto.UpdateTrack payload)
         {
             _trackService.UpdateTrack(payload);
             return NoContent();
         }
-
+        [Authorize(Roles = "Dean,Chair")]
         [HttpPost]
         public ActionResult<TrackDto.ReadTrack> AddTrack(TrackDto.AddTrack payload)
         {
             var trackData = _trackService.AddTrack(payload);
             return CreatedAtRoute(nameof(GetTrack), new {trackData.Id}, trackData);
         }
-
+        [Authorize(Roles = "Dean,Chair")]
         [HttpDelete("{id}")]
         public ActionResult DeleteTrack(int id)
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using InternConnect.Dto.Event;
 using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
@@ -19,6 +20,7 @@ namespace InternConnect.Controllers
 
 
         //GET /admin
+        [Authorize(Roles = "Chair")]
         [HttpGet("all/{adminId}")]
         public ActionResult<IEnumerable<EventDto.ReadEvent>> GetAllEvents(int adminId)
         {
@@ -26,6 +28,7 @@ namespace InternConnect.Controllers
         }
 
         //GET /admin/id
+        [Authorize(Roles = "Chair, Coordinator, Student")]
         [HttpGet("{id}", Name = "GetEvent")]
         public ActionResult<IEnumerable<EventDto.ReadEvent>> GetEvent(int id)
         {
@@ -38,7 +41,7 @@ namespace InternConnect.Controllers
                 return BadRequest("Event doesn't exist");
             }
         }
-
+        [Authorize(Roles = "Chair")]
         [HttpPost]
         public ActionResult<EventDto.ReadEvent> AddEvent(EventDto.AddEvent payload)
         {
@@ -46,6 +49,7 @@ namespace InternConnect.Controllers
             return CreatedAtRoute(nameof(GetEvent), new {eventData.Id}, eventData);
         }
 
+        [Authorize(Roles = "Chair")]
         [HttpPut("admin")]
         public ActionResult<EventDto.ReadEvent> UpdateEvent(EventDto.UpdateEvent payload)
         {

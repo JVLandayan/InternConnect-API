@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using InternConnect.Dto.Student;
 using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
@@ -19,6 +20,7 @@ namespace InternConnect.Controllers
 
 
         //GET /admin
+        [Authorize(Roles = "Dean,Chair,Coordinator")]
         [HttpGet]
         public ActionResult<IEnumerable<StudentDto.ReadStudent>> GetAllStudent()
         {
@@ -26,6 +28,7 @@ namespace InternConnect.Controllers
         }
 
         //GET /admin/id
+        [Authorize(Roles = "Dean,Chair,Coordinator")]
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<StudentDto.ReadStudent>> GetStudent(int id)
         {

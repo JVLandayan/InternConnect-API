@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using InternConnect.Dto.AdminResponse;
 using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
@@ -17,12 +18,14 @@ namespace InternConnect.Controllers
             _adminResponseService = adminResponse;
         }
 
+        [Authorize(Roles = "Coordinator,Dean,Chair")]
         [HttpGet]
         public ActionResult<IEnumerable<AdminResponseDto.ReadResponse>> GetAllEntries()
         {
             return Ok(_adminResponseService.GetAllEntries());
         }
 
+        [Authorize(Roles = "Coordinator,Dean,Chair")]
         [HttpGet("admin/{stepNum}")]
         public ActionResult<IEnumerable<AdminResponseDto.ReadResponse>> GetAllEntriesByStep(int stepNum)
         {
@@ -36,7 +39,7 @@ namespace InternConnect.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Coordinator")]
         [HttpPut("coordinator/{adminId}")]
         public ActionResult<AdminResponseDto.ReadResponse> UpdateAcceptanceByCoordinator(
             AdminResponseDto.UpdateAcceptanceOfCoordinatorResponse payload, int adminId)
@@ -44,7 +47,7 @@ namespace InternConnect.Controllers
             _adminResponseService.UpdateAcceptanceByCoordinator(payload, adminId);
             return NoContent();
         }
-
+        [Authorize(Roles = "Coordinator")]
         [HttpPut("coordinator/email")]
         public ActionResult<AdminResponseDto.ReadResponse> UpdateEmailSent(
             AdminResponseDto.UpdateEmailSentResponse payload)
@@ -53,7 +56,7 @@ namespace InternConnect.Controllers
 
             return NoContent();
         }
-
+        [Authorize(Roles = "Coordinator")]
         [HttpPut("coordinator/company")]
         public ActionResult<AdminResponseDto.ReadResponse> UpdateCompanyAgrees(
             AdminResponseDto.UpdateCompanyAgreesResponse payload)
@@ -63,7 +66,7 @@ namespace InternConnect.Controllers
 
             return NoContent();
         }
-
+        [Authorize(Roles = "Chair")]
         [HttpPut("chair")]
         public ActionResult<AdminResponseDto.ReadResponse> UpdateAcceptanceByChair(
             AdminResponseDto.UpdateChairResponse payload)
@@ -73,7 +76,7 @@ namespace InternConnect.Controllers
 
             return NoContent();
         }
-
+        [Authorize(Roles = "Dean")]
         [HttpPut("dean/{adminId}")]
         public ActionResult<AdminResponseDto.ReadResponse> UpdateAcceptanceByDean(
             AdminResponseDto.UpdateDeanResponse payload, int adminId)

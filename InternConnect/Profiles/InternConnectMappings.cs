@@ -34,6 +34,7 @@ namespace InternConnect.Profiles
             CreateMap<Account, AccountDto.AddAccountChair>().ReverseMap();
             CreateMap<Account, AccountDto.ReadAccount>().ReverseMap();
             CreateMap<Account, AccountDto.UpdateAccount>().ReverseMap();
+            CreateMap<Account, AccountDto.ReadSession>().ReverseMap();
 
             //Admin
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using InternConnect.Dto.Section;
 using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
@@ -19,6 +20,7 @@ namespace InternConnect.Controllers
 
 
         //GET /admin
+        [Authorize]
         [HttpGet]
         public ActionResult<IEnumerable<SectionDto.ReadSection>> GetAllSections()
         {
@@ -26,6 +28,7 @@ namespace InternConnect.Controllers
         }
 
         //GET /admin/id
+        [Authorize]
         [HttpGet("{id}", Name = "GetSection")]
         public ActionResult<IEnumerable<SectionDto.ReadSection>> GetSection(int id)
         {
@@ -39,7 +42,7 @@ namespace InternConnect.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Chair")]
         [HttpPut]
         public ActionResult<SectionDto.ReadSection> UpdateSection(SectionDto.UpdateSection payload)
         {
@@ -47,6 +50,7 @@ namespace InternConnect.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Dean,Chair")]
         [HttpPost]
         public ActionResult<SectionDto.ReadSection> AddSection(SectionDto.AddSection payload)
         {

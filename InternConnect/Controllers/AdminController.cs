@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using InternConnect.Dto.Account;
 using InternConnect.Dto.Admin;
 using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
@@ -20,6 +21,7 @@ namespace InternConnect.Controllers
 
 
         //GET /admin
+        [Authorize(Roles = "Dean")]
         [HttpGet]
         public ActionResult<IEnumerable<AdminDto.ReadAdmin>> GetAllAdmin()
         {
@@ -27,6 +29,8 @@ namespace InternConnect.Controllers
         }
 
         //GET /admin/id
+        [Authorize(Roles = "Dean")]
+        [Authorize]
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<AdminDto.ReadAdmin>> GetAdmin(int id)
         {
@@ -40,7 +44,7 @@ namespace InternConnect.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Coordinator,Dean")]
         [HttpPut("signature/{id}")]
         public ActionResult<AccountDto.ReadAccount> UpdateSignature(AdminDto.UpdateAdmin payload, int id)
         {

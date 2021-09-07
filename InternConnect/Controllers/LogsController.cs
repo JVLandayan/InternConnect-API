@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using InternConnect.Dto.AdminLogs;
 using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
@@ -18,6 +19,7 @@ namespace InternConnect.Controllers
 
 
         //GET /admin
+        [Authorize(Roles = "Dean,Coordinator")]
         [HttpGet("adminId")]
         public ActionResult<IEnumerable<LogsDto.ReadLogs>> GetLogs(int adminId)
         {

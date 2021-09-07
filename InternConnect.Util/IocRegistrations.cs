@@ -72,6 +72,7 @@ namespace InternConnect.Util
             services.AddScoped<IPdfService, PdfService>();
             services.AddScoped<IUploadService, UploadService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IJwtUtils, JwtUtils>();
 
             return services;
         }

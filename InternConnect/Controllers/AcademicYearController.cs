@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using InternConnect.Dto.AcademicYear;
 using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
@@ -20,8 +21,9 @@ namespace InternConnect.Controllers
         //GET /admin
 
         //GET /admin/id
-        [HttpGet("{id}")]
-        public ActionResult<IEnumerable<AcademicYearDto.ReadAcademicYear>> GetAcademicYear(int id)
+        [Authorize]
+        [HttpGet]
+        public ActionResult<IEnumerable<AcademicYearDto.ReadAcademicYear>> GetAcademicYear()
         {
             try
             {
@@ -35,7 +37,7 @@ namespace InternConnect.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Dean")]
         [HttpPut]
         public ActionResult<AcademicYearDto.ReadAcademicYear> UpdateAcademicYear(
             AcademicYearDto.UpdateAcademicYear payload)

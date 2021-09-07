@@ -1,19 +1,25 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using AutoMapper;
 using InternConnect.Context;
 using InternConnect.Context.Models;
+using InternConnect.Data;
 using InternConnect.Data.Interfaces;
 using InternConnect.Dto.Account;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace InternConnect.Service.ThirdParty
 {
     public interface IAuthService
     {
         public Account ForgotPassword(string email);
-        public void Authenticate(string email, string password);
+        public AccountDto.ReadSession Authenticate(AuthenticationModel payload);
         public Account ResetPassword(AccountDto.UpdateAccount payload);
         public Account Onboard(string email);
     }
@@ -21,24 +27,56 @@ namespace InternConnect.Service.ThirdParty
     public class AuthService : IAuthService
     {
         private readonly IAccountRepository _accountRepository;
+        private readonly IOptions<AppSettings> _appSettings;
+        private readonly IBaseRepository<Authorization> _authRepository;
+        private readonly IMapper _mapper;
         private readonly InternConnectContext _context;
         private readonly IMailerService _mailerService;
 
         public AuthService(InternConnectContext context, IAccountRepository accountRepository,
-            IMailerService mailerService)
+            IMailerService mailerService, IOptions<AppSettings> appSettings,
+            IBaseRepository<Authorization> authRepository, IMapper mapper)
         {
             _context = context;
             _accountRepository = accountRepository;
             _mailerService = mailerService;
+            _appSettings = appSettings;
+            _authRepository = authRepository;
+            _mapper = mapper;
         }
 
-        public void Authenticate(string email, string password)
+        public AccountDto.ReadSession Authenticate(AuthenticationModel payload)
         {
-            var mappedEmail = email.ToUpper();
-            var mappedPassword = HashPassword(password);
-            var accountData = _accountRepository.Find(a => a.Email == mappedEmail && a.Password == mappedPassword)
-                .FirstOrDefault();
-            if (accountData == null) ;
+            var mappedEmail = payload.Email.ToUpper();
+            var mappedPassword = HashPassword(payload.Password);
+            var accountData = _accountRepository.GetAllAccountData()
+                .SingleOrDefault(a => a.Email == mappedEmail && a.Password == mappedPassword);
+            if (accountData == null)
+                return null;
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Value.Secret);
+
+            var tokenDescriptor = new SecurityTokenDescriptor();
+            tokenDescriptor.Subject = new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.Name, accountData.Id.ToString()),
+                new Claim(ClaimTypes.Role,
+                    accountData.Student == null
+                        ? _authRepository.Get(accountData.Admin.AuthId).Name
+                        : _authRepository.Get((int) accountData.Student.AuthId).Name)
+            });
+            tokenDescriptor.Expires = DateTime.UtcNow.AddDays(7);
+            tokenDescriptor.SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                SecurityAlgorithms.HmacSha256Signature);
+
+
+            // authentication successful so generate jwt token
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            accountData.Token = tokenHandler.WriteToken(token);
+
+            return _mapper.Map<AccountDto.ReadSession>(accountData);
         }
 
         public Account ForgotPassword(string email)

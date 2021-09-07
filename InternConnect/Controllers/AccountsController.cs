@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using InternConnect.Context.Models;
 using InternConnect.Dto.Account;
 using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
@@ -19,12 +20,13 @@ namespace InternConnect.Controllers
         }
 
         //GET /accounts
+        [Authorize(Roles = "Dean")]
         [HttpGet]
         public ActionResult<IEnumerable<Account>> GetAllAccounts()
         {
             return Ok(_accountService.GetAll());
         }
-
+        [Authorize(Roles = "Dean")]
         [HttpGet("{id}", Name = "GetAccount")]
         public ActionResult<IEnumerable<Account>> GetAccount(int id)
         {
@@ -38,7 +40,7 @@ namespace InternConnect.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Chair")]
         [HttpPost("coordinators")]
         public ActionResult<AccountDto.ReadAccount> AddCoordinators(AccountDto.AddAccountCoordinator payload)
         {
@@ -46,7 +48,7 @@ namespace InternConnect.Controllers
             if (accountData.Id == 0) return BadRequest("Email already exists");
             return CreatedAtRoute(nameof(GetAccount), new {accountData.Id}, accountData);
         }
-
+        [Authorize (Roles = "Coordinator,Chair")]
         [HttpPost("student")]
         public ActionResult<AccountDto.ReadAccount> AddStudents(AccountDto.AddAccountStudent payload)
         {
@@ -64,6 +66,7 @@ namespace InternConnect.Controllers
         }
 
         //Chairs
+        [Authorize(Roles = "Dean")]
         [HttpPost("chair")]
         public ActionResult<AccountDto.ReadAccount> AddChair(AccountDto.AddAccountChair payload)
         {
@@ -72,6 +75,7 @@ namespace InternConnect.Controllers
             return CreatedAtRoute(nameof(GetAccount), new {accountData.Id}, accountData);
         }
 
+        [Authorize(Roles = "Dean,Chair,Coordinator")]
         [HttpDelete("{id}")]
         public ActionResult DeleteAccount(int id)
         {

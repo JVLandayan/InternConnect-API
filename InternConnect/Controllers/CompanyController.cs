@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using InternConnect.Dto.Company;
 using InternConnect.Service.Main;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Controllers
@@ -31,7 +32,7 @@ namespace InternConnect.Controllers
                 return BadRequest("Company doesn't exist");
             }
         }
-
+        [Authorize(Roles = "Dean")]
         [HttpGet]
         public ActionResult<IEnumerable<CompanyDto.ReadCompany>> GetAllCompany()
         {
@@ -41,6 +42,7 @@ namespace InternConnect.Controllers
 
         //Coordinators
         //Authorize AuthCoordinatorClaim
+        [Authorize(Roles = "Dean,Chair,Tech Coordinator")]
         [HttpDelete("{id}")]
         public ActionResult DeleteCompany(int id)
         {
@@ -55,15 +57,14 @@ namespace InternConnect.Controllers
             }
         }
 
-        //Authorize Student Claim
-        // POST accounts/student 
+        [Authorize(Roles = "Dean,Chair,Tech Coordinator")]
         [HttpPut]
         public ActionResult<CompanyDto.ReadCompany> UpdateCompany(CompanyDto.UpdateCompany payload)
         {
             _companyService.UpdateCompany(payload);
             return NoContent();
         }
-
+        [Authorize(Roles = "Dean,Chair,Tech Coordinator")]
         [HttpPost]
         public ActionResult<CompanyDto.ReadCompany> AddCompany(CompanyDto.AddCompany payload)
         {
