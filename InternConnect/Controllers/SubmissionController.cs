@@ -49,9 +49,9 @@ namespace InternConnect.Controllers
         }
 
         [HttpPost("{sectionId}")]
-        public ActionResult AddSubmission(SubmissionDto.AddSubmission payload, int sectionId)
+        public ActionResult AddSubmission(SubmissionDto.AddSubmission payload, int sectionId,int programId)
         {
-            var submissionData = _submissionService.AddSubmission(payload, sectionId);
+            var submissionData = _submissionService.AddSubmission(payload, sectionId, programId);
             return CreatedAtRoute(nameof(GetSubmission), new {submissionData.Id}, submissionData);
         }
     }

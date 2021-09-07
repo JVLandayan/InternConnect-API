@@ -30,6 +30,11 @@ namespace InternConnect.Dto.Account
             [Required] public int ProgramId { get; set; }
         }
 
+        public class AddAccountTechCoordinator
+        {
+            [Required] public string Email { get; set; }
+        }
+
         public class AddAccountStudent
         {
             [Required] public string Email { get; set; }
@@ -38,7 +43,7 @@ namespace InternConnect.Dto.Account
 
             [Required] public int ProgramId { get; set; }
 
-            public string AdminEmail { get; set; }
+            [Required] public string AdminEmail { get; set; }
         }
 
         public class MapAdmin

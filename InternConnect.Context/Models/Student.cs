@@ -15,6 +15,8 @@ namespace InternConnect.Context.Models
         public Account Account { get; set; }
 
         public List<Submission> Submissions { get; set; }
+        public int? AuthId { get; set; }
+        public Authorization Authorization { get; set; }
 
         public int ProgramId { get; set; }
         public Program Program { get; set; }

@@ -47,7 +47,6 @@ namespace InternConnect.Dto.Submission
 
         public class AddSubmission
         {
-            public int IsoCode { get; set; }
             public DateTime SubmissionDate { get; set; }
             public string LastName { get; set; }
             public string FirstName { get; set; }

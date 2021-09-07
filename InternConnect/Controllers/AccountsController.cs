@@ -55,6 +55,14 @@ namespace InternConnect.Controllers
             return CreatedAtRoute(nameof(GetAccount), new {accountData.Id}, accountData);
         }
 
+        [HttpPost("techcoordinator")]
+        public ActionResult<AccountDto.ReadAccount> AddStudents(AccountDto.AddAccountTechCoordinator payload)
+        {
+            var accountData = _accountService.AddTechCoordinator(payload);
+            if (accountData.Id == 0) return BadRequest("Email already exists");
+            return CreatedAtRoute(nameof(GetAccount), new { accountData.Id }, accountData);
+        }
+
         //Chairs
         [HttpPost("chair")]
         public ActionResult<AccountDto.ReadAccount> AddChair(AccountDto.AddAccountChair payload)

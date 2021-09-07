@@ -13,6 +13,7 @@ namespace InternConnect.Dto.Student
             public string AddedBy { get; set; }
             public int SectionId { get; set; }
             public int ProgramId { get; set; }
+            public int AuthId { get; set; }
         }
 
 

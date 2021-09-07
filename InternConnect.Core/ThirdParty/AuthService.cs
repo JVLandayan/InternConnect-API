@@ -5,6 +5,7 @@ using System.Text;
 using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
+using InternConnect.Dto.Account;
 using Microsoft.AspNetCore.WebUtilities;
 
 namespace InternConnect.Service.ThirdParty
@@ -13,7 +14,7 @@ namespace InternConnect.Service.ThirdParty
     {
         public Account ForgotPassword(string email);
         public void Authenticate(string email, string password);
-        public Account ResetPassword(string email, string password, string resetkey);
+        public Account ResetPassword(AccountDto.UpdateAccount payload);
         public Account Onboard(string email);
     }
 
@@ -37,7 +38,7 @@ namespace InternConnect.Service.ThirdParty
             var mappedPassword = HashPassword(password);
             var accountData = _accountRepository.Find(a => a.Email == mappedEmail && a.Password == mappedPassword)
                 .FirstOrDefault();
-            if (accountData == null) return;
+            if (accountData == null) ;
         }
 
         public Account ForgotPassword(string email)
@@ -66,13 +67,13 @@ namespace InternConnect.Service.ThirdParty
             return accountData;
         }
 
-        public Account ResetPassword(string email, string password, string resetKey)
+        public Account ResetPassword(AccountDto.UpdateAccount payload)
         {
             var accountData = _accountRepository.GetAll()
-                .FirstOrDefault(a => a.Email == email.ToUpper() && a.ResetKey == resetKey);
+                .FirstOrDefault(a => a.Email == payload.Email.ToUpper() && a.ResetKey == payload.ResetKey);
             if (accountData != null)
             {
-                accountData.Password = HashPassword(password);
+                accountData.Password = HashPassword(payload.Password);
                 accountData.ResetKey = TokenConfig(Guid.NewGuid().ToString());
                 _context.SaveChanges();
             }

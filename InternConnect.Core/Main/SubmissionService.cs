@@ -11,7 +11,8 @@ namespace InternConnect.Service.Main
 {
     public interface ISubmissionService
     {
-        public SubmissionDto.ReadSubmission AddSubmission(SubmissionDto.AddSubmission payload, int id);
+        public SubmissionDto.ReadSubmission AddSubmission(SubmissionDto.AddSubmission payload, int sectionId,
+            int programId);
         public void UpdateSubmission(SubmissionDto.UpdateSubmission payload);
         public SubmissionDto.ReadSubmission GetSubmission(int id);
         public IEnumerable<SubmissionDto.ReadSubmission> GetAllSubmissions();
@@ -24,10 +25,11 @@ namespace InternConnect.Service.Main
         private readonly IMailerService _mailerService;
         private readonly IMapper _mapper;
         private readonly IStudentService _studentService;
+        private readonly IProgramService _programService;
         private readonly ISubmissionRepository _submissionRepository;
 
         public SubmissionService(ISubmissionRepository submission, IMapper mapper,
-            InternConnectContext context, IAdminResponseRepository adminResponse, IMailerService mailerService,
+            InternConnectContext context, IAdminResponseRepository adminResponse, IMailerService mailerService, IProgramService programService,
             IStudentService studentService)
         {
             _mapper = mapper;
@@ -36,11 +38,17 @@ namespace InternConnect.Service.Main
             _adminResponseRepository = adminResponse;
             _mailerService = mailerService;
             _studentService = studentService;
+            _programService = programService;
         }
 
-        public SubmissionDto.ReadSubmission AddSubmission(SubmissionDto.AddSubmission payload, int sectionId)
+        public SubmissionDto.ReadSubmission AddSubmission(SubmissionDto.AddSubmission payload, int sectionId, int programId)
         {
             var submissionData = _mapper.Map<Submission>(payload);
+            if (_programService.GetById(programId).NumberOfHours == null)
+            {
+                return new SubmissionDto.ReadSubmission();
+            }
+            submissionData.IsoCode = (int)_programService.GetById(programId).NumberOfHours;
             var adminResponse = new AdminResponse();
             adminResponse.Comments = "";
             submissionData.AdminResponse = adminResponse;

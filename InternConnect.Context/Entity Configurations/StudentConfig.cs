@@ -17,6 +17,7 @@ namespace InternConnect.Context.Entity_Configurations
                 .HasMany(s => s.Submissions).WithOne(s => s.Student).HasForeignKey(s => s.StudentId);
             modelBuilder
                 .HasOne(p => p.Program).WithMany(s => s.Students).HasForeignKey(s => s.ProgramId);
+            modelBuilder.HasOne(s => s.Authorization).WithMany(a => a.Students).HasForeignKey(s => s.AuthId);
             modelBuilder.Property(s => s.DateAdded).IsRequired();
             modelBuilder.Property(s => s.AddedBy).IsRequired();
         }

@@ -19,6 +19,7 @@ namespace InternConnect.Service.Main
         public AccountDto.ReadAccount AddStudent(AccountDto.AddAccountStudent payload);
 
         public AccountDto.ReadAccount AddChair(AccountDto.AddAccountChair payload);
+        public AccountDto.ReadAccount AddTechCoordinator(AccountDto.AddAccountTechCoordinator entity);
 
         //public void AddRange(List<Account> entity);
         public void Delete(int id);
@@ -49,7 +50,7 @@ namespace InternConnect.Service.Main
 
         public AccountDto.ReadAccount AddStudent(AccountDto.AddAccountStudent payload)
         {
-            if (_accountRepository.GetAll().FirstOrDefault(a => a.Email == payload.Email) != null)
+            if (_accountRepository.GetAll().FirstOrDefault(a => a.Email == payload.Email.ToUpper()) != null)
                 return new AccountDto.ReadAccount();
 
             var accountData = new Account
@@ -64,7 +65,8 @@ namespace InternConnect.Service.Main
                 ProgramId = payload.ProgramId,
                 SectionId = payload.ProgramId,
                 DateAdded = DateTime.Now,
-                AddedBy = payload.AdminEmail
+                AddedBy = payload.AdminEmail,
+                AuthId = 5
             };
             accountData.Student = studentData;
             _accountRepository.Add(accountData);
@@ -75,7 +77,7 @@ namespace InternConnect.Service.Main
 
         public AccountDto.ReadAccount AddCoordinator(AccountDto.AddAccountCoordinator entity)
         {
-            if (_accountRepository.GetAll().FirstOrDefault(a => a.Email == entity.Email) != null)
+            if (_accountRepository.GetAll().FirstOrDefault(a => a.Email == entity.Email.ToUpper()) != null)
                 return new AccountDto.ReadAccount();
             var accountData = new Account
             {
@@ -98,7 +100,7 @@ namespace InternConnect.Service.Main
 
         public AccountDto.ReadAccount AddChair(AccountDto.AddAccountChair entity)
         {
-            if (_accountRepository.GetAll().FirstOrDefault(a => a.Email == entity.Email) != null)
+            if (_accountRepository.GetAll().FirstOrDefault(a => a.Email == entity.Email.ToUpper()) != null)
                 return new AccountDto.ReadAccount();
             var accountData = new Account
             {
@@ -110,6 +112,27 @@ namespace InternConnect.Service.Main
             {
                 AuthId = 2,
                 ProgramId = entity.ProgramId
+            };
+            accountData.Admin = adminData;
+            _accountRepository.Add(accountData);
+            _context.SaveChanges();
+            _authService.Onboard(accountData.Email);
+            return _mapper.Map<AccountDto.ReadAccount>(accountData);
+        }
+
+        public AccountDto.ReadAccount AddTechCoordinator(AccountDto.AddAccountTechCoordinator entity)
+        {
+            if (_accountRepository.GetAll().FirstOrDefault(a => a.Email == entity.Email.ToUpper()) != null)
+                return new AccountDto.ReadAccount();
+            var accountData = new Account
+            {
+                Email = entity.Email.ToUpper(),
+                Password = HashPassword(Guid.NewGuid().ToString()),
+                ResetKey = TokenConfig(Guid.NewGuid().ToString())
+            };
+            var adminData = new Admin
+            {
+                AuthId = 4,
             };
             accountData.Admin = adminData;
             _accountRepository.Add(accountData);

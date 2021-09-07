@@ -32,12 +32,12 @@ namespace InternConnect.Controllers
 
         //Chairs
         [HttpPost("resetpassword")]
-        public ActionResult<AccountDto.ReadAccount> ResetPassword(string email, string password, string resetKey)
+        public ActionResult<AccountDto.ReadAccount> ResetPassword(AccountDto.UpdateAccount payload)
         {
-            var accountData = _authService.ResetPassword(email, password, resetKey);
+            var accountData = _authService.ResetPassword(payload);
             if (accountData == null) return BadRequest("Account not found");
-            _authService.ResetPassword(email, password, resetKey);
-            return Ok("Password resetted");
+            _authService.ResetPassword(payload);
+            return Ok("Password Resetted");
         }
     }
 }
