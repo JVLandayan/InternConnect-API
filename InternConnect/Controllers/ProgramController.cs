@@ -20,7 +20,7 @@ namespace InternConnect.Controllers
 
 
         //GET /admin
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public ActionResult<IEnumerable<ProgramDto.ReadProgram>> GetAllPrograms()
         {

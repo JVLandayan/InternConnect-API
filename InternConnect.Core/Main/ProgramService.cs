@@ -40,7 +40,7 @@ namespace InternConnect.Service.Main
 
         public IEnumerable<ProgramDto.ReadProgram> GetAll()
         {
-            var programData = _programRepository.GetAll();
+            var programData = _programRepository.GetAllProgramAndTracks();
             var mappedData = new List<ProgramDto.ReadProgram>();
             foreach (var program in programData) mappedData.Add(_mapper.Map<ProgramDto.ReadProgram>(program));
 
