@@ -32,7 +32,7 @@ namespace InternConnect.Controllers
                 return BadRequest("Company doesn't exist");
             }
         }
-        [Authorize(Roles = "Dean")]
+
         [HttpGet]
         public ActionResult<IEnumerable<CompanyDto.ReadCompany>> GetAllCompany()
         {

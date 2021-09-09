@@ -15,6 +15,9 @@ namespace InternConnect.Dto.Company
             public string HeaderFileName { get; set; }
             public string LogoFileName { get; set; }
             public string Description { get; set; }
+            public string ContactPersonName { get; set; }
+            public string ContactPersonEmail { get; set; }
+            public string ContactPersonDesignation { get; set; }
         }
 
         public class UpdateCompany
@@ -33,6 +36,9 @@ namespace InternConnect.Dto.Company
             public string HeaderFileName { get; set; }
             public string LogoFileName { get; set; }
             public string Description { get; set; }
+            public string ContactPersonName { get; set; }
+            public string ContactPersonEmail { get; set; }
+            public string ContactPersonDesignation { get; set; }
         }
 
         public class AddCompany
@@ -49,6 +55,9 @@ namespace InternConnect.Dto.Company
             public string HeaderFileName { get; set; }
             public string LogoFileName { get; set; }
             public string Description { get; set; }
+            public string ContactPersonName { get; set; }
+            public string ContactPersonEmail { get; set; }
+            public string ContactPersonDesignation { get; set; }
         }
     }
 }
