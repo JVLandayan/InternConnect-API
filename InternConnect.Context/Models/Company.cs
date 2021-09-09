@@ -6,6 +6,7 @@ namespace InternConnect.Context.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Link { get; set; }
         public string AddressOne { get; set; }
         public string AddressTwo { get; set; }
         public string AddressThree { get; set; }

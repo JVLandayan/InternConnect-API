@@ -30,14 +30,13 @@ namespace InternConnect.Controllers
         [HttpGet("{id}", Name = "GetAccount")]
         public ActionResult<IEnumerable<Account>> GetAccount(int id)
         {
-            try
+            if (_accountService.GetById(id) != null)
             {
                 return Ok(_accountService.GetById(id));
             }
-            catch (Exception e)
-            {
+
                 return NotFound(new {message = "Account doesn't exist"});
-            }
+
         }
 
         [Authorize(Roles = "Chair")]

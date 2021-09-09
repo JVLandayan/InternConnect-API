@@ -28,7 +28,6 @@ namespace InternConnect.Controllers
             try
             {
                 if (_academicYearService.GetAcademicYear() != null) return Ok(_academicYearService.GetAcademicYear());
-
                 throw new Exception();
             }
             catch (Exception e)

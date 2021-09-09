@@ -8,6 +8,7 @@ namespace InternConnect.Dto.Company
         {
             public int Id { get; set; }
             public string Name { get; set; }
+            public string Link { get; set; }
             public string AddressOne { get; set; }
             public string AddressTwo { get; set; }
             public string AddressThree { get; set; }
@@ -25,6 +26,8 @@ namespace InternConnect.Dto.Company
             [Required] public int Id { get; set; }
 
             [Required] public string Name { get; set; }
+            [Required]
+            public string Link { get; set; }
 
             [Required] public string AddressOne { get; set; }
 
@@ -44,6 +47,7 @@ namespace InternConnect.Dto.Company
         public class AddCompany
         {
             [Required] public string Name { get; set; }
+            public string Link { get; set; }
 
             [Required] public string AddressOne { get; set; }
 

@@ -18,7 +18,6 @@ namespace InternConnect.Controllers
             _eventsService = events;
         }
 
-
         //GET /admin
         [Authorize(Roles = "Chair")]
         [HttpGet("all/{adminId}")]
@@ -32,14 +31,12 @@ namespace InternConnect.Controllers
         [HttpGet("{id}", Name = "GetEvent")]
         public ActionResult<IEnumerable<EventDto.ReadEvent>> GetEvent(int id)
         {
-            try
+            if (_eventsService.GetbyId(id) != null)
             {
                 return Ok(_eventsService.GetbyId(id));
             }
-            catch (Exception e)
-            {
-                return BadRequest("Event doesn't exist");
-            }
+            return BadRequest("Event doesn't exist");
+
         }
         [Authorize(Roles = "Chair")]
         [HttpPost]

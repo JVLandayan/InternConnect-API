@@ -10,11 +10,14 @@ namespace InternConnect.Dto.Submission
             public int Id { get; set; }
             public int IsoCode { get; set; }
             public DateTime SubmissionDate { get; set; }
+            public string StudentTitle { get; set; }
             public string LastName { get; set; }
             public string FirstName { get; set; }
             public string MiddleInitial { get; set; }
             public int StudentNumber { get; set; }
-            public string ContactPerson { get; set; }
+            public string ContactPersonTitle { get; set; }
+            public string ContactPersonFirstName { get; set; }
+            public string ContactPersonLastName { get; set; }
             public string ContactPersonEmail { get; set; }
             public string ContactPersonPosition { get; set; }
             public string AcceptanceLetterFileName { get; set; }
@@ -29,13 +32,15 @@ namespace InternConnect.Dto.Submission
         public class UpdateSubmission
         {
             public int Id { get; set; }
-            public int IsoCode { get; set; }
             public DateTime SubmissionDate { get; set; }
+            public string StudentTitle { get; set; }
             public string LastName { get; set; }
             public string FirstName { get; set; }
             public string MiddleInitial { get; set; }
             public int StudentNumber { get; set; }
-            public string ContactPerson { get; set; }
+            public string ContactPersonTitle { get; set; }
+            public string ContactPersonFirstName { get; set; }
+            public string ContactPersonLastName { get; set; }
             public string ContactPersonEmail { get; set; }
             public string ContactPersonPosition { get; set; }
             public string AcceptanceLetterFileName { get; set; }
@@ -48,6 +53,7 @@ namespace InternConnect.Dto.Submission
         public class AddSubmission
         {
             public DateTime SubmissionDate { get; set; }
+            public string StudentTitle { get; set; }
             public string LastName { get; set; }
             public string FirstName { get; set; }
             public string MiddleInitial { get; set; }

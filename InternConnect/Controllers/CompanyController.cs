@@ -23,14 +23,12 @@ namespace InternConnect.Controllers
         [HttpGet("{id}", Name = "GetCompany")]
         public ActionResult<IEnumerable<CompanyDto.ReadCompany>> GetCompany(int id)
         {
-            try
+            if (_companyService.GetById(id) != null)
             {
                 return Ok(_companyService.GetById(id));
             }
-            catch (Exception e)
-            {
-                return BadRequest("Company doesn't exist");
-            }
+            return BadRequest("Company doesn't exist");
+
         }
 
         [HttpGet]
