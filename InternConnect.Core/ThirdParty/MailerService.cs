@@ -33,6 +33,8 @@ namespace InternConnect.Service.ThirdParty
 
         //Onboard
         public void Onboard(Account accountData);
+
+        public void ChangeDean(string oldEmail, string newEmail, string resetkey);
     }
 
     public class MailerService : IMailerService
@@ -217,6 +219,18 @@ namespace InternConnect.Service.ThirdParty
             toAccount.Body = message;
             client.Send(toAccount);
         }
+        public void ChangeDean(string oldEmail,string newEmail, string resetkey)
+        {
+            var message = "http://localhost:5000/" +
+                          $"onboard?oldemail={oldEmail}&newemail={newEmail}&resetkey={resetkey}";
+            var client = SmtpConfiguration();
+            var toAccount = new MailMessage();
+            toAccount.To.Add(newEmail);
+            toAccount.From = new MailAddress("postmaster@eco-tigers.com");
+            toAccount.Subject = "Reset Password Link";
+            toAccount.Body = message;
+            client.Send(toAccount);
+        }
 
         public void Onboard(Account accountData)
         {
@@ -230,5 +244,7 @@ namespace InternConnect.Service.ThirdParty
             toAccount.Body = message;
             client.Send(toAccount);
         }
+
+
     }
 }

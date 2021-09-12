@@ -22,7 +22,7 @@ namespace InternConnect.Controllers
             _uploadService = uploadService;
         }
 
-        [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
+       // [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
         [HttpGet("excel")]
         public IActionResult GenerateExcel([FromQuery] int[] ids)
         {
@@ -30,13 +30,13 @@ namespace InternConnect.Controllers
 
             return _reportService.GenerateExcel(ids, this);
         }
-        [Authorize(Roles = "Student")]
+        //[Authorize(Roles = "Student")]
         [HttpPost("file")]
         public ActionResult<string> FileUpload([FromForm] FileUploadAPI uploadedFile)
         {
             return _uploadService.SubmissionFiles(this, uploadedFile);
         }
-        [Authorize]
+        //[Authorize]
         [HttpPost("image/{entity}")]
         public ActionResult<string> ImageUpload([FromForm] FileUploadAPI uploadedFile, string entity)
         {

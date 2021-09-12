@@ -26,7 +26,9 @@ namespace InternConnect.Service.Main
 
         //public void DeleteRange(List<Account> entities);
         public List<AccountDto.ReadAccount> GetAll();
+        public void DeleteAll();
         public Account GetById(int id);
+        public void ChangeDean(string oldEmail, string newEmail, int accountId);
     }
 
     public class AccountService : IAccountService
@@ -34,17 +36,23 @@ namespace InternConnect.Service.Main
         private readonly IAccountRepository _accountRepository;
         private readonly IAdminRepository _adminRepository;
         private readonly IAuthService _authService;
+        private readonly IAcademicYearRepository _ayRepository;
+        private readonly ISectionRepository _sectionRepository;
+        private readonly IMailerService _mailerService;
         private readonly InternConnectContext _context;
         private readonly IMapper _mapper;
 
         public AccountService(IAccountRepository account, IMapper mapper, IAdminRepository admin,
-            InternConnectContext context, IAuthService authService)
+            InternConnectContext context, IAuthService authService, IAcademicYearRepository ayRepository, ISectionRepository sectionRepository, IMailerService mailerService)
         {
             _accountRepository = account;
             _mapper = mapper;
             _adminRepository = admin;
             _context = context;
             _authService = authService;
+            _ayRepository = ayRepository;
+            _sectionRepository = sectionRepository;
+            _mailerService = mailerService;
         }
 
 
@@ -159,9 +167,40 @@ namespace InternConnect.Service.Main
             return mappedData;
         }
 
+        public void DeleteAll()
+        {
+            #region Reset Academic Year
+
+            var ayData = _ayRepository.GetAll().First();
+            ayData.EndDate = new DateTime(1111,1,1);
+            ayData.StartDate = new DateTime(1111, 1, 1);
+            ayData.IgaarpEmail = "";
+            ayData.CollegeName = "";
+
+            #endregion
+            #region Delete Accounts
+
+            var adminList = _accountRepository.GetAllAccountData().Where(acc => acc.Admin != null);
+            var studentList = _accountRepository.GetAllAccountData().Where(acc => acc.Student != null);
+            var mappedList = adminList.Where(acc => acc.Admin.AuthId != 1);
+            _accountRepository.RemoveRange(mappedList);
+            _accountRepository.RemoveRange(studentList);
+
+            #endregion
+            #region Delete Sections
+            _sectionRepository.RemoveRange(_sectionRepository.GetAll().ToList());
+            #endregion
+            _context.SaveChanges();
+        }
+
         public Account GetById(int id)
         {
             return _accountRepository.Get(id);
+        }
+        public void ChangeDean(string oldEmail, string newEmail ,int accountId)
+        {
+            var accountData = GetById(accountId);
+            _mailerService.ChangeDean(oldEmail,newEmail,accountData.ResetKey);
         }
 
         public string HashPassword(string password)
@@ -180,5 +219,7 @@ namespace InternConnect.Service.Main
             var validToken = WebEncoders.Base64UrlEncode(encodedToken);
             return validToken;
         }
+
+
     }
 }

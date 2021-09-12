@@ -1,31 +1,22 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using InternConnect.Context;
-using InternConnect.Data;
-using InternConnect.Data.Interfaces;
-using InternConnect.Data.Repositories;
-using InternConnect.Profiles;
-using Newtonsoft.Json.Serialization;
-using InternConnect.Util;
-using Microsoft.Extensions.FileProviders;
-using Newtonsoft.Json;
 using System.Text;
+using InternConnect.Context;
+using InternConnect.Profiles;
 using InternConnect.Service.ThirdParty;
-using Microsoft.IdentityModel.Tokens;
+using InternConnect.Util;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace InternConnect
 {
@@ -52,7 +43,8 @@ namespace InternConnect
                 });
             });
 
-            services.AddDbContext<InternConnectContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("InternConnectAppCon")));
+            services.AddDbContext<InternConnectContext>(opt =>
+                opt.UseSqlServer(Configuration.GetConnectionString("InternConnectAppCon")));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -68,7 +60,7 @@ namespace InternConnect
                     Scheme = "Bearer"
                 });
 
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
                         new OpenApiSecurityScheme
@@ -80,8 +72,7 @@ namespace InternConnect
                             },
                             Scheme = "oauth2",
                             Name = "Bearer",
-                            In = ParameterLocation.Header,
-
+                            In = ParameterLocation.Header
                         },
                         new List<string>()
                     }
@@ -106,6 +97,7 @@ namespace InternConnect
             var appSettings = appSettingsSection.Get<AppSettings>();
 
             #region JWT
+
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
             services.AddAuthentication(x =>
                 {
@@ -125,11 +117,7 @@ namespace InternConnect
                     };
                 });
 
-
             #endregion
-
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -156,7 +144,8 @@ namespace InternConnect
             });
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "images/signatures")),
+                FileProvider =
+                    new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "images/signatures")),
                 RequestPath = "/images/signatures"
             });
             app.UseStaticFiles(new StaticFileOptions
@@ -166,7 +155,8 @@ namespace InternConnect
             });
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "images/company")),
+                FileProvider =
+                    new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "images/company")),
                 RequestPath = "/images/company"
             });
 
@@ -174,10 +164,7 @@ namespace InternConnect
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

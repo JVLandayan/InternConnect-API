@@ -39,7 +39,6 @@ namespace InternConnect.Dto.AcademicYear
 
             [Required] public string IgaarpEmail { get; set; }
 
-            public Context.Models.PdfState PdfState { get; set; }
         }
     }
 }

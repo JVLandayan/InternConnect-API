@@ -21,6 +21,7 @@ namespace InternConnect.Service.ThirdParty
         public Account ForgotPassword(string email);
         public AccountDto.ReadSession Authenticate(AuthenticationModel payload);
         public Account ResetPassword(AccountDto.UpdateAccount payload);
+        public Account ChangeDean(AccountDto.UpdateAccount payload, string oldEmail);
         public Account Onboard(string email);
     }
 
@@ -119,6 +120,21 @@ namespace InternConnect.Service.ThirdParty
             return accountData;
         }
 
+        public Account ChangeDean(AccountDto.UpdateAccount payload, string oldEmail)
+        {
+            var accountData = _accountRepository.GetAll()
+                .FirstOrDefault(a => a.Email == oldEmail.ToUpper() && a.ResetKey == payload.ResetKey);
+            if (accountData != null)
+            {
+                accountData.Email = payload.Email.ToUpper();
+                accountData.Password = HashPassword(payload.Password);
+                accountData.ResetKey = TokenConfig(Guid.NewGuid().ToString());
+                _context.SaveChanges();
+            }
+
+            return accountData;
+        }
+
         #region Password Hasher
 
         public static string HashPassword(string password)
@@ -143,5 +159,7 @@ namespace InternConnect.Service.ThirdParty
 
             #endregion
         }
+
+
     }
 }

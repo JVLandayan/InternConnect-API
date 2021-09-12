@@ -58,7 +58,9 @@ namespace InternConnect.Dto.Submission
             public string FirstName { get; set; }
             public string MiddleInitial { get; set; }
             public int StudentNumber { get; set; }
-            public string ContactPerson { get; set; }
+            public string ContactPersonTitle { get; set; }
+            public string ContactPersonFirstName { get; set; }
+            public string ContactPersonLastName { get; set; }
             public string ContactPersonEmail { get; set; }
             public string ContactPersonPosition { get; set; }
             public string AcceptanceLetterFileName { get; set; }

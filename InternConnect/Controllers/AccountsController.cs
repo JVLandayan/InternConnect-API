@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using InternConnect.Context.Models;
+using InternConnect.Dto;
 using InternConnect.Dto.Account;
 using InternConnect.Service.Main;
+using InternConnect.Service.ThirdParty;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +15,12 @@ namespace InternConnect.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly IAccountService _accountService;
+        private readonly IAuthService _authService;
 
-        public AccountsController(IAccountService account)
+        public AccountsController(IAccountService account, IAuthService auth)
         {
             _accountService = account;
+            _authService = auth;
         }
 
         //GET /accounts
@@ -81,5 +85,26 @@ namespace InternConnect.Controllers
             _accountService.Delete(id);
             return NoContent();
         }
+
+        [Authorize(Roles = "Dean")]
+        [HttpDelete]
+        public ActionResult DeleteAllAccounts(AuthenticationModel payload)
+        {
+            if (_authService.Authenticate(payload) == null)
+            {
+                return BadRequest("Wrong Password");
+            }
+            _accountService.DeleteAll();
+            return NoContent();
+        }
+
+        [Authorize(Roles = "Dean")]
+        [HttpPost("changedean")]
+        public ActionResult ChangeDean(ChangeDeanModel payload)
+        {
+            _accountService.ChangeDean(payload.OldEmail, payload.NewEmail, payload.AccountId);
+            return NoContent();
+        }
+
     }
 }

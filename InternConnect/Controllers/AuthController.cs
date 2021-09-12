@@ -42,5 +42,14 @@ namespace InternConnect.Controllers
             _authService.ResetPassword(payload);
             return Ok("Password Resetted");
         }
+
+        [HttpPost("changedean")]
+        public ActionResult<AccountDto.ReadAccount> ChangeDean(AccountDto.UpdateAccount payload, string oldEmail)
+        {
+            var accountData = _authService.ChangeDean(payload, oldEmail);
+            if (accountData == null) return BadRequest("Account not found");
+            _authService.ResetPassword(payload);
+            return Ok("Password Resetted");
+        }
     }
 }
