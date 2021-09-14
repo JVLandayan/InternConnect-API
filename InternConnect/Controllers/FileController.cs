@@ -12,14 +12,16 @@ namespace InternConnect.Controllers
     {
         private readonly IReportService _reportService;
         private readonly IUploadService _uploadService;
+        private readonly IPdfService _pdfService;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
         public FileController(IReportService reportService, IWebHostEnvironment webHostEnvironment,
-            IUploadService uploadService)
+            IUploadService uploadService, IPdfService pdfService)
         {
             _reportService = reportService;
             _webHostEnvironment = webHostEnvironment;
             _uploadService = uploadService;
+            _pdfService = pdfService;
         }
 
        // [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
@@ -29,6 +31,12 @@ namespace InternConnect.Controllers
             if (ids.Length == 0) return NotFound("Submission not found");
 
             return _reportService.GenerateExcel(ids, this);
+        }
+
+        [HttpGet("pdf")]
+        public IActionResult GeneratePdf()
+        {
+            return _pdfService.GeneratePdf(this);
         }
         //[Authorize(Roles = "Student")]
         [HttpPost("file")]

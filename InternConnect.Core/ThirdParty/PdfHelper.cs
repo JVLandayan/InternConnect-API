@@ -28,7 +28,9 @@
         public string CollegeName { get; set; }
         public int IsoCode { get; set; }
         public string CurriculumHours { get; set; }
-        public string UniversityLogo { get; set; }
-        public string CollegeLogo { get; set; }
+        public string UniversityLogoFileName { get; set; }
+        public string CollegeLogoFileName { get; set; }
+        public string CoordinatorSignatureFileName { get; set; }
+        public string DeanSignatureFileName { get; set; }
     }
 }

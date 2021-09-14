@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -40,7 +40,6 @@
 
   <ItemGroup>
     <Folder Include="images\company\" />
-    <Folder Include="images\logo\" />
     <Folder Include="images\signatures\" />
     <Folder Include="files\" />
   </ItemGroup>
