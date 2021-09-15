@@ -9,7 +9,7 @@ namespace InternConnect.Dto.Program
         {
             public int Id { get; set; }
             public string Name { get; set; }
-
+            public string IsoCodeProgramNumber { get; set; }
             public int? IsoCode { get; set; }
             public int? NumberOfHours { get; set; }
 
@@ -20,6 +20,7 @@ namespace InternConnect.Dto.Program
         {
             public int Id { get; set; }
             public string Name { get; set; }
+            public string IsoCodeProgramNumber { get; set; }
         }
 
         public class UpdateIsoCode

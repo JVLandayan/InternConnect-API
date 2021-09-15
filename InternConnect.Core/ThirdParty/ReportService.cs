@@ -47,8 +47,8 @@ namespace InternConnect.Service.ThirdParty
                 var worksheet = workBook.Worksheets.Add("Submissions");
 
                 #region Headers
-
                 worksheet.Cell(1, 1).Value = "Email Address";
+                worksheet.Cell(1, 1).Style.Font.Bold = true;
                 worksheet.Cell(1, 2).Value = "ISO Code";
                 worksheet.Cell(1, 3).Value = "Student Title";
                 worksheet.Cell(1, 4).Value = "Lastname of Requesting Students";
@@ -72,6 +72,10 @@ namespace InternConnect.Service.ThirdParty
                 worksheet.Cell(1, 22).Value = "STATUS";
                 worksheet.Cell(1, 23).Value = "Acceptance Letter";
                 worksheet.Cell(1, 24).Value = "Company Profile";
+                for (int i = 1; i < 25; i++)
+                {
+                    worksheet.Cell(1, i).Style.Font.Bold = true;
+                }
 
 
                 #endregion
@@ -151,7 +155,9 @@ namespace InternConnect.Service.ThirdParty
                     worksheet.Cell(1 + index, 24).Value = $"fileloc/{submission.CompanyProfileFileName}";
                     index++;
                 }
-
+                worksheet.Rows().AdjustToContents();
+                worksheet.Columns().AdjustToContents();
+                worksheet.Rows().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
                 #endregion
 
 

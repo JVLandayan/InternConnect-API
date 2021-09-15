@@ -33,10 +33,10 @@ namespace InternConnect.Controllers
             return _reportService.GenerateExcel(ids, this);
         }
 
-        [HttpGet("pdf")]
-        public IActionResult GeneratePdf()
+        [HttpGet("pdf/{submissionId}")]
+        public IActionResult GeneratePdf(int submissionId)
         {
-            return _pdfService.GeneratePdf(this);
+            return _pdfService.GeneratePdf(this, submissionId);
         }
         //[Authorize(Roles = "Student")]
         [HttpPost("file")]

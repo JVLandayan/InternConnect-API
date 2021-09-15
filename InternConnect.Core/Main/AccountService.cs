@@ -71,7 +71,7 @@ namespace InternConnect.Service.Main
             var studentData = new Student
             {
                 ProgramId = payload.ProgramId,
-                SectionId = payload.ProgramId,
+                SectionId = payload.SectionId,
                 DateAdded = DateTime.Now,
                 AddedBy = payload.AdminEmail,
                 AuthId = 5

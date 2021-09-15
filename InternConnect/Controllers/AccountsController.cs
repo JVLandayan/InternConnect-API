@@ -51,7 +51,7 @@ namespace InternConnect.Controllers
             if (accountData.Id == 0) return BadRequest("Email already exists");
             return CreatedAtRoute(nameof(GetAccount), new {accountData.Id}, accountData);
         }
-        [Authorize (Roles = "Coordinator,Chair")]
+        [Authorize (Roles = "Coordinator, Chair")]
         [HttpPost("student")]
         public ActionResult<AccountDto.ReadAccount> AddStudents(AccountDto.AddAccountStudent payload)
         {
@@ -59,9 +59,9 @@ namespace InternConnect.Controllers
             if (accountData.Id == 0) return BadRequest("Email already exists");
             return CreatedAtRoute(nameof(GetAccount), new {accountData.Id}, accountData);
         }
-
+        [Authorize(Roles = "Dean")]
         [HttpPost("techcoordinator")]
-        public ActionResult<AccountDto.ReadAccount> AddStudents(AccountDto.AddAccountTechCoordinator payload)
+        public ActionResult<AccountDto.ReadAccount> AddTechCoordinator(AccountDto.AddAccountTechCoordinator payload)
         {
             var accountData = _accountService.AddTechCoordinator(payload);
             if (accountData.Id == 0) return BadRequest("Email already exists");

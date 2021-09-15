@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using InternConnect.Data.Interfaces;
 using iText.IO.Font;
 using iText.IO.Image;
@@ -19,7 +20,7 @@ namespace InternConnect.Service.ThirdParty
 {
     public interface IPdfService
     {
-        public IActionResult GeneratePdf(ControllerBase controller);
+        public IActionResult GeneratePdf(ControllerBase controller, int submissionId);
     }
 
     public class PdfService : IPdfService
@@ -31,21 +32,75 @@ namespace InternConnect.Service.ThirdParty
 
         private readonly ISubmissionRepository _submissionRepository;
         private readonly IWebHostEnvironment _webHost;
+        private readonly ITrackRepository _trackRepository;
+        private readonly IProgramRepository _programRepository;
+        private readonly ICompanyRepository _companyRepository;
+        private readonly ISectionRepository _sectionRepository;
+
 
         public PdfService(IAdminRepository adminRepository, ISubmissionRepository submissionRepository,
             IAcademicYearRepository academicYear, IPdfStateRepository pdfStateRepository,
-            IWebHostEnvironment webHostEnvironment)
+            IWebHostEnvironment webHostEnvironment, ITrackRepository trackRepository, IProgramRepository programRepository, ICompanyRepository companyRepository, ISectionRepository sectionRepository)
         {
             _adminRepository = adminRepository;
             _submissionRepository = submissionRepository;
             _academicYearRepository = academicYear;
             _pdfStateRepository = pdfStateRepository;
             _webHost = webHostEnvironment;
+            _trackRepository = trackRepository;
+            _programRepository = programRepository;
+            _companyRepository = companyRepository;
+            _sectionRepository = sectionRepository;
+
         }
 
 
-        public IActionResult GeneratePdf(ControllerBase controller)
+        public IActionResult GeneratePdf(ControllerBase controller, int submissionId)
         {
+            var submissionData = _submissionRepository.GetAllRelatedData().First(s=>s.Id == submissionId);
+            var trackData = _trackRepository.Get(submissionData.TrackId);
+            var programList = _programRepository.GetAll();
+            var companyData = _companyRepository.Get(submissionData.CompanyId);
+            var academicYearData = _academicYearRepository.GetAll().First();
+            var pdfStateData = _pdfStateRepository.GetAll().First();
+            var sectionData = _sectionRepository.Get(submissionData.Student.SectionId);
+            var deanData = _adminRepository.GetAll().Where(a => a.AuthId == 1).First();
+            var coordinatorList = _adminRepository.GetAll().Where(a => a.SectionId != null).ToList();
+            var coordinatorData = coordinatorList.Find(a => a.SectionId == submissionData.Student.SectionId);
+            //var pdfData = new PdfHelper()
+            //{
+            //    IsoCode = submissionData.IsoCode,
+            //    IsoCodeProgramNumber = programList.First(p=>p.Id == submissionData.Student.ProgramId).IsoCodeProgramNumber,
+            //    IgaarpName = pdfStateData.IgaarpName,
+            //    DeanName = pdfStateData.DeanName,
+            //    DeanSignatureFileName = deanData.StampFileName,
+            //    CurriculumHours = (int)programList.First(p => p.Id == submissionData.Student.ProgramId).NumberOfHours,
+            //    CompanyAddressOne = companyData.AddressOne,
+            //    CompanyAddressTwo = companyData.AddressTwo,
+            //    CompanyAddressThree = companyData.AddressThree,
+            //    CompanyName = companyData.Name,
+            //    CollegeLogoFileName = pdfStateData.CollegeLogoFileName,
+            //    UniversityLogoFileName = pdfStateData.UstLogoFileName,
+            //    CollegeName = academicYearData.CollegeName,
+            //    CoordinatorSignatureFileName = coordinatorData.StampFileName,
+            //    ContactPersonTitle = submissionData.ContactPersonTitle,
+            //    ContactPersonFirstName = submissionData.ContactPersonFirstName,
+            //    ContactPersonLastName = submissionData.ContactPersonLastName,
+            //    ContactPersonRole = submissionData.ContactPersonPosition,
+
+            //    StudentTitle = submissionData.StudentTitle,
+            //    StudentFirstName = submissionData.FirstName,
+            //    StudentLastName = submissionData.LastName,
+            //    StudentMiddleInitial = submissionData.MiddleInitial,
+            //    StudentProgram = programList.First(p=>p.Id == submissionData.Student.ProgramId).Name,
+            //    StudentSection = sectionData.Name,
+            //    StudentTrack = trackData.Name,
+                
+            //};
+
+
+
+
             var contentType = "pdf/application";
             var fileName = $"{DateTime.Now}+{Guid.NewGuid()}.pdf";
 
@@ -64,11 +119,11 @@ namespace InternConnect.Service.ThirdParty
                     #region Fonts
 
                     var headProgram =
-                        FontProgramFactory.CreateFont(_webHost.ContentRootPath + "/resources/candara-bold.ttf");
+                        FontProgramFactory.CreateFont(_webHost.ContentRootPath + "/resources/fonts/candara-bold.ttf");
                     var subHeadProgram =
-                        FontProgramFactory.CreateFont(_webHost.ContentRootPath + "/resources/TCM_____.TTF");
+                        FontProgramFactory.CreateFont(_webHost.ContentRootPath + "/resources/fonts/TCM_____.TTF");
                     var normalBold =
-                        FontProgramFactory.CreateFont(_webHost.ContentRootPath + "/resources/arial-bold.ttf");
+                        FontProgramFactory.CreateFont(_webHost.ContentRootPath + "/resources/fonts/arial-bold.ttf");
 
                     var headerFont = PdfFontFactory.CreateFont(headProgram, PdfEncodings.WINANSI, true);
                     var subHeaderFont = PdfFontFactory.CreateFont(subHeadProgram, PdfEncodings.WINANSI, true);
@@ -79,9 +134,9 @@ namespace InternConnect.Service.ThirdParty
                     #region Header
 
                     var header = new Text("University Of Santo Tomas").SetFontSize(14).SetFont(headerFont);
-                    var subHeaderOne = new Text("College of Information and Computing Sciences").SetFontSize(11)
+                    var subHeaderOne = new Text($"{academicYearData.CollegeName}").SetFontSize(11)
                         .SetFont(headerFont);
-                    var subHeaderTwo = new Text("--DepartmentName--").SetFont(subHeaderFont);
+                    var subHeaderTwo = new Text($"Department Of {programList.First(p => p.Id == submissionData.Student.ProgramId).Name}").SetFont(subHeaderFont);
                     var pHead = new Paragraph().Add(header).SetTextAlignment(TextAlignment.CENTER);
                     var pSubHeadOne = new Paragraph().Add(subHeaderOne).SetTextAlignment(TextAlignment.CENTER);
                     var pSubHeadTwo = new Paragraph().Add(subHeaderTwo).SetTextAlignment(TextAlignment.CENTER);
@@ -94,9 +149,9 @@ namespace InternConnect.Service.ThirdParty
                     #region Logos
 
                     var iicsLogoPath = _webHost.ContentRootPath +
-                                       "/images/logo/UST-Seal-Institute-of-Information-Computing-Sciences-2014-Present-868x1024.png";
+                                       $"/images/logo/{pdfStateData.CollegeLogoFileName}";
                     var ustLogoPath = _webHost.ContentRootPath +
-                                      "/images/logo/Ust-logo.png";
+                                      $"/images/logo/{pdfStateData.UstLogoFileName}";
 
 
                     var iicsLogoData = ImageDataFactory.Create(iicsLogoPath);
@@ -118,8 +173,8 @@ namespace InternConnect.Service.ThirdParty
 
                     #region Texts
 
-                    var isoCode = new Text("UST:A022-(programId)-LE(isoCode)");
-                    var academicYear = new Text("(startYear) - (endYear)");
+                    var isoCode = new Text($"UST:A022-{programList.First(p => p.Id == submissionData.Student.ProgramId).IsoCodeProgramNumber}-LE{programList.First(p => p.Id == submissionData.Student.ProgramId).IsoCode}");
+                    var academicYear = new Text($"AY {academicYearData.StartDate.ToString("yyyy")} - {academicYearData.EndDate.ToString("yyyy")}");
                     var isoCodep = new Paragraph().Add(isoCode).SetTextAlignment(TextAlignment.LEFT).SetFontSize(11);
                     var academicYearp = new Paragraph().Add(academicYear).SetTextAlignment(TextAlignment.LEFT)
                         .SetFontSize(11);
@@ -127,27 +182,53 @@ namespace InternConnect.Service.ThirdParty
                     document.Add(academicYearp.SetMarginBottom(11.0f).SetFixedLeading(7.0f));
 
 
-                    document.Add(new Paragraph().Add(new Text($"{DateTime.Now}").SetFontSize(11)).SetMarginBottom(11.0f)
+                    document.Add(new Paragraph().Add(new Text($"{DateTime.Now.ToString("MMMM dd, yyyy")}").SetFontSize(11)).SetMarginBottom(11.0f)
                         .SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
 
-                    document.Add(new Paragraph().Add(new Text("Title, ContactName").SetFontSize(11))
+                    document.Add(new Paragraph().Add(new Text($"{submissionData.ContactPersonTitle}. {submissionData.ContactPersonFirstName} {submissionData.ContactPersonLastName}").SetFontSize(11))
                         .SetTextAlignment(TextAlignment.LEFT).SetMarginBottom(0f).SetFixedLeading(7.0f));
-                    document.Add(new Paragraph().Add(new Text("ContactNamePosition").SetFontSize(11))
+                    document.Add(new Paragraph().Add(new Text($"{submissionData.ContactPersonPosition}").SetFontSize(11))
                         .SetTextAlignment(TextAlignment.LEFT).SetMarginBottom(0f).SetFixedLeading(7.0f));
-                    document.Add(new Paragraph().Add(new Text("CompanyName").SetFontSize(11))
+                    document.Add(new Paragraph().Add(new Text($"{companyData.Name}").SetFontSize(11))
                         .SetTextAlignment(TextAlignment.LEFT).SetMarginBottom(0f).SetFixedLeading(7.0f));
-                    document.Add(new Paragraph().Add(new Text("AddressOne, AddressTwo, AddressThree").SetFontSize(11))
-                        .SetMarginBottom(11.0f).SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
 
-                    document.Add(new Paragraph().Add(new Text("Dear Mr. (LastNameContact)").SetFontSize(11))
+                    if (companyData.AddressThree != null)
+                    {
+                        document.Add(new Paragraph().Add(new Text($"{companyData.AddressOne}").SetFontSize(11))
+                            .SetMarginBottom(0f).SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
+                        document.Add(new Paragraph().Add(new Text($"{companyData.AddressTwo}").SetFontSize(11))
+                            .SetMarginBottom(0f).SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
+                        document.Add(new Paragraph().Add(new Text($"{companyData.AddressThree}").SetFontSize(11))
+                            .SetMarginBottom(11.0f).SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
+                    } else if (companyData.AddressTwo != null)
+                    {
+                        document.Add(new Paragraph().Add(new Text($"{companyData.AddressOne}").SetFontSize(11))
+                            .SetMarginBottom(0f).SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
+                        document.Add(new Paragraph().Add(new Text($"{companyData.AddressTwo}").SetFontSize(11))
+                            .SetMarginBottom(11.0f).SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
+                    }
+                    else
+                    {
+                        document.Add(new Paragraph().Add(new Text($"{companyData.AddressOne}").SetFontSize(11))
+                            .SetMarginBottom(11.0f).SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
+                    }
+
+                    //document.Add(new Paragraph().Add(new Text("AddressOne").SetFontSize(11))
+                    //    .SetMarginBottom(11.0f).SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
+                    //document.Add(new Paragraph().Add(new Text("AddressTwo").SetFontSize(11))
+                    //    .SetMarginBottom(11.0f).SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
+                    //document.Add(new Paragraph().Add(new Text("AddressThree").SetFontSize(11))
+                    //    .SetMarginBottom(11.0f).SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
+
+                    document.Add(new Paragraph().Add(new Text($"Dear {submissionData.ContactPersonTitle}. {submissionData.ContactPersonLastName}").SetFontSize(11))
                         .SetMarginBottom(11.0f).SetTextAlignment(TextAlignment.LEFT));
 
                     document.Add(new Paragraph().Add(new Text(
-                            "This is to recommend Mr. Jovan S. Caballero, a bona fide student of section  3ISA of the Institute " +
-                            "of Information and Computing Sciences of the University  of Santo Tomas to take an Internship or  Practicum  Course  " +
-                            "this  June  –  July  2020  in  your  reputable  company.  As  part  of  our Outcomes-Based Education curriculum requirements " +
-                            "in the  B. S. Information Systems program, said  student  must  undertake  a  minimum  of  300  hours  of  relevant  company  " +
-                            "or  industry immersion. ").SetFontSize(11)).SetTextAlignment(TextAlignment.LEFT)
+                            $"This is to recommend {submissionData.StudentTitle}. {submissionData.FirstName} {submissionData.MiddleInitial}. {submissionData.LastName}, " +
+                            $"a bona fide student of section {sectionData.Name} of the {academicYearData.CollegeName} of the University  of Santo Tomas to take an Internship or  Practicum  Course  " +
+                            $"this  {academicYearData.StartDate.ToString("MMMM")}  –  {academicYearData.EndDate.ToString("MMMM")}  {academicYearData.EndDate.ToString("yyyy")}  in  your  reputable  company.  As  part  of  our Outcomes-Based Education curriculum requirements " +
+                            $"in the  B. S. {programList.First(p => p.Id == submissionData.Student.ProgramId).Name} program, said  student  must  undertake  a  minimum  of  {programList.First(p => p.Id == submissionData.Student.ProgramId).NumberOfHours}  hours  of  relevant  company  " +
+                            "or  industry immersion. ").SetFontSize(11)).SetTextAlignment(TextAlignment.JUSTIFIED)
                         .SetFixedLeading(11.0f).SetMarginBottom(11.0f));
 
 
@@ -157,8 +238,7 @@ namespace InternConnect.Service.ThirdParty
                                       "to solve  computing problems; and/or  to  work  and  communicate  " +
                                       "effectively  in  a project involving a multidisciplinary team; and " +
                                       "to be updated with the latest trends and emerging  technologies in " +
-                                      "his field of study. Since said student is pursuing a track in Service " +
-                                      "Management, please assign said student in any combination of activities " +
+                                      $"his field of study. Since said student is pursuing a track in {trackData.Name}, please assign said student in any combination of activities " +
                                       "in line with the same track and other computer related activities except " +
                                       "encoding or clerical work. If possible, please allow our student to consult with his " +
                                       "assigned supervisor to conceptualize an industry-based research problem. This will enable our " +
@@ -171,7 +251,7 @@ namespace InternConnect.Service.ThirdParty
                     document.Add(new Paragraph()
                         .Add(new Text(
                             "If you have further inquiries or concern, please contact us by " +
-                            "email at igaarp.ust.eng@gmail.com or at our land line " +
+                            $"email at {academicYearData.IgaarpEmail} or at our land line " +
                             "number 786-1878 or 406-1611 extension 8678").SetFontSize(11))
                         .SetTextAlignment(TextAlignment.LEFT)
                         .SetFixedLeading(11.0f)
@@ -193,7 +273,7 @@ namespace InternConnect.Service.ThirdParty
 
                     document.Add(new Paragraph()
                         .Add(new Text(
-                            "--IGAARP NAME--").SetFontSize(11).SetFont(normalBoldFont))
+                            $"{pdfStateData.IgaarpName}").SetFontSize(11).SetFont(normalBoldFont))
                         .SetTextAlignment(TextAlignment.LEFT)
                         .SetFixedLeading(7.0f).SetMarginBottom(0f));
                     document.Add(new Paragraph()
@@ -212,7 +292,7 @@ namespace InternConnect.Service.ThirdParty
 
                     document.Add(new Paragraph()
                         .Add(new Text(
-                            "--Dean Name--").SetFontSize(11).SetFont(normalBoldFont))
+                            $"{pdfStateData.DeanName}").SetFontSize(11).SetFont(normalBoldFont))
                         .SetTextAlignment(TextAlignment.LEFT)
                         .SetFixedLeading(7.0f).SetMarginBottom(0f));
                     document.Add(new Paragraph()
@@ -223,8 +303,39 @@ namespace InternConnect.Service.ThirdParty
 
                     #endregion
 
+                    #region Signatures
+                    //coordSignature.SetFixedPosition(50, 238).ScaleAbsolute(100, 30); IGAARP SIGNATURE
+                    var coordSignaturePath = _webHost.ContentRootPath +
+                                                 $"/images/signatures/{coordinatorData.StampFileName}";
+                    var deanSignaturePath = _webHost.ContentRootPath +
+                                             $"/images/signatures/{deanData.StampFileName}";
+
+                    var coordSignatureData = ImageDataFactory.Create(coordSignaturePath);
+                    var coordSignature = new Image(coordSignatureData);
+                    var deanSignatureData = ImageDataFactory.Create(deanSignaturePath);
+                    var deanSignature = new Image(deanSignatureData);
+
+                    if (companyData.AddressThree != null)
+                    {
+                        coordSignature.SetFixedPosition(165, 158).ScaleAbsolute(100, 30);
+                        deanSignature.SetFixedPosition(50, 158).ScaleAbsolute(100, 30);
+                    } else if (companyData.AddressTwo != null)
+                    {
+                        coordSignature.SetFixedPosition(165, 169).ScaleAbsolute(100, 30);
+                        deanSignature.SetFixedPosition(50, 169).ScaleAbsolute(100, 30);
+                    }
+                    else
+                    {
+                        coordSignature.SetFixedPosition(165, 180).ScaleAbsolute(100, 30);
+                        deanSignature.SetFixedPosition(50, 180).ScaleAbsolute(100, 30);
+                    }
+                    document.Add(coordSignature);
+                    document.Add(deanSignature);
+
+                    #endregion
+
                     var companyResponseBoxPath = _webHost.ContentRootPath +
-                                                 "/images/logo/companyresponsebox.png";
+                                                 "/resources/images/companyresponsebox.png";
                     var companyResponseBoxData = ImageDataFactory.Create(companyResponseBoxPath);
                     var imgcompanyResponseBox = new Image(companyResponseBoxData);
                     imgcompanyResponseBox.SetFixedPosition(333, 200).ScaleAbsolute(210, 65);
