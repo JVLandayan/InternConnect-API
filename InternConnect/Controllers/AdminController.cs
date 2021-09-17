@@ -22,11 +22,24 @@ namespace InternConnect.Controllers
 
         //GET /admin
         [Authorize(Roles = "Dean")]
-        [HttpGet]
+        [HttpGet("admins")]
         public ActionResult<IEnumerable<AdminDto.ReadAdmin>> GetAllAdmin()
         {
             return Ok(_adminService.GetAll());
         }
+
+        [Authorize(Roles = "Chair")]
+        [HttpGet("coordinators/{programId}")]
+        public ActionResult<IEnumerable<AdminDto.ReadAdmin>> GetAllCoordinatorsByProgram(int programId)
+        {
+            return Ok(_adminService.GetAllCoordinatorByProgram(programId));
+        }
+        //[Authorize(Roles = "Dean")]
+        //[HttpGet("chairs/{programId}")]
+        //public ActionResult<IEnumerable<AdminDto.ReadAdmin>> GetAllChairsByProgram(int programId)
+        //{
+        //    return Ok(_adminService.GetAllChairByProgram(programId));
+        //}
 
         //GET /admin/id
         [Authorize(Roles = "Dean")]

@@ -5,6 +5,7 @@ using System.Linq;
 using ClosedXML.Excel;
 using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternConnect.Service.ThirdParty
@@ -19,6 +20,7 @@ namespace InternConnect.Service.ThirdParty
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyRepository;
         private readonly IProgramRepository _programRepository;
+        private readonly IWebHostEnvironment _environment;
         private readonly ISectionRepository _sectionRepository;
         private readonly IStudentRepository _studentRepository;
         private readonly ISubmissionRepository _submissionRepository;
@@ -26,7 +28,7 @@ namespace InternConnect.Service.ThirdParty
         public ReportService(ISubmissionRepository submissionRepository, IStudentRepository studentRepository,
             IAccountRepository accountRepository, ISectionRepository sectionRepository,
             ICompanyRepository companyRepository,
-            IProgramRepository programRepository)
+            IProgramRepository programRepository, IWebHostEnvironment env)
         {
             _submissionRepository = submissionRepository;
             _studentRepository = studentRepository;
@@ -34,6 +36,7 @@ namespace InternConnect.Service.ThirdParty
             _companyRepository = companyRepository;
             _sectionRepository = sectionRepository;
             _programRepository = programRepository;
+            _environment = env;
         }
 
 
@@ -151,8 +154,8 @@ namespace InternConnect.Service.ThirdParty
 
                     #endregion
 
-                    worksheet.Cell(1 + index, 23).Value = $"fileloc/{submission.AcceptanceLetterFileName}";
-                    worksheet.Cell(1 + index, 24).Value = $"fileloc/{submission.CompanyProfileFileName}";
+                    worksheet.Cell(1 + index, 23).Value = $"http://localhost:5000/files/{submission.AcceptanceLetterFileName}";
+                    worksheet.Cell(1 + index, 24).Value = $"http://localhost:5000/files/{submission.CompanyProfileFileName}";
                     index++;
                 }
                 worksheet.Rows().AdjustToContents();

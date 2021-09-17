@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using InternConnect.Context.Models;
+using InternConnect.Dto.Program;
+using InternConnect.Dto.Section;
 
 namespace InternConnect.Dto.Admin
 {
@@ -18,8 +20,9 @@ namespace InternConnect.Dto.Admin
             public int? ProgramId { get; set; }
             public int? SectionId { get; set; }
             public int AccountId { get; set; }
-            public List<Logs> Logs { get; set; }
-            public List<Context.Models.Event> Events { get; set; }
+
+            public SectionDto.ReadSection Section { get; set; }
+            public ProgramDto.ReadProgram Program { get; set; }
         }
     }
 }

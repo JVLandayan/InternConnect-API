@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using InternConnect.Context;
 using InternConnect.Data.Interfaces;
@@ -11,6 +12,10 @@ namespace InternConnect.Service.Main
         public void UpdateAdmin(AdminDto.UpdateAdmin entity, int id);
         public AdminDto.ReadAdmin GetById(int id);
         public IEnumerable<AdminDto.ReadAdmin> GetAll();
+
+        public IEnumerable<AdminDto.ReadAdmin> GetAllCoordinatorByProgram(int programId);
+        public IEnumerable<AdminDto.ReadAdmin> GetAllChairByProgram(int programId);
+
     }
 
     public class AdminService : IAdminService
@@ -40,7 +45,23 @@ namespace InternConnect.Service.Main
 
         public IEnumerable<AdminDto.ReadAdmin> GetAll()
         {
-            var adminList = _adminRepository.GetAll();
+            var adminList = _adminRepository.GetAllAdminsWithRelatedData();
+            var mappedData = new List<AdminDto.ReadAdmin>();
+            foreach (var admin in adminList) mappedData.Add(_mapper.Map<AdminDto.ReadAdmin>(admin));
+            return mappedData;
+        }
+
+        public IEnumerable<AdminDto.ReadAdmin> GetAllCoordinatorByProgram(int programId)
+        {
+            var adminList = _adminRepository.GetAllAdminsWithRelatedData().Where(a => a.Program.Id == programId && a.AuthId == 3);
+            var mappedData = new List<AdminDto.ReadAdmin>();
+            foreach (var admin in adminList) mappedData.Add(_mapper.Map<AdminDto.ReadAdmin>(admin));
+            return mappedData;
+        }
+
+        public IEnumerable<AdminDto.ReadAdmin> GetAllChairByProgram(int programId)
+        {
+            var adminList = _adminRepository.GetAllAdminsWithRelatedData().Where(a=>a.Program.Id == programId&& a.AuthId == 2);
             var mappedData = new List<AdminDto.ReadAdmin>();
             foreach (var admin in adminList) mappedData.Add(_mapper.Map<AdminDto.ReadAdmin>(admin));
             return mappedData;
