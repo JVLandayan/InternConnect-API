@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Mail;
 using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace InternConnect.Service.ThirdParty
 {
@@ -40,6 +41,7 @@ namespace InternConnect.Service.ThirdParty
     public class MailerService : IMailerService
     {
         private readonly IAcademicYearRepository _academicYearRepository;
+        private readonly IConfiguration _configuration;
         private readonly IAccountRepository _accountRepository;
         private readonly IAdminRepository _adminRepository;
         private readonly IStudentRepository _studentRepository;
@@ -47,13 +49,14 @@ namespace InternConnect.Service.ThirdParty
 
         public MailerService(IAdminRepository adminRepository, IAccountRepository accountRepository,
             IStudentRepository studentRepository, ISubmissionRepository submissionRepository,
-            IAcademicYearRepository academicYear)
+            IAcademicYearRepository academicYear, IConfiguration configuration)
         {
             _adminRepository = adminRepository;
             _accountRepository = accountRepository;
             _studentRepository = studentRepository;
             _submissionRepository = submissionRepository;
             _academicYearRepository = academicYear;
+            _configuration = configuration;
         }
 
         public SmtpClient SmtpConfiguration()
@@ -210,7 +213,7 @@ namespace InternConnect.Service.ThirdParty
 
         public void ForgotPassword(Account accountData)
         {
-            var message = "http://localhost:5000/" + $"login?email={accountData.Email}&resetkey={accountData.ResetKey}";
+            var message = $"{_configuration["ClientAppUrl"]}" + $"/login?email={accountData.Email}&resetkey={accountData.ResetKey}";
             var client = SmtpConfiguration();
             var toAccount = new MailMessage();
             toAccount.To.Add(accountData.Email);
@@ -221,7 +224,7 @@ namespace InternConnect.Service.ThirdParty
         }
         public void ChangeDean(string oldEmail,string newEmail, string resetkey)
         {
-            var message = "http://localhost:5000/" +
+            var message = $"{_configuration["ClientAppUrl"]}/" +
                           $"onboard?oldemail={oldEmail}&newemail={newEmail}&resetkey={resetkey}";
             var client = SmtpConfiguration();
             var toAccount = new MailMessage();
@@ -234,7 +237,7 @@ namespace InternConnect.Service.ThirdParty
 
         public void Onboard(Account accountData)
         {
-            var message = "http://localhost:5000/" +
+            var message = $"{_configuration["ClientAppUrl"]}/" +
                           $"onboard?email={accountData.Email}&resetkey={accountData.ResetKey}";
             var client = SmtpConfiguration();
             var toAccount = new MailMessage();
