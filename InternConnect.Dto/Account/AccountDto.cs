@@ -14,6 +14,12 @@ namespace InternConnect.Dto.Account
             public AdminDto.ReadAdmin Admin { get; set; }
         }
 
+        public class ReadCoordinator
+        {
+            public int Id { get; set; }
+            public string Email { get; set; }
+        }
+
         public class ReadSession
         {
             public int Id { get; set; }

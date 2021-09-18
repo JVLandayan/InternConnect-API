@@ -34,12 +34,12 @@ namespace InternConnect.Controllers
         {
             return Ok(_adminService.GetAllCoordinatorByProgram(programId));
         }
-        //[Authorize(Roles = "Dean")]
-        //[HttpGet("chairs/{programId}")]
-        //public ActionResult<IEnumerable<AdminDto.ReadAdmin>> GetAllChairsByProgram(int programId)
-        //{
-        //    return Ok(_adminService.GetAllChairByProgram(programId));
-        //}
+        [Authorize(Roles = "Dean")]
+        [HttpGet("chairs")]
+        public ActionResult<IEnumerable<AdminDto.ReadAdmin>> GetAllChairs()
+        {
+            return Ok(_adminService.GetAllChairByProgram());
+        }
 
         //GET /admin/id
         [Authorize(Roles = "Dean")]

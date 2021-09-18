@@ -35,11 +35,13 @@ namespace InternConnect.Profiles
             CreateMap<Account, AccountDto.ReadAccount>().ReverseMap();
             CreateMap<Account, AccountDto.UpdateAccount>().ReverseMap();
             CreateMap<Account, AccountDto.ReadSession>().ReverseMap();
+            CreateMap<Account, AccountDto.ReadCoordinator>().ReverseMap();
 
             //Admin
 
             CreateMap<Admin, AdminDto.UpdateAdmin>().ReverseMap();
             CreateMap<Admin, AdminDto.ReadAdmin>().ReverseMap();
+            CreateMap<Admin, AdminDto.ReadCoordinator>().ReverseMap();
 
             //AdminResponse
             CreateMap<AdminResponse, AdminResponseDto.ReadResponse>().ReverseMap();

@@ -13,8 +13,8 @@ namespace InternConnect.Service.Main
         public AdminDto.ReadAdmin GetById(int id);
         public IEnumerable<AdminDto.ReadAdmin> GetAll();
 
-        public IEnumerable<AdminDto.ReadAdmin> GetAllCoordinatorByProgram(int programId);
-        public IEnumerable<AdminDto.ReadAdmin> GetAllChairByProgram(int programId);
+        public IEnumerable<AdminDto.ReadCoordinator> GetAllCoordinatorByProgram(int programId);
+        public IEnumerable<AdminDto.ReadCoordinator> GetAllChairByProgram();
 
     }
 
@@ -51,19 +51,19 @@ namespace InternConnect.Service.Main
             return mappedData;
         }
 
-        public IEnumerable<AdminDto.ReadAdmin> GetAllCoordinatorByProgram(int programId)
+        public IEnumerable<AdminDto.ReadCoordinator> GetAllCoordinatorByProgram(int programId)
         {
             var adminList = _adminRepository.GetAllAdminsWithRelatedData().Where(a => a.Program.Id == programId && a.AuthId == 3);
-            var mappedData = new List<AdminDto.ReadAdmin>();
-            foreach (var admin in adminList) mappedData.Add(_mapper.Map<AdminDto.ReadAdmin>(admin));
+            var mappedData = new List<AdminDto.ReadCoordinator>();
+            foreach (var admin in adminList) mappedData.Add(_mapper.Map<AdminDto.ReadCoordinator>(admin));
             return mappedData;
         }
 
-        public IEnumerable<AdminDto.ReadAdmin> GetAllChairByProgram(int programId)
+        public IEnumerable<AdminDto.ReadCoordinator> GetAllChairByProgram()
         {
-            var adminList = _adminRepository.GetAllAdminsWithRelatedData().Where(a=>a.Program.Id == programId&& a.AuthId == 2);
-            var mappedData = new List<AdminDto.ReadAdmin>();
-            foreach (var admin in adminList) mappedData.Add(_mapper.Map<AdminDto.ReadAdmin>(admin));
+            var adminList = _adminRepository.GetAllAdminsWithRelatedData().Where(a=>a.AuthId == 2);
+            var mappedData = new List<AdminDto.ReadCoordinator>();
+            foreach (var admin in adminList) mappedData.Add(_mapper.Map<AdminDto.ReadCoordinator>(admin));
             return mappedData;
         }
     }

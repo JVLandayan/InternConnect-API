@@ -15,7 +15,7 @@ namespace InternConnect.Data.Repositories
 
         public IEnumerable<Admin> GetAllAdminsWithRelatedData()
         {
-            return Context.Set<Admin>().Include(a=>a.Section).Include(a=>a.Program).ToList();
+            return Context.Set<Admin>().Include(a=>a.Section).Include(a=>a.Program).Include(a=>a.Account).ToList();
         }
     }
 }
