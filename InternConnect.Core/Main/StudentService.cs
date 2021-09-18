@@ -27,7 +27,7 @@ namespace InternConnect.Service.Main
 
         public IEnumerable<StudentDto.ReadStudent> GetAll()
         {
-            var studentList = _studentRepository.GetAll();
+            var studentList = _studentRepository.GetAllStudentWithRelatedData();
             var mappedList = new List<StudentDto.ReadStudent>();
 
             foreach (var student in studentList) mappedList.Add(_mapper.Map<StudentDto.ReadStudent>(student));
