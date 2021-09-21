@@ -53,9 +53,10 @@ namespace InternConnect.Service.Main
 
         public IEnumerable<AdminDto.ReadCoordinator> GetAllCoordinatorByProgram(int programId)
         {
-            var adminList = _adminRepository.GetAllAdminsWithRelatedData().Where(a => a.Program.Id == programId && a.AuthId == 3);
+            var coordinatorList = _adminRepository.GetAllAdminsWithRelatedData().Where(a => a.ProgramId != null);
+
             var mappedData = new List<AdminDto.ReadCoordinator>();
-            foreach (var admin in adminList) mappedData.Add(_mapper.Map<AdminDto.ReadCoordinator>(admin));
+            foreach (var admin in coordinatorList.Where(a=>a.AuthId == 3 && a.ProgramId == programId)) mappedData.Add(_mapper.Map<AdminDto.ReadCoordinator>(admin));
             return mappedData;
         }
 
