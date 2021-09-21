@@ -22,7 +22,14 @@ namespace InternConnect.Controllers
         public ActionResult Authenticate(AuthenticationModel payload)
         {
             var sessionData =  _authService.Authenticate(payload);
-            return Ok(sessionData);
+
+            if (sessionData != null)
+            {
+                return Ok(sessionData);
+            }
+
+            return BadRequest("Wrong email or password");
+
         }
         
         [HttpPost("forgotpassword")]

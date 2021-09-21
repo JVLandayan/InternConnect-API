@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
 namespace InternConnect.Service.ThirdParty
@@ -42,6 +44,8 @@ namespace InternConnect.Service.ThirdParty
     {
         private readonly IAcademicYearRepository _academicYearRepository;
         private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _env;
+        private readonly IPdfService _pdfService;
         private readonly IAccountRepository _accountRepository;
         private readonly IAdminRepository _adminRepository;
         private readonly IStudentRepository _studentRepository;
@@ -49,7 +53,7 @@ namespace InternConnect.Service.ThirdParty
 
         public MailerService(IAdminRepository adminRepository, IAccountRepository accountRepository,
             IStudentRepository studentRepository, ISubmissionRepository submissionRepository,
-            IAcademicYearRepository academicYear, IConfiguration configuration)
+            IAcademicYearRepository academicYear, IConfiguration configuration, IWebHostEnvironment environment, IPdfService pdfService)
         {
             _adminRepository = adminRepository;
             _accountRepository = accountRepository;
@@ -57,6 +61,18 @@ namespace InternConnect.Service.ThirdParty
             _submissionRepository = submissionRepository;
             _academicYearRepository = academicYear;
             _configuration = configuration;
+            _env = environment;
+            _pdfService = pdfService;
+        }
+
+
+        private string ReadHtml(string fileName)
+        {
+            StreamReader str = new StreamReader(_env.ContentRootPath + "/resources/email/" + fileName+".html");
+            string mailText = str.ReadToEnd();
+            str.Close();
+
+            return mailText;
         }
 
         public SmtpClient SmtpConfiguration()
@@ -69,11 +85,13 @@ namespace InternConnect.Service.ThirdParty
             return client;
         }
 
+
         public void NotifyCoordinator(int sectionId)
         {
             var adminData = _adminRepository.Find(a => a.SectionId == sectionId).First();
             var accountData = _accountRepository.Get(adminData.AccountId);
 
+            string mailText = ReadHtml("submission-new");
 
             //mailer
             var client = SmtpConfiguration();
@@ -81,38 +99,58 @@ namespace InternConnect.Service.ThirdParty
             msg.To.Add(accountData.Email);
             msg.From = new MailAddress("postmaster@eco-tigers.com");
             msg.Subject = "Student Submission For Letter";
-            msg.Body = "A student has submitted a form. Check it here";
+            msg.Body = mailText;
+            msg.IsBodyHtml = true;
             client.Send(msg);
         }
 
         public void NotifyChair(int submissionId, int adminId, bool isAccepted)
         {
+
+            string mailToAdmin = ReadHtml("submission-final");
+            string failText = ReadHtml("status-disapproved");
+
+
             var client = SmtpConfiguration();
             var coordinatorData = _adminRepository.Get(adminId);
             var chairData = _adminRepository.Find(a => a.AuthId == 2 && a.ProgramId == coordinatorData.ProgramId)
                 .First();
             var accountData = _accountRepository.Get(chairData.AccountId);
+            var submissionData = _submissionRepository.Get(submissionId);
+            var studentData = _studentRepository.Get(submissionData.StudentId);
+            var accountDataStudent = _accountRepository.Get(studentData.AccountId);
+            var adminResponses = _submissionRepository.GetAllRelatedData().Where(s =>
+                s.AdminResponse.AcceptedByCoordinator == true && s.AdminResponse.AcceptedByChair == null).ToList();
+
             var toChair = new MailMessage();
             var toStudent = new MailMessage();
 
             if (isAccepted)
             {
-                toChair.To.Add(accountData.Email);
-                toChair.From = new MailAddress("postmaster@eco-tigers.com");
-                toChair.Subject = "Student Submission For Letter";
-                toChair.Body = "A coordinator has verified a submission. Check it here";
-                client.Send(toChair);
+                if (adminResponses.Count == 10)
+                {
+                    toChair.To.Add(accountData.Email);
+                    toChair.From = new MailAddress("postmaster@eco-tigers.com");
+                    toChair.Subject = "Student Submission For Letter";
+                    toChair.Body = mailToAdmin;
+                    toChair.IsBodyHtml = true;
+                    client.Send(toChair);
+                }
             }
 
-            var submissionData = _submissionRepository.Get(submissionId);
-            var studentData = _studentRepository.Get(submissionData.StudentId);
-            var accountDataStudent = _accountRepository.Get(studentData.AccountId);
+            else
+            {
+                toStudent.To.Add(accountDataStudent.Email);
+                toStudent.From = new MailAddress("postmaster@eco-tigers.com");
+                toStudent.Subject = "Endorsement Letter Request";
+                toStudent.Body = failText;
+                toStudent.IsBodyHtml = true;
+                client.Send(toStudent);
+            }
 
-            toStudent.To.Add(accountDataStudent.Email);
-            toStudent.From = new MailAddress("postmaster@eco-tigers.com");
-            toStudent.Subject = "Endorsement Letter Request";
-            toStudent.Body = "Coordinator has updated your request";
-            client.Send(toStudent);
+
+
+
 
 
             //Mailer
@@ -120,71 +158,104 @@ namespace InternConnect.Service.ThirdParty
 
         public void NotifyDean(int submissionId, bool isAccepted)
         {
+            string mailText = ReadHtml("submission-final");
+            string failText = ReadHtml("status-disapproved");
             var client = SmtpConfiguration();
             var deanData = _adminRepository.Find(a => a.AuthId == 1)
                 .First();
             var accountData = _accountRepository.Get(deanData.AccountId);
-
+            var responseData = _submissionRepository.GetAllRelatedData().Where(s =>
+                s.AdminResponse.AcceptedByChair == true && s.AdminResponse.AcceptedByDean == null).ToList();
             if (isAccepted)
             {
-                var toDean = new MailMessage();
-                toDean.To.Add(accountData.Email);
-                toDean.From = new MailAddress("postmaster@eco-tigers.com");
-                toDean.Subject = "Student Submission For Letter";
-                toDean.Body = "Send to dean";
-                client.Send(toDean);
+                if (responseData.Count == 10)
+                {
+                    var toDean = new MailMessage();
+                    toDean.To.Add(accountData.Email);
+                    toDean.From = new MailAddress("postmaster@eco-tigers.com");
+                    toDean.Subject = "Student Submission For Letter";
+                    toDean.Body = mailText;
+                    toDean.IsBodyHtml = true;
+                    client.Send(toDean);
+                }
+            }
+
+            else
+            {
+                var submissionData = _submissionRepository.Get(submissionId);
+                var studentData = _studentRepository.Get(submissionData.StudentId);
+                var accountDataStudent = _accountRepository.Get(studentData.AccountId);
+                var toStudent = new MailMessage();
+                toStudent.To.Add(accountDataStudent.Email);
+                toStudent.From = new MailAddress("postmaster@eco-tigers.com");
+                toStudent.Subject = "Endorsement Letter Request Update";
+                toStudent.Body = failText;
+                toStudent.IsBodyHtml = true;
+                client.Send(toStudent);
             }
 
 
-            var submissionData = _submissionRepository.Get(submissionId);
-            var studentData = _studentRepository.Get(submissionData.StudentId);
-            var accountDataStudent = _accountRepository.Get(studentData.AccountId);
-            var toStudent = new MailMessage();
-            toStudent.To.Add(accountDataStudent.Email);
-            toStudent.From = new MailAddress("postmaster@eco-tigers.com");
-            toStudent.Subject = "Endorsement Letter Request";
-            toStudent.Body = "Chair has updated your request";
-            client.Send(toStudent);
         }
 
         public void NotifyCoordAndIgaarp(int submissionId, bool isAccepted)
         {
-            var client = SmtpConfiguration();
+            string mailToAdmin = ReadHtml("submission-pending");
+            string mailToStudent = ReadHtml("status-signed");
+            string mailToIgaarp = ReadHtml("submission-igaarp");
+            string failText = ReadHtml("status-disapproved");
 
+            var client = SmtpConfiguration();
             var submissionData = _submissionRepository.Get(submissionId);
             var studentData = _studentRepository.Get(submissionData.StudentId);
             var coordinatorData = _adminRepository.Find(a => a.SectionId == studentData.SectionId).First();
             var accountData = _accountRepository.Get(coordinatorData.AccountId);
-
+            var accountDataStudent = _accountRepository.Get(studentData.AccountId);
             if (isAccepted)
             {
                 var toCoordinator = new MailMessage();
                 toCoordinator.To.Add(accountData.Email);
                 toCoordinator.From = new MailAddress("postmaster@eco-tigers.com");
                 toCoordinator.Subject = "Student Submission For Letter";
-                toCoordinator.Body = "Send to coordinator";
+                toCoordinator.Body = mailToAdmin;
+                toCoordinator.IsBodyHtml = true;
                 client.Send(toCoordinator);
+
+                var content = _pdfService.AddPdf(submissionId).ToArray();
 
                 var ayData = _academicYearRepository.GetAll().First();
                 var toIgaarp = new MailMessage();
                 toIgaarp.To.Add(ayData.IgaarpEmail);
                 toIgaarp.From = new MailAddress("postmaster@eco-tigers.com");
                 toIgaarp.Subject = "Student Submission For Letter";
-                toIgaarp.Body = "Send to Igaarp";
+                toIgaarp.Body = mailToIgaarp;
+                toIgaarp.Attachments.Add(new Attachment(new MemoryStream(content), $"{submissionData.StudentNumber}.pdf"));
+                toIgaarp.IsBodyHtml = true;
                 client.Send(toIgaarp);
+
+                var toStudent = new MailMessage();
+                toStudent.To.Add(accountDataStudent.Email);
+                toStudent.From = new MailAddress("postmaster@eco-tigers.com");
+                toStudent.Subject = "Student Submission For Letter";
+                toStudent.Body = mailToStudent;
+                toStudent.IsBodyHtml = true;
+                client.Send(toStudent);
+            }
+            else
+            {
+                var toStudent = new MailMessage();
+                toStudent.To.Add(accountDataStudent.Email);
+                toStudent.From = new MailAddress("postmaster@eco-tigers.com");
+                toStudent.Subject = "Student Submission For Letter";
+                toStudent.Body = failText;
+                toStudent.IsBodyHtml = true;
+                client.Send(toStudent);
             }
 
-            var accountDataStudent = _accountRepository.Get(studentData.AccountId);
-            var toStudent = new MailMessage();
-            toStudent.To.Add(accountDataStudent.Email);
-            toStudent.From = new MailAddress("postmaster@eco-tigers.com");
-            toStudent.Subject = "Student Submission For Letter";
-            toStudent.Body = "Send to Student";
-            client.Send(toStudent);
         }
 
         public void NotifyStudentEmailSent(int submissionId)
         {
+            string mailText = ReadHtml("status-senttocompany");
             var client = SmtpConfiguration();
             var submissionData = _submissionRepository.Get(submissionId);
             var studentData = _studentRepository.Get(submissionData.StudentId);
@@ -193,12 +264,15 @@ namespace InternConnect.Service.ThirdParty
             toStudent.To.Add(accountData.Email);
             toStudent.From = new MailAddress("postmaster@eco-tigers.com");
             toStudent.Subject = "Student Submission For Letter";
-            toStudent.Body = "Send to Student second to last step";
+            toStudent.Body = mailText;
+            toStudent.IsBodyHtml = true;
             client.Send(toStudent);
         }
 
         public void NotifyStudentCompanyApproves(int submissionId)
         {
+            string mailText = ReadHtml("status-accepted");
+
             var client = SmtpConfiguration();
             var submissionData = _submissionRepository.Get(submissionId);
             var studentData = _studentRepository.Get(submissionData.StudentId);
@@ -207,31 +281,43 @@ namespace InternConnect.Service.ThirdParty
             toStudent.To.Add(accountData.Email);
             toStudent.From = new MailAddress("postmaster@eco-tigers.com");
             toStudent.Subject = "Student Submission For Letter";
-            toStudent.Body = "Send to Student last step";
+            toStudent.Body = mailText;
+            toStudent.IsBodyHtml = true;
             client.Send(toStudent);
         }
 
         public void ForgotPassword(Account accountData)
         {
-            var message = $"{_configuration["ClientAppUrl"]}" + $"/login?email={accountData.Email}&resetkey={accountData.ResetKey}";
+            string mailText = ReadHtml("resetpassword");
+            mailText = mailText.Replace("[forgotpassword]", $"{_configuration["ClientAppUrl"]}" + $"/login?email={accountData.Email}&resetkey={accountData.ResetKey}");
+
+            //var message = $"{_configuration["ClientAppUrl"]}" + $"/login?email={accountData.Email}&resetkey={accountData.ResetKey}";
             var client = SmtpConfiguration();
             var toAccount = new MailMessage();
             toAccount.To.Add(accountData.Email);
             toAccount.From = new MailAddress("internconnectsmtp@gmail.com");
             toAccount.Subject = "Reset Password Link";
-            toAccount.Body = message;
+            toAccount.Body = mailText;
+            toAccount.IsBodyHtml = true;
             client.Send(toAccount);
         }
         public void ChangeDean(string oldEmail,string newEmail, string resetkey)
         {
             var message = $"{_configuration["ClientAppUrl"]}/" +
                           $"onboard?oldemail={oldEmail}&newemail={newEmail}&resetkey={resetkey}";
+            string mailText = ReadHtml("onboarding");
+
+            mailText = mailText.Replace("[onboarding]", message);
+
+
             var client = SmtpConfiguration();
             var toAccount = new MailMessage();
             toAccount.To.Add(newEmail);
             toAccount.From = new MailAddress("postmaster@eco-tigers.com");
             toAccount.Subject = "Reset Password Link";
-            toAccount.Body = message;
+            toAccount.Body = mailText;
+            toAccount.IsBodyHtml = true;
+
             client.Send(toAccount);
         }
 
@@ -239,12 +325,18 @@ namespace InternConnect.Service.ThirdParty
         {
             var message = $"{_configuration["ClientAppUrl"]}/" +
                           $"onboard?email={accountData.Email}&resetkey={accountData.ResetKey}";
+
+            string mailText = ReadHtml("onboarding");
+
+            mailText = mailText.Replace("[onboarding]", message);
+            
             var client = SmtpConfiguration();
             var toAccount = new MailMessage();
             toAccount.To.Add(accountData.Email);
             toAccount.From = new MailAddress("postmaster@eco-tigers.com");
             toAccount.Subject = "Reset Password Link";
-            toAccount.Body = message;
+            toAccount.Body = mailText;
+            toAccount.IsBodyHtml = true;
             client.Send(toAccount);
         }
 
