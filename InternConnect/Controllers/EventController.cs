@@ -49,5 +49,13 @@ namespace InternConnect.Controllers
             _eventsService.UpdateEvent(payload);
             return NoContent();
         }
+
+        [Authorize(Roles = "Dean,Chair,Coordinator")]
+        [HttpDelete("{id}")]
+        public ActionResult DeleteEvent(int id)
+        {
+            _eventsService.DeleteEvent(id);
+            return NoContent();
+        }
     }
 }

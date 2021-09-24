@@ -14,6 +14,7 @@ namespace InternConnect.Service.Main
         public void UpdateSection(SectionDto.UpdateSection payload);
         public SectionDto.ReadSection GetById(int id);
         public IEnumerable<SectionDto.ReadSection> GetAll();
+        public void DeleteSection(int id);
     }
 
     public class SectionService : ISectionService
@@ -35,6 +36,13 @@ namespace InternConnect.Service.Main
             _sectionRepository.Add(payloadData);
             _context.SaveChanges();
             return _mapper.Map<SectionDto.ReadSection>(payloadData);
+        }
+
+        public void DeleteSection(int id)
+        {
+            var sectionData = _sectionRepository.Get(id);
+            _sectionRepository.Remove(sectionData);
+            _context.SaveChanges();
         }
 
         public IEnumerable<SectionDto.ReadSection> GetAll()

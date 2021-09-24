@@ -14,6 +14,8 @@ namespace InternConnect.Service.Main
         public EventDto.ReadEvent GetbyId(int id);
         public EventDto.ReadEvent AddEvent(EventDto.AddEvent payload);
         public void UpdateEvent(EventDto.UpdateEvent payload);
+
+        public void DeleteEvent(int id);
     }
 
     public class EventService : IEventService
@@ -36,6 +38,11 @@ namespace InternConnect.Service.Main
             _context.SaveChanges();
 
             return _mapper.Map<EventDto.ReadEvent>(payloadData);
+        }
+
+        public void DeleteEvent(int id)
+        {
+            _eventsRepository.Remove(_eventsRepository.Get(id));
         }
 
         public IEnumerable<EventDto.ReadEvent> GetAll(int adminId)

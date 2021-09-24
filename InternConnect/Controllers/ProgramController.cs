@@ -73,5 +73,15 @@ namespace InternConnect.Controllers
             _programService.UpdateNumberOfHours(payload);
             return NoContent();
         }
+
+        [Authorize(Roles = "Dean,Chair,Coordinator")]
+        [HttpDelete("{id}")]
+        public ActionResult DeleteProgram(int id)
+        {
+            _programService.DeleteProgram(id);
+            return NoContent();
+        }
+
+
     }
 }

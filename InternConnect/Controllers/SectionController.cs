@@ -57,5 +57,13 @@ namespace InternConnect.Controllers
             var sectionData = _sectionService.AddSection(payload);
             return CreatedAtRoute(nameof(GetSection), new {sectionData.Id}, sectionData);
         }
+
+        [Authorize(Roles = "Dean,Chair,Coordinator")]
+        [HttpDelete("{id}")]
+        public ActionResult DeleteSection(int id)
+        {
+            _sectionService.DeleteSection(id);
+            return NoContent();
+        }
     }
 }

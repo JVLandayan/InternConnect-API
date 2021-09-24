@@ -15,6 +15,7 @@ namespace InternConnect.Service.Main
         public ProgramDto.ReadProgram GetById(int id);
         public void UpdateIsoCode(ProgramDto.UpdateIsoCode payload);
         public void UpdateNumberOfHours(ProgramDto.UpdateNumberOfHours payload);
+        public void DeleteProgram(int id);
     }
 
     public class ProgramService : IProgramService
@@ -36,6 +37,11 @@ namespace InternConnect.Service.Main
             _programRepository.Add(payloadData);
             _context.SaveChanges();
             return _mapper.Map<ProgramDto.ReadProgram>(payloadData);
+        }
+
+        public void DeleteProgram(int id)
+        {
+            _programRepository.Remove(_programRepository.Get(id));
         }
 
         public IEnumerable<ProgramDto.ReadProgram> GetAll()
