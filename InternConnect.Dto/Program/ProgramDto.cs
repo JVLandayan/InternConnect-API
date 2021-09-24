@@ -38,6 +38,7 @@ namespace InternConnect.Dto.Program
         public class AddProgram
         {
             public string Name { get; set; }
+            public string IsoCodeProgramNumber { get; set; }
         }
     }
 }
