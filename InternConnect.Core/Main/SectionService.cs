@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using InternConnect.Context;
 using InternConnect.Context.Models;
@@ -52,7 +53,7 @@ namespace InternConnect.Service.Main
 
         public void UpdateSection(SectionDto.UpdateSection payload)
         {
-            var sectionData = _sectionRepository.Find(s => s.Id == payload.Id);
+            var sectionData = _sectionRepository.Find(s => s.Id == payload.Id).First();
             _mapper.Map(payload, sectionData);
             _context.SaveChanges();
         }
