@@ -43,6 +43,7 @@ namespace InternConnect.Service.Main
         public void DeleteEvent(int id)
         {
             _eventsRepository.Remove(_eventsRepository.Get(id));
+            _context.SaveChanges();
         }
 
         public IEnumerable<EventDto.ReadEvent> GetAll(int adminId)

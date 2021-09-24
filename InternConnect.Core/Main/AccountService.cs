@@ -17,6 +17,7 @@ namespace InternConnect.Service.Main
     {
         public AccountDto.ReadAccount AddCoordinator(AccountDto.AddAccountCoordinator entity);
         public AccountDto.ReadAccount AddStudent(AccountDto.AddAccountStudent payload);
+        public List<AccountDto.ReadAccount> AddStudents(List<AccountDto.AddAccountStudent> payload);
 
         public AccountDto.ReadAccount AddChair(AccountDto.AddAccountChair payload);
         public AccountDto.ReadAccount AddTechCoordinator(AccountDto.AddAccountTechCoordinator entity);
@@ -152,7 +153,7 @@ namespace InternConnect.Service.Main
 
         public void Delete(int id)
         {
-            var accountData = GetById(id);
+            var accountData = _accountRepository.Get(id);
             _accountRepository.Remove(accountData);
             _context.SaveChanges();
         }
@@ -203,7 +204,7 @@ namespace InternConnect.Service.Main
             _mailerService.ChangeDean(oldEmail,newEmail,accountData.ResetKey);
         }
 
-        public string HashPassword(string password)
+        private string HashPassword(string password)
         {
             var passBytes = Encoding.ASCII.GetBytes(password);
             var sha = new SHA512Managed();
@@ -213,13 +214,51 @@ namespace InternConnect.Service.Main
             return encryptedPass;
         }
 
-        public string TokenConfig(string token)
+        private string TokenConfig(string token)
         {
             var encodedToken = Encoding.UTF8.GetBytes(token);
             var validToken = WebEncoders.Base64UrlEncode(encodedToken);
             return validToken;
         }
 
+        public List<AccountDto.ReadAccount>AddStudents(List<AccountDto.AddAccountStudent> payload)
+        {
+            List<Account> accountList = new List<Account>();
 
+            foreach (var data in payload)
+            {
+                if (_accountRepository.GetAll().FirstOrDefault(a => a.Email == data.Email.ToUpper()) != null)
+                    return null;
+
+                var accountData = new Account
+                {
+                    Email = data.Email.ToUpper(),
+                    Password = HashPassword(Guid.NewGuid().ToString()),
+                    ResetKey = TokenConfig(Guid.NewGuid().ToString())
+                };
+
+                var studentData = new Student
+                {
+                    ProgramId = data.ProgramId,
+                    SectionId = data.SectionId,
+                    DateAdded = DateTime.Now,
+                    AddedBy = data.AdminEmail,
+                    AuthId = 5
+                };
+                accountData.Student = studentData;
+                accountList.Add(accountData);
+            }
+            _accountRepository.AddRange(accountList);
+            _context.SaveChanges();
+
+            foreach (var accountData in accountList)
+            {
+                _authService.Onboard(accountData.Email);
+            }
+
+            return new List<AccountDto.ReadAccount>();
+
+
+        }
     }
 }

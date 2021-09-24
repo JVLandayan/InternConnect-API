@@ -40,7 +40,7 @@ namespace InternConnect.Controllers
             return _pdfService.GeneratePdf(this, submissionId);
         }
 
-        [Authorize(Roles = "Student")]
+        //[Authorize(Roles = "Student")]
         [HttpPost("file")]
         public ActionResult<string> FileUpload([FromForm] FileUploadAPI uploadedFile)
         {

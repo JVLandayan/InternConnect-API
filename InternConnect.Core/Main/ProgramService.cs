@@ -42,6 +42,7 @@ namespace InternConnect.Service.Main
         public void DeleteProgram(int id)
         {
             _programRepository.Remove(_programRepository.Get(id));
+            _context.SaveChanges();
         }
 
         public IEnumerable<ProgramDto.ReadProgram> GetAll()

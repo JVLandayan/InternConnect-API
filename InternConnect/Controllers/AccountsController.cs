@@ -49,11 +49,20 @@ namespace InternConnect.Controllers
 
         [Authorize(Roles = "Coordinator, Chair")]
         [HttpPost("student")]
-        public ActionResult<AccountDto.ReadAccount> AddStudents(AccountDto.AddAccountStudent payload)
+        public ActionResult<AccountDto.ReadAccount> AddStudent(AccountDto.AddAccountStudent payload)
         {
             var accountData = _accountService.AddStudent(payload);
             if (accountData.Id == 0) return BadRequest("Email already exists");
             return CreatedAtRoute(nameof(GetAccount), new {accountData.Id}, accountData);
+        }
+
+        [Authorize(Roles = "Coordinator, Chair")]
+        [HttpPost("students")]
+        public ActionResult<AccountDto.ReadAccount> AddStudents(List<AccountDto.AddAccountStudent> payload)
+        {
+            var accountData = _accountService.AddStudents(payload);
+            //if (accountData.Id == 0) return BadRequest("Email already exists");
+            return CreatedAtRoute(nameof(GetAccount), new { accountData }, accountData);
         }
 
         [Authorize(Roles = "Dean")]
