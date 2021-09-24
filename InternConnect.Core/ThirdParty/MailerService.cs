@@ -275,7 +275,7 @@ namespace InternConnect.Service.ThirdParty
             var mailText = ReadHtml("resetpassword");
             mailText = mailText.Replace("[forgotpassword]",
                 $"{_configuration["ClientAppUrl"]}" +
-                $"/login?email={accountData.Email}&resetkey={accountData.ResetKey}");
+                $"/forgotpassword?email={accountData.Email}&resetkey={accountData.ResetKey}");
 
             //var message = $"{_configuration["ClientAppUrl"]}" + $"/login?email={accountData.Email}&resetkey={accountData.ResetKey}";
             var client = SmtpConfiguration();
@@ -291,7 +291,7 @@ namespace InternConnect.Service.ThirdParty
         public void ChangeDean(string oldEmail, string newEmail, string resetkey)
         {
             var message = $"{_configuration["ClientAppUrl"]}/" +
-                          $"onboard?oldemail={oldEmail}&newemail={newEmail}&resetkey={resetkey}";
+                          $"changedean?oldemail={oldEmail}&newemail={newEmail}&resetkey={resetkey}";
             var mailText = ReadHtml("onboarding");
 
             mailText = mailText.Replace("[onboarding]", message);
