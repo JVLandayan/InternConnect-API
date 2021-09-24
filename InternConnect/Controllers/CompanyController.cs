@@ -23,12 +23,8 @@ namespace InternConnect.Controllers
         [HttpGet("{id}", Name = "GetCompany")]
         public ActionResult<IEnumerable<CompanyDto.ReadCompany>> GetCompany(int id)
         {
-            if (_companyService.GetById(id) != null)
-            {
-                return Ok(_companyService.GetById(id));
-            }
+            if (_companyService.GetById(id) != null) return Ok(_companyService.GetById(id));
             return BadRequest("Company doesn't exist");
-
         }
 
         [HttpGet]
@@ -62,6 +58,7 @@ namespace InternConnect.Controllers
             _companyService.UpdateCompany(payload);
             return NoContent();
         }
+
         [Authorize(Roles = "Dean,Chair,Tech Coordinator")]
         [HttpPost]
         public ActionResult<CompanyDto.ReadCompany> AddCompany(CompanyDto.AddCompany payload)

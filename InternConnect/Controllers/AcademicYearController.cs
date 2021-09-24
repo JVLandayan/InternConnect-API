@@ -25,15 +25,10 @@ namespace InternConnect.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<AcademicYearDto.ReadAcademicYear>> GetAcademicYear()
         {
-            try
-            {
-                if (_academicYearService.GetAcademicYear() != null) return Ok(_academicYearService.GetAcademicYear());
-                throw new Exception();
-            }
-            catch (Exception e)
-            {
-                return BadRequest("Academic Year isn't set");
-            }
+            if (_academicYearService.GetAcademicYear() != null)
+                return Ok(_academicYearService.GetAcademicYear());
+
+            return BadRequest("Academic Year isn't set");
         }
 
         [Authorize(Roles = "Dean")]

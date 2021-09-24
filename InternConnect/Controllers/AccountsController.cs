@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using InternConnect.Context.Models;
 using InternConnect.Dto;
 using InternConnect.Dto.Account;
@@ -30,17 +29,13 @@ namespace InternConnect.Controllers
         {
             return Ok(_accountService.GetAll());
         }
+
         [Authorize(Roles = "Dean")]
         [HttpGet("{id}", Name = "GetAccount")]
         public ActionResult<IEnumerable<Account>> GetAccount(int id)
         {
-            if (_accountService.GetById(id) != null)
-            {
-                return Ok(_accountService.GetById(id));
-            }
-
-                return NotFound(new {message = "Account doesn't exist"});
-
+            if (_accountService.GetById(id) != null) return Ok(_accountService.GetById(id));
+            return NotFound(new {message = "Account doesn't exist"});
         }
 
         [Authorize(Roles = "Chair")]
@@ -51,7 +46,8 @@ namespace InternConnect.Controllers
             if (accountData.Id == 0) return BadRequest("Email already exists");
             return CreatedAtRoute(nameof(GetAccount), new {accountData.Id}, accountData);
         }
-        [Authorize (Roles = "Coordinator, Chair")]
+
+        [Authorize(Roles = "Coordinator, Chair")]
         [HttpPost("student")]
         public ActionResult<AccountDto.ReadAccount> AddStudents(AccountDto.AddAccountStudent payload)
         {
@@ -59,13 +55,14 @@ namespace InternConnect.Controllers
             if (accountData.Id == 0) return BadRequest("Email already exists");
             return CreatedAtRoute(nameof(GetAccount), new {accountData.Id}, accountData);
         }
+
         [Authorize(Roles = "Dean")]
         [HttpPost("techcoordinator")]
         public ActionResult<AccountDto.ReadAccount> AddTechCoordinator(AccountDto.AddAccountTechCoordinator payload)
         {
             var accountData = _accountService.AddTechCoordinator(payload);
             if (accountData.Id == 0) return BadRequest("Email already exists");
-            return CreatedAtRoute(nameof(GetAccount), new { accountData.Id }, accountData);
+            return CreatedAtRoute(nameof(GetAccount), new {accountData.Id}, accountData);
         }
 
         //Chairs
@@ -90,10 +87,7 @@ namespace InternConnect.Controllers
         [HttpDelete]
         public ActionResult DeleteAllAccounts(AuthenticationModel payload)
         {
-            if (_authService.Authenticate(payload) == null)
-            {
-                return BadRequest("Wrong Password");
-            }
+            if (_authService.Authenticate(payload) == null) return BadRequest("Wrong Password");
             _accountService.DeleteAll();
             return NoContent();
         }
@@ -105,6 +99,5 @@ namespace InternConnect.Controllers
             _accountService.ChangeDean(payload.OldEmail, payload.NewEmail, payload.AccountId);
             return NoContent();
         }
-
     }
 }

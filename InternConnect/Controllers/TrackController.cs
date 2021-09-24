@@ -46,6 +46,7 @@ namespace InternConnect.Controllers
             _trackService.UpdateTrack(payload);
             return NoContent();
         }
+
         [Authorize(Roles = "Dean,Chair")]
         [HttpPost]
         public ActionResult<TrackDto.ReadTrack> AddTrack(TrackDto.AddTrack payload)
@@ -53,6 +54,7 @@ namespace InternConnect.Controllers
             var trackData = _trackService.AddTrack(payload);
             return CreatedAtRoute(nameof(GetTrack), new {trackData.Id}, trackData);
         }
+
         [Authorize(Roles = "Dean,Chair")]
         [HttpDelete("{id}")]
         public ActionResult DeleteTrack(int id)

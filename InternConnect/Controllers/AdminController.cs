@@ -34,6 +34,7 @@ namespace InternConnect.Controllers
         {
             return Ok(_adminService.GetAllCoordinatorByProgram(programId));
         }
+
         [Authorize(Roles = "Dean")]
         [HttpGet("chairs")]
         public ActionResult<IEnumerable<AdminDto.ReadAdmin>> GetAllChairs()
@@ -47,14 +48,12 @@ namespace InternConnect.Controllers
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<AdminDto.ReadAdmin>> GetAdmin(int id)
         {
-            try
+            if (_adminService.GetById(id) != null)
             {
                 return Ok(_adminService.GetById(id));
             }
-            catch (Exception e)
-            {
-                return BadRequest("Admin doesn't exist");
-            }
+            return BadRequest("Admin doesn't exist");
+
         }
 
         [Authorize(Roles = "Coordinator,Dean")]

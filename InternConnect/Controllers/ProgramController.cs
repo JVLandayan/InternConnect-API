@@ -41,6 +41,7 @@ namespace InternConnect.Controllers
                 return BadRequest("Program doesn't exist");
             }
         }
+
         [Authorize(Roles = "Dean")]
         [HttpPost]
         public ActionResult<ProgramDto.ReadProgram> AddProgram(ProgramDto.AddProgram payload)
@@ -48,6 +49,7 @@ namespace InternConnect.Controllers
             var programData = _programService.AddProgram(payload);
             return CreatedAtRoute(nameof(GetProgram), new {programData.Id}, programData);
         }
+
         [Authorize(Roles = "Dean,Chair")]
         [HttpPut("ISO")]
         public ActionResult<ProgramDto.ReadProgram> UpdateIsoCode(ProgramDto.UpdateIsoCode payload)
@@ -55,6 +57,7 @@ namespace InternConnect.Controllers
             _programService.UpdateIsoCode(payload);
             return NoContent();
         }
+
         [Authorize(Roles = "Dean")]
         [HttpPut("program")]
         public ActionResult<ProgramDto.ReadProgram> UpdateProgram(ProgramDto.UpdateProgram payload)

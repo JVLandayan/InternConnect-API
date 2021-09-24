@@ -19,8 +19,8 @@ namespace InternConnect.Service.ThirdParty
     {
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyRepository;
-        private readonly IProgramRepository _programRepository;
         private readonly IWebHostEnvironment _environment;
+        private readonly IProgramRepository _programRepository;
         private readonly ISectionRepository _sectionRepository;
         private readonly IStudentRepository _studentRepository;
         private readonly ISubmissionRepository _submissionRepository;
@@ -50,6 +50,7 @@ namespace InternConnect.Service.ThirdParty
                 var worksheet = workBook.Worksheets.Add("Submissions");
 
                 #region Headers
+
                 worksheet.Cell(1, 1).Value = "Email Address";
                 worksheet.Cell(1, 1).Style.Font.Bold = true;
                 worksheet.Cell(1, 2).Value = "ISO Code";
@@ -75,11 +76,7 @@ namespace InternConnect.Service.ThirdParty
                 worksheet.Cell(1, 22).Value = "STATUS";
                 worksheet.Cell(1, 23).Value = "Acceptance Letter";
                 worksheet.Cell(1, 24).Value = "Company Profile";
-                for (int i = 1; i < 25; i++)
-                {
-                    worksheet.Cell(1, i).Style.Font.Bold = true;
-                }
-
+                for (var i = 1; i < 25; i++) worksheet.Cell(1, i).Style.Font.Bold = true;
 
                 #endregion
 
@@ -154,13 +151,17 @@ namespace InternConnect.Service.ThirdParty
 
                     #endregion
 
-                    worksheet.Cell(1 + index, 23).Value = $"http://localhost:5000/files/{submission.AcceptanceLetterFileName}";
-                    worksheet.Cell(1 + index, 24).Value = $"http://localhost:5000/files/{submission.CompanyProfileFileName}";
+                    worksheet.Cell(1 + index, 23).Value =
+                        $"http://localhost:5000/files/{submission.AcceptanceLetterFileName}";
+                    worksheet.Cell(1 + index, 24).Value =
+                        $"http://localhost:5000/files/{submission.CompanyProfileFileName}";
                     index++;
                 }
+
                 worksheet.Rows().AdjustToContents();
                 worksheet.Columns().AdjustToContents();
                 worksheet.Rows().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
                 #endregion
 
 

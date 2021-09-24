@@ -43,17 +43,18 @@ namespace InternConnect.Service.ThirdParty
     public class MailerService : IMailerService
     {
         private readonly IAcademicYearRepository _academicYearRepository;
+        private readonly IAccountRepository _accountRepository;
+        private readonly IAdminRepository _adminRepository;
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _env;
         private readonly IPdfService _pdfService;
-        private readonly IAccountRepository _accountRepository;
-        private readonly IAdminRepository _adminRepository;
         private readonly IStudentRepository _studentRepository;
         private readonly ISubmissionRepository _submissionRepository;
 
         public MailerService(IAdminRepository adminRepository, IAccountRepository accountRepository,
             IStudentRepository studentRepository, ISubmissionRepository submissionRepository,
-            IAcademicYearRepository academicYear, IConfiguration configuration, IWebHostEnvironment environment, IPdfService pdfService)
+            IAcademicYearRepository academicYear, IConfiguration configuration, IWebHostEnvironment environment,
+            IPdfService pdfService)
         {
             _adminRepository = adminRepository;
             _accountRepository = accountRepository;
@@ -63,16 +64,6 @@ namespace InternConnect.Service.ThirdParty
             _configuration = configuration;
             _env = environment;
             _pdfService = pdfService;
-        }
-
-
-        private string ReadHtml(string fileName)
-        {
-            StreamReader str = new StreamReader(_env.ContentRootPath + "/resources/email/" + fileName+".html");
-            string mailText = str.ReadToEnd();
-            str.Close();
-
-            return mailText;
         }
 
         public SmtpClient SmtpConfiguration()
@@ -91,7 +82,7 @@ namespace InternConnect.Service.ThirdParty
             var adminData = _adminRepository.Find(a => a.SectionId == sectionId).First();
             var accountData = _accountRepository.Get(adminData.AccountId);
 
-            string mailText = ReadHtml("submission-new");
+            var mailText = ReadHtml("submission-new");
 
             //mailer
             var client = SmtpConfiguration();
@@ -106,9 +97,8 @@ namespace InternConnect.Service.ThirdParty
 
         public void NotifyChair(int submissionId, int adminId, bool isAccepted)
         {
-
-            string mailToAdmin = ReadHtml("submission-final");
-            string failText = ReadHtml("status-disapproved");
+            var mailToAdmin = ReadHtml("submission-final");
+            var failText = ReadHtml("status-disapproved");
 
 
             var client = SmtpConfiguration();
@@ -149,17 +139,13 @@ namespace InternConnect.Service.ThirdParty
             }
 
 
-
-
-
-
             //Mailer
         }
 
         public void NotifyDean(int submissionId, bool isAccepted)
         {
-            string mailText = ReadHtml("submission-final");
-            string failText = ReadHtml("status-disapproved");
+            var mailText = ReadHtml("submission-final");
+            var failText = ReadHtml("status-disapproved");
             var client = SmtpConfiguration();
             var deanData = _adminRepository.Find(a => a.AuthId == 1)
                 .First();
@@ -193,16 +179,14 @@ namespace InternConnect.Service.ThirdParty
                 toStudent.IsBodyHtml = true;
                 client.Send(toStudent);
             }
-
-
         }
 
         public void NotifyCoordAndIgaarp(int submissionId, bool isAccepted)
         {
-            string mailToAdmin = ReadHtml("submission-pending");
-            string mailToStudent = ReadHtml("status-signed");
-            string mailToIgaarp = ReadHtml("submission-igaarp");
-            string failText = ReadHtml("status-disapproved");
+            var mailToAdmin = ReadHtml("submission-pending");
+            var mailToStudent = ReadHtml("status-signed");
+            var mailToIgaarp = ReadHtml("submission-igaarp");
+            var failText = ReadHtml("status-disapproved");
 
             var client = SmtpConfiguration();
             var submissionData = _submissionRepository.Get(submissionId);
@@ -228,7 +212,8 @@ namespace InternConnect.Service.ThirdParty
                 toIgaarp.From = new MailAddress("postmaster@eco-tigers.com");
                 toIgaarp.Subject = "Student Submission For Letter";
                 toIgaarp.Body = mailToIgaarp;
-                toIgaarp.Attachments.Add(new Attachment(new MemoryStream(content), $"{submissionData.StudentNumber}.pdf"));
+                toIgaarp.Attachments.Add(new Attachment(new MemoryStream(content),
+                    $"{submissionData.StudentNumber}.pdf"));
                 toIgaarp.IsBodyHtml = true;
                 client.Send(toIgaarp);
 
@@ -250,12 +235,11 @@ namespace InternConnect.Service.ThirdParty
                 toStudent.IsBodyHtml = true;
                 client.Send(toStudent);
             }
-
         }
 
         public void NotifyStudentEmailSent(int submissionId)
         {
-            string mailText = ReadHtml("status-senttocompany");
+            var mailText = ReadHtml("status-senttocompany");
             var client = SmtpConfiguration();
             var submissionData = _submissionRepository.Get(submissionId);
             var studentData = _studentRepository.Get(submissionData.StudentId);
@@ -271,7 +255,7 @@ namespace InternConnect.Service.ThirdParty
 
         public void NotifyStudentCompanyApproves(int submissionId)
         {
-            string mailText = ReadHtml("status-accepted");
+            var mailText = ReadHtml("status-accepted");
 
             var client = SmtpConfiguration();
             var submissionData = _submissionRepository.Get(submissionId);
@@ -288,8 +272,10 @@ namespace InternConnect.Service.ThirdParty
 
         public void ForgotPassword(Account accountData)
         {
-            string mailText = ReadHtml("resetpassword");
-            mailText = mailText.Replace("[forgotpassword]", $"{_configuration["ClientAppUrl"]}" + $"/login?email={accountData.Email}&resetkey={accountData.ResetKey}");
+            var mailText = ReadHtml("resetpassword");
+            mailText = mailText.Replace("[forgotpassword]",
+                $"{_configuration["ClientAppUrl"]}" +
+                $"/login?email={accountData.Email}&resetkey={accountData.ResetKey}");
 
             //var message = $"{_configuration["ClientAppUrl"]}" + $"/login?email={accountData.Email}&resetkey={accountData.ResetKey}";
             var client = SmtpConfiguration();
@@ -301,11 +287,12 @@ namespace InternConnect.Service.ThirdParty
             toAccount.IsBodyHtml = true;
             client.Send(toAccount);
         }
-        public void ChangeDean(string oldEmail,string newEmail, string resetkey)
+
+        public void ChangeDean(string oldEmail, string newEmail, string resetkey)
         {
             var message = $"{_configuration["ClientAppUrl"]}/" +
                           $"onboard?oldemail={oldEmail}&newemail={newEmail}&resetkey={resetkey}";
-            string mailText = ReadHtml("onboarding");
+            var mailText = ReadHtml("onboarding");
 
             mailText = mailText.Replace("[onboarding]", message);
 
@@ -326,10 +313,10 @@ namespace InternConnect.Service.ThirdParty
             var message = $"{_configuration["ClientAppUrl"]}/" +
                           $"onboard?email={accountData.Email}&resetkey={accountData.ResetKey}";
 
-            string mailText = ReadHtml("onboarding");
+            var mailText = ReadHtml("onboarding");
 
             mailText = mailText.Replace("[onboarding]", message);
-            
+
             var client = SmtpConfiguration();
             var toAccount = new MailMessage();
             toAccount.To.Add(accountData.Email);
@@ -341,5 +328,13 @@ namespace InternConnect.Service.ThirdParty
         }
 
 
+        private string ReadHtml(string fileName)
+        {
+            var str = new StreamReader(_env.ContentRootPath + "/resources/email/" + fileName + ".html");
+            var mailText = str.ReadToEnd();
+            str.Close();
+
+            return mailText;
+        }
     }
 }

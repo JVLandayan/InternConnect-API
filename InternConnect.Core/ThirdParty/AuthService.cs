@@ -30,9 +30,9 @@ namespace InternConnect.Service.ThirdParty
         private readonly IAccountRepository _accountRepository;
         private readonly IOptions<AppSettings> _appSettings;
         private readonly IBaseRepository<Authorization> _authRepository;
-        private readonly IMapper _mapper;
         private readonly InternConnectContext _context;
         private readonly IMailerService _mailerService;
+        private readonly IMapper _mapper;
 
         public AuthService(InternConnectContext context, IAccountRepository accountRepository,
             IMailerService mailerService, IOptions<AppSettings> appSettings,
@@ -159,7 +159,5 @@ namespace InternConnect.Service.ThirdParty
 
             #endregion
         }
-
-
     }
 }

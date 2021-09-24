@@ -40,8 +40,6 @@ namespace InternConnect.Controllers
         }
 
 
-
-
         [HttpGet]
         public ActionResult<IEnumerable<OpportunityDto.ReadOpportunity>> GetAllOpportunity()
         {
@@ -55,6 +53,7 @@ namespace InternConnect.Controllers
             _opportunityService.DeleteOpportunity(id);
             return Ok();
         }
+
         [Authorize(Roles = "Dean,Chair,Tech Coordinator")]
         [HttpPut]
         public ActionResult<OpportunityDto.ReadOpportunity> UpdateOpportunity(OpportunityDto.UpdateOpportunity payload)
@@ -62,6 +61,7 @@ namespace InternConnect.Controllers
             _opportunityService.UpdateOpportunity(payload);
             return NoContent();
         }
+
         [Authorize(Roles = "Dean,Chair,Tech Coordinator")]
         [HttpPost]
         public ActionResult<OpportunityDto.ReadOpportunity> AddOpportunity(OpportunityDto.AddOpportunity payload)

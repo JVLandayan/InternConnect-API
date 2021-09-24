@@ -18,7 +18,7 @@ namespace InternConnect.Controllers
         }
 
 
-        //GET /admin
+
         [Authorize(Roles = "Dean,Coordinator")]
         [HttpGet("adminId")]
         public ActionResult<IEnumerable<LogsDto.ReadLogs>> GetLogs(int adminId)

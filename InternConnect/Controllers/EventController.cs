@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using InternConnect.Dto.Event;
 using InternConnect.Service.Main;
 using Microsoft.AspNetCore.Authorization;
@@ -31,13 +30,10 @@ namespace InternConnect.Controllers
         [HttpGet("{id}", Name = "GetEvent")]
         public ActionResult<IEnumerable<EventDto.ReadEvent>> GetEvent(int id)
         {
-            if (_eventsService.GetbyId(id) != null)
-            {
-                return Ok(_eventsService.GetbyId(id));
-            }
+            if (_eventsService.GetbyId(id) != null) return Ok(_eventsService.GetbyId(id));
             return BadRequest("Event doesn't exist");
-
         }
+
         [Authorize(Roles = "Chair")]
         [HttpPost]
         public ActionResult<EventDto.ReadEvent> AddEvent(EventDto.AddEvent payload)
