@@ -17,7 +17,6 @@ namespace InternConnect.Context.Entity_Configurations
             modelBuilder.Property(s => s.StudentNumber).IsRequired();
             modelBuilder.Property(s => s.AcceptanceLetterFileName).IsRequired();
             modelBuilder.Property(s => s.CompanyProfileFileName).IsRequired();
-            modelBuilder.Property(s => s.EndorsementFileName).IsRequired();
             modelBuilder.Property(s => s.TrackId).IsRequired();
 
             modelBuilder.Property(s => s.ContactPersonPosition).IsRequired();

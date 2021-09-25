@@ -20,7 +20,6 @@ namespace InternConnect.Context.Models
         public string AcceptanceLetterFileName { get; set; }
         public string CompanyProfileFileName { get; set; }
         public string JobDescription { get; set; }
-        public string EndorsementFileName { get; set; }
         public int TrackId { get; set; }
         public int StudentId { get; set; }
         public Student Student { get; set; }

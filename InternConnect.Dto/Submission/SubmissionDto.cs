@@ -23,7 +23,6 @@ namespace InternConnect.Dto.Submission
             public string AcceptanceLetterFileName { get; set; }
             public string CompanyProfileFileName { get; set; }
             public string JobDescription { get; set; }
-            public string EndorsementFileName { get; set; }
             public int TrackId { get; set; }
             public int StudentId { get; set; }
             public int CompanyId { get; set; }
@@ -66,7 +65,6 @@ namespace InternConnect.Dto.Submission
             public string AcceptanceLetterFileName { get; set; }
             public string CompanyProfileFileName { get; set; }
             public string JobDescription { get; set; }
-            public string EndorsementFileName { get; set; }
             public int TrackId { get; set; }
             public int CompanyId { get; set; }
             public int StudentId { get; set; }
