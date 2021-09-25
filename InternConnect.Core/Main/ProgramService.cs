@@ -56,7 +56,7 @@ namespace InternConnect.Service.Main
 
         public ProgramDto.ReadProgram GetById(int id)
         {
-            return _mapper.Map<ProgramDto.ReadProgram>(_programRepository.Get(id));
+            return _mapper.Map<ProgramDto.ReadProgram>(_programRepository.GetProgramAndTracks(id));
         }
 
         public void UpdateIsoCode(ProgramDto.UpdateIsoCode payload)

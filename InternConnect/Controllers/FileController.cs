@@ -1,4 +1,5 @@
-﻿using InternConnect.Context.Models;
+﻿using System.IO;
+using InternConnect.Context.Models;
 using InternConnect.Service.ThirdParty;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -33,7 +34,7 @@ namespace InternConnect.Controllers
             return _reportService.GenerateExcel(ids, this);
         }
 
-        [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
+        //[Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
         [HttpGet("pdf/{submissionId}")]
         public IActionResult GeneratePdf(int submissionId)
         {
@@ -52,6 +53,12 @@ namespace InternConnect.Controllers
         public ActionResult<string> ImageUpload([FromForm] FileUploadAPI uploadedFile, string entity)
         {
             return _uploadService.UploadImage(entity, this, uploadedFile);
+        }
+
+        [HttpGet("{adminId}/previewPdf")]
+        public ActionResult PreviewPdf(int adminId)
+        {
+            return _pdfService.PreviewPdf(this, adminId);
         }
     }
 }

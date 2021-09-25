@@ -17,5 +17,10 @@ namespace InternConnect.Data.Repositories
         {
             return Context.Set<Program>().Include(p => p.Tracks).ToList();
         }
+
+        public Program GetProgramAndTracks(int id)
+        {
+            return Context.Set<Program>().Include(p => p.Tracks).First(p => p.Id == id);
+        }
     }
 }
