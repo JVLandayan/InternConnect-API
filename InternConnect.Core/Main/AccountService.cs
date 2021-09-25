@@ -17,7 +17,7 @@ namespace InternConnect.Service.Main
     {
         public AccountDto.ReadAccount AddCoordinator(AccountDto.AddAccountCoordinator entity);
         public AccountDto.ReadAccount AddStudent(AccountDto.AddAccountStudent payload);
-        public List<AccountDto.ReadAccount> AddStudents(List<AccountDto.AddAccountStudent> payload);
+        public List<AccountDto.AddAccountStudent> AddStudents(List<AccountDto.AddAccountStudent> payload);
 
         public AccountDto.ReadAccount AddChair(AccountDto.AddAccountChair payload);
         public AccountDto.ReadAccount AddTechCoordinator(AccountDto.AddAccountTechCoordinator entity);
@@ -81,6 +81,7 @@ namespace InternConnect.Service.Main
             _accountRepository.Add(accountData);
             _context.SaveChanges();
             _authService.Onboard(accountData.Email);
+            
             return _mapper.Map<AccountDto.ReadAccount>(accountData);
         }
 
@@ -221,32 +222,40 @@ namespace InternConnect.Service.Main
             return validToken;
         }
 
-        public List<AccountDto.ReadAccount>AddStudents(List<AccountDto.AddAccountStudent> payload)
+        public List<AccountDto.AddAccountStudent>AddStudents(List<AccountDto.AddAccountStudent> payload)
         {
             List<Account> accountList = new List<Account>();
+            List<AccountDto.AddAccountStudent> rejectedAccounts = new List<AccountDto.AddAccountStudent>();
 
             foreach (var data in payload)
             {
                 if (_accountRepository.GetAll().FirstOrDefault(a => a.Email == data.Email.ToUpper()) != null)
-                    return null;
-
-                var accountData = new Account
                 {
-                    Email = data.Email.ToUpper(),
-                    Password = HashPassword(Guid.NewGuid().ToString()),
-                    ResetKey = TokenConfig(Guid.NewGuid().ToString())
-                };
+                    rejectedAccounts.Add(data);
+                }
 
-                var studentData = new Student
+                else
                 {
-                    ProgramId = data.ProgramId,
-                    SectionId = data.SectionId,
-                    DateAdded = DateTime.Now,
-                    AddedBy = data.AdminEmail,
-                    AuthId = 5
-                };
-                accountData.Student = studentData;
-                accountList.Add(accountData);
+                    var accountData = new Account
+                    {
+                        Email = data.Email.ToUpper(),
+                        Password = HashPassword(Guid.NewGuid().ToString()),
+                        ResetKey = TokenConfig(Guid.NewGuid().ToString())
+                    };
+
+                    var studentData = new Student
+                    {
+                        ProgramId = data.ProgramId,
+                        SectionId = data.SectionId,
+                        DateAdded = DateTime.Now,
+                        AddedBy = data.AdminEmail,
+                        AuthId = 5
+                    };
+                    accountData.Student = studentData;
+                    accountList.Add(accountData);
+                }
+
+                
             }
             _accountRepository.AddRange(accountList);
             _context.SaveChanges();
@@ -255,8 +264,7 @@ namespace InternConnect.Service.Main
             {
                 _authService.Onboard(accountData.Email);
             }
-
-            return new List<AccountDto.ReadAccount>();
+            return rejectedAccounts;
 
 
         }
