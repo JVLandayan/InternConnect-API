@@ -53,7 +53,7 @@ namespace InternConnect.Controllers
         }
 
         [Authorize(Roles = "Student")]
-        [HttpPost("{sectionId}")]
+        [HttpPost]
         public ActionResult AddSubmission(SubmissionDto.AddSubmission payload, int sectionId, int programId)
         {
             var submissionData = _submissionService.AddSubmission(payload, sectionId, programId);
