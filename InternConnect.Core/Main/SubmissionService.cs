@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using InternConnect.Context;
 using InternConnect.Context.Models;
@@ -52,6 +53,7 @@ namespace InternConnect.Service.Main
             var adminResponse = new AdminResponse();
             adminResponse.Comments = "";
             submissionData.AdminResponse = adminResponse;
+            submissionData.SubmissionDate = DateTime.Now;
             _submissionRepository.Add(submissionData);
             _context.SaveChanges();
             _mailerService.NotifyCoordinator(sectionId);

@@ -31,7 +31,6 @@ namespace InternConnect.Dto.Submission
         public class UpdateSubmission
         {
             public int Id { get; set; }
-            public DateTime SubmissionDate { get; set; }
             public string StudentTitle { get; set; }
             public string LastName { get; set; }
             public string FirstName { get; set; }
@@ -51,7 +50,6 @@ namespace InternConnect.Dto.Submission
 
         public class AddSubmission
         {
-            public DateTime SubmissionDate { get; set; }
             public string StudentTitle { get; set; }
             public string LastName { get; set; }
             public string FirstName { get; set; }
