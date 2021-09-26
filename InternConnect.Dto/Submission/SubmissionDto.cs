@@ -1,6 +1,7 @@
 ﻿using System;
 using InternConnect.Dto.Admin;
 using InternConnect.Dto.AdminResponse;
+using InternConnect.Dto.Company;
 using InternConnect.Dto.Student;
 
 namespace InternConnect.Dto.Submission
@@ -29,6 +30,7 @@ namespace InternConnect.Dto.Submission
             public int StudentId { get; set; }
             public StudentDto.ReadStudent Student { get; set; }
             public int CompanyId { get; set; }
+            public CompanyDto.ReadCompany Company { get; set; }
             public AdminResponseDto.ReadResponse Response { get; set; }
 
         }

@@ -5,6 +5,7 @@ using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
 using InternConnect.Dto.AdminResponse;
+using InternConnect.Dto.Company;
 using InternConnect.Dto.Submission;
 using InternConnect.Service.ThirdParty;
 
@@ -27,11 +28,12 @@ namespace InternConnect.Service.Main
         private readonly IMapper _mapper;
         private readonly IStudentService _studentService;
         private readonly IProgramService _programService;
+        private readonly ICompanyRepository _companyRepository;
         private readonly ISubmissionRepository _submissionRepository;
 
         public SubmissionService(ISubmissionRepository submission, IMapper mapper,
             InternConnectContext context, IAdminResponseRepository adminResponse, IMailerService mailerService, IProgramService programService,
-            IStudentService studentService)
+            IStudentService studentService, ICompanyRepository companyRepository)
         {
             _mapper = mapper;
             _context = context;
@@ -40,6 +42,7 @@ namespace InternConnect.Service.Main
             _mailerService = mailerService;
             _studentService = studentService;
             _programService = programService;
+            _companyRepository = companyRepository;
         }
 
         public SubmissionDto.ReadSubmission AddSubmission(SubmissionDto.AddSubmission payload, int sectionId, int programId)
@@ -66,6 +69,11 @@ namespace InternConnect.Service.Main
             var mappedList = new List<SubmissionDto.ReadSubmission>();
             foreach (var submission in submissionList)
                 mappedList.Add(_mapper.Map<SubmissionDto.ReadSubmission>(submission));
+
+            foreach (var submission in mappedList)
+            {
+                submission.Company =  _mapper.Map<CompanyDto.ReadCompany>(_companyRepository.Get(submission.CompanyId));
+            }
 
             return mappedList;
         }
