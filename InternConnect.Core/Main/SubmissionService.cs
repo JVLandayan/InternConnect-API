@@ -83,7 +83,7 @@ namespace InternConnect.Service.Main
 
         public SubmissionDto.ReadSubmission GetSubmission(int id)
         {
-            return _mapper.Map<SubmissionDto.ReadSubmission>(_submissionRepository.GetAllRelatedData().ToList().Where(s=>s.Id == id));
+            return _mapper.Map<SubmissionDto.ReadSubmission>(_submissionRepository.GetAllRelatedData().ToList().First(s=>s.Id == id));
         }
 
         public IEnumerable<SubmissionDto.ReadSubmission> GetSubmissionsByStep(int stepNumber)
