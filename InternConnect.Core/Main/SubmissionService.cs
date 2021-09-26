@@ -62,7 +62,7 @@ namespace InternConnect.Service.Main
 
         public IEnumerable<SubmissionDto.ReadSubmission> GetAllSubmissions()
         {
-            var submissionList = _submissionRepository.GetAll();
+            var submissionList = _submissionRepository.GetAllRelatedData();
             var mappedList = new List<SubmissionDto.ReadSubmission>();
             foreach (var submission in submissionList)
                 mappedList.Add(_mapper.Map<SubmissionDto.ReadSubmission>(submission));

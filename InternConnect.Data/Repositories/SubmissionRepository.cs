@@ -14,7 +14,7 @@ namespace InternConnect.Data.Repositories
 
         public IEnumerable<Submission> GetAllRelatedData()
         {
-            return Context.Set<Submission>().Include(s => s.Student).Include(s=>s.AdminResponse);
+            return Context.Set<Submission>().Include(s => s.Student).Include(s=>s.AdminResponse).Include(s=>s.Student.Program).Include(s=>s.Student.Section).Include(s=>s.Student);
         }
     }
 }
