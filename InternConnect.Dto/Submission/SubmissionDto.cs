@@ -31,7 +31,7 @@ namespace InternConnect.Dto.Submission
             public StudentDto.ReadStudent Student { get; set; }
             public int CompanyId { get; set; }
             public CompanyDto.ReadCompany Company { get; set; }
-            public AdminResponseDto.ReadResponse Response { get; set; }
+            public AdminResponseDto.ReadResponse AdminResponse { get; set; }
 
         }
 
