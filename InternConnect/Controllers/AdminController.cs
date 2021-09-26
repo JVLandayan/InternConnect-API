@@ -43,8 +43,7 @@ namespace InternConnect.Controllers
         }
 
         //GET /admin/id
-        [Authorize(Roles = "Dean")]
-        [Authorize]
+        [Authorize(Roles = "Dean,Chair,Coordinator")]
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<AdminDto.ReadAdmin>> GetAdmin(int id)
         {

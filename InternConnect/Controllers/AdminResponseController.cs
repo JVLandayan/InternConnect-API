@@ -18,26 +18,26 @@ namespace InternConnect.Controllers
             _adminResponseService = adminResponse;
         }
 
-        [Authorize(Roles = "Coordinator,Dean,Chair")]
-        [HttpGet]
-        public ActionResult<IEnumerable<AdminResponseDto.ReadResponse>> GetAllEntries()
-        {
-            return Ok(_adminResponseService.GetAllEntries());
-        }
+        //[Authorize(Roles = "Coordinator,Dean,Chair")]
+        //[HttpGet]
+        //public ActionResult<IEnumerable<AdminResponseDto.ReadResponse>> GetAllEntries()
+        //{
+        //    return Ok(_adminResponseService.GetAllEntries());
+        //}
 
-        [Authorize(Roles = "Coordinator,Dean,Chair")]
-        [HttpGet("admin/{stepNum}")]
-        public ActionResult<IEnumerable<AdminResponseDto.ReadResponse>> GetAllEntriesByStep(int stepNum)
-        {
-            try
-            {
-                return Ok(_adminResponseService.GetAllEntriesByStep(stepNum));
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
-        }
+        //[Authorize(Roles = "Coordinator,Dean,Chair")]
+        //[HttpGet("admin/{stepNum}")]
+        //public ActionResult<IEnumerable<AdminResponseDto.ReadResponse>> GetAllEntriesByStep(int stepNum)
+        //{
+        //    try
+        //    {
+        //        return Ok(_adminResponseService.GetAllEntriesByStep(stepNum));
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest(e);
+        //    }
+        //}
 
         [Authorize(Roles = "Coordinator")]
         [HttpPut("coordinator/{adminId}")]

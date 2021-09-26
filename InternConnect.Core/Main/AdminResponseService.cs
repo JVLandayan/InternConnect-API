@@ -20,8 +20,8 @@ namespace InternConnect.Service.Main
         public void UpdateAcceptanceByChair(AdminResponseDto.UpdateChairResponse payload);
         public void UpdateAcceptanceByDean(AdminResponseDto.UpdateDeanResponse payload, int adminId);
 
-        public IEnumerable<AdminResponseDto.ReadResponse> GetAllEntriesByStep(int stepNumber);
-        public IEnumerable<AdminResponseDto.ReadResponse> GetAllEntries();
+        //public IEnumerable<AdminResponseDto.ReadResponse> GetAllEntriesByStep(int stepNumber);
+        //public IEnumerable<AdminResponseDto.ReadResponse> GetAllEntries();
     }
 
     public class AdminResponseService : IAdminResponseService
@@ -89,36 +89,36 @@ namespace InternConnect.Service.Main
             _mailerService.NotifyDean(responseData.SubmissionId, payload.AcceptedByChair);
         }
 
-        public IEnumerable<AdminResponseDto.ReadResponse> GetAllEntriesByStep(int stepNumber)
-        {
-            var responseList = _adminResponseRepository.GetAll().Where(ar => ar.AcceptedByCoordinator == null);
+        //public IEnumerable<AdminResponseDto.ReadResponse> GetAllEntriesByStep(int stepNumber)
+        //{
+        //    var responseList = _adminResponseRepository.GetAll().Where(ar => ar.AcceptedByCoordinator == null);
 
-            if (stepNumber == 2)
-                responseList = _adminResponseRepository.GetAll()
-                    .Where(ar => ar.AcceptedByCoordinator == true && ar.AcceptedByChair == null);
-            if (stepNumber == 3)
-                responseList = _adminResponseRepository.GetAll()
-                    .Where(ar => ar.AcceptedByChair == true && ar.AcceptedByDean == null);
-            if (stepNumber == 4)
-                responseList = _adminResponseRepository.GetAll()
-                    .Where(ar => ar.AcceptedByDean == true && ar.EmailSentByCoordinator == null);
-            if (stepNumber == 5)
-                responseList = _adminResponseRepository.GetAll()
-                    .Where(ar => ar.EmailSentByCoordinator == true && ar.CompanyAgrees == null);
+        //    if (stepNumber == 2)
+        //        responseList = _adminResponseRepository.GetAll()
+        //            .Where(ar => ar.AcceptedByCoordinator == true && ar.AcceptedByChair == null);
+        //    if (stepNumber == 3)
+        //        responseList = _adminResponseRepository.GetAll()
+        //            .Where(ar => ar.AcceptedByChair == true && ar.AcceptedByDean == null);
+        //    if (stepNumber == 4)
+        //        responseList = _adminResponseRepository.GetAll()
+        //            .Where(ar => ar.AcceptedByDean == true && ar.EmailSentByCoordinator == null);
+        //    if (stepNumber == 5)
+        //        responseList = _adminResponseRepository.GetAll()
+        //            .Where(ar => ar.EmailSentByCoordinator == true && ar.CompanyAgrees == null);
 
-            var mappedList = new List<AdminResponseDto.ReadResponse>();
-            foreach (var response in responseList) mappedList.Add(_mapper.Map<AdminResponseDto.ReadResponse>(response));
+        //    var mappedList = new List<AdminResponseDto.ReadResponse>();
+        //    foreach (var response in responseList) mappedList.Add(_mapper.Map<AdminResponseDto.ReadResponse>(response));
 
-            return mappedList;
-        }
+        //    return mappedList;
+        //}
 
-        public IEnumerable<AdminResponseDto.ReadResponse> GetAllEntries()
-        {
-            var responseList = _adminResponseRepository.GetAll();
-            var mappedList = new List<AdminResponseDto.ReadResponse>();
-            foreach (var response in responseList) mappedList.Add(_mapper.Map<AdminResponseDto.ReadResponse>(response));
+        //public IEnumerable<AdminResponseDto.ReadResponse> GetAllEntries()
+        //{
+        //    var responseList = _adminResponseRepository.GetAll();
+        //    var mappedList = new List<AdminResponseDto.ReadResponse>();
+        //    foreach (var response in responseList) mappedList.Add(_mapper.Map<AdminResponseDto.ReadResponse>(response));
 
-            return mappedList;
-        }
+        //    return mappedList;
+        //}
     }
 }
