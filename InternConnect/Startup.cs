@@ -48,7 +48,7 @@ namespace InternConnect
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = "InternConnect", Version = "v1"});
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "InternConnect", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
@@ -130,13 +130,33 @@ namespace InternConnect
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "InternConnect v1"));
             }
 
-            app.UseRouting();
+
             app.UseCors("EnableCORS");
 
-            //JWT
-            //app.UseAuthentication();
-            //app.UseAuthorization();
-            //app.UseMiddleware<JwtMiddleware>();
+            app.Use(async (context, next) =>
+            {
+
+                await next();
+
+                if (context.Response.StatusCode == 404 && !System.IO.Path.HasExtension(context.Request.Path.Value))
+
+                {
+
+                    context.Request.Path = "/index.html";
+
+                    await next();
+
+                }
+
+            });
+            app.UseDefaultFiles();
+            app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseStaticFiles();
+
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "files")),
@@ -161,8 +181,6 @@ namespace InternConnect
             });
 
 
-            app.UseAuthentication();
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
