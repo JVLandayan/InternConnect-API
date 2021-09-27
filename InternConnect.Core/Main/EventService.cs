@@ -48,7 +48,7 @@ namespace InternConnect.Service.Main
 
         public IEnumerable<EventDto.ReadEvent> GetAll(int adminId)
         {
-            var eventsList = _eventsRepository.GetAll().Where(e => e.AdminId == adminId);
+            var eventsList = _eventsRepository.GetAllEventsWithAdmin().Where(e => e.AdminId == adminId);
             var mappedList = new List<EventDto.ReadEvent>();
 
             foreach (var eventElement in eventsList) mappedList.Add(_mapper.Map<EventDto.ReadEvent>(eventElement));
