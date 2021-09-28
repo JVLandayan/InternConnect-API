@@ -76,6 +76,7 @@ namespace InternConnect.Profiles
             //PdfState
             CreateMap<PdfState, PdfStateDto.ReadPdfState>().ReverseMap();
             CreateMap<PdfState, PdfStateDto.UpdatePdfState>().ReverseMap();
+            CreateMap<PdfState, PdfStateDto.AddPdfState>().ReverseMap();
 
             //Program
             CreateMap<Context.Models.Program, ProgramDto.ReadProgram>().ReverseMap();

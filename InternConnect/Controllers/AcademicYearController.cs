@@ -46,5 +46,20 @@ namespace InternConnect.Controllers
                 return BadRequest(e);
             }
         }
+
+        [Authorize(Roles = "Dean")]
+        [HttpPost]
+        public ActionResult<AcademicYearDto.ReadAcademicYear> AddAcademicYear(
+            AcademicYearDto.AddAcademicYear payload)
+        {
+            var ayData = _academicYearService.AddAcademicYear(payload);
+            if (ayData == null)
+            {
+                return NoContent();
+            }
+            return BadRequest("Academic year existing");
+
+
+        }
     }
 }
