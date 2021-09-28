@@ -189,11 +189,12 @@ namespace InternConnect.Service.ThirdParty
             var failText = ReadHtml("status-disapproved");
 
             var client = SmtpConfiguration();
-            var submissionData = _submissionRepository.Get(submissionId);
-            var studentData = _studentRepository.Get(submissionData.StudentId);
-            var coordinatorData = _adminRepository.Find(a => a.SectionId == studentData.SectionId).First();
-            var accountData = _accountRepository.Get(coordinatorData.AccountId);
-            var accountDataStudent = _accountRepository.Get(studentData.AccountId);
+            var submissionData = _submissionRepository.GetAllRelatedData().First(s => s.Id == submissionId);
+            var studentData = submissionData.Student;
+            var coordinatorData = _adminRepository.GetAllAdminsWithRelatedData()
+                .First(a => a.SectionId == studentData.SectionId);
+            var accountData = coordinatorData.Account;
+            var accountDataStudent = studentData.Account;
             if (isAccepted)
             {
                 var toCoordinator = new MailMessage();

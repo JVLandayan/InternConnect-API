@@ -62,19 +62,16 @@ namespace InternConnect.Service.ThirdParty
         {
             var submissionData = _submissionRepository.GetAllRelatedData().First(s => s.Id == submissionId);
             var trackData = _trackRepository.Get(submissionData.TrackId);
-            var programList = _programRepository.GetAll();
             var companyData = _companyRepository.Get(submissionData.CompanyId);
             var academicYearData = _academicYearRepository.GetAll().First();
             var pdfStateData = _pdfStateRepository.GetAll().First();
-            var sectionData = _sectionRepository.Get(submissionData.Student.SectionId);
             var deanData = _adminRepository.GetAll().Where(a => a.AuthId == 1).First();
-            var coordinatorList = _adminRepository.GetAll().Where(a => a.SectionId != null).ToList();
-            var coordinatorData = coordinatorList.Find(a => a.SectionId == submissionData.Student.SectionId);
+            var coordinatorData = _adminRepository.GetAll().Where(a => a.SectionId != null).ToList().Find(a => a.SectionId == submissionData.Student.SectionId);
 
 
             var contentType = "application/pdf";
             var fileName =
-                $"{submissionData.StudentNumber}-Endorsement-Letter-{DateTime.Now.ToString("MM/dd/yyyy")}.pdf";
+                $"{submissionData.Student.Section.Name}-{submissionData.LastName}_{submissionData.FirstName}-{submissionData.StudentNumber}-Endorsement-Letter.pdf";
 
             try
             {
@@ -110,7 +107,7 @@ namespace InternConnect.Service.ThirdParty
                         .SetFont(headerFont);
                     var subHeaderTwo =
                         new Text(
-                                $"Department Of {programList.First(p => p.Id == submissionData.Student.ProgramId).Name}")
+                                $"Department Of {submissionData.Student.Program.Name}")
                             .SetFont(subHeaderFont);
                     var pHead = new Paragraph().Add(header).SetTextAlignment(TextAlignment.CENTER);
                     var pSubHeadOne = new Paragraph().Add(subHeaderOne).SetTextAlignment(TextAlignment.CENTER);
@@ -150,7 +147,7 @@ namespace InternConnect.Service.ThirdParty
 
                     var isoCode =
                         new Text(
-                            $"UST:A022-{programList.First(p => p.Id == submissionData.Student.ProgramId).IsoCodeProgramNumber}-LE{programList.First(p => p.Id == submissionData.Student.ProgramId).IsoCode}");
+                            $"UST:A022-{submissionData.Student.Program.IsoCodeProgramNumber}-LE{submissionData.IsoCode}");
                     var academicYear =
                         new Text(
                             $"AY {academicYearData.StartDate.ToString("yyyy")} - {academicYearData.EndDate.ToString("yyyy")}");
@@ -168,7 +165,7 @@ namespace InternConnect.Service.ThirdParty
 
                     document.Add(new Paragraph()
                         .Add(new Text(
-                                $"{submissionData.ContactPersonTitle}. {submissionData.ContactPersonFirstName} {submissionData.ContactPersonLastName}")
+                                $"{submissionData.ContactPersonTitle} {submissionData.ContactPersonFirstName} {submissionData.ContactPersonLastName}")
                             .SetFontSize(11))
                         .SetTextAlignment(TextAlignment.LEFT).SetMarginBottom(0f).SetFixedLeading(7.0f));
                     document.Add(new Paragraph()
@@ -213,10 +210,10 @@ namespace InternConnect.Service.ThirdParty
                         .SetMarginBottom(11.0f).SetTextAlignment(TextAlignment.LEFT));
 
                     document.Add(new Paragraph().Add(new Text(
-                            $"This is to recommend {submissionData.StudentTitle}. {submissionData.FirstName} {submissionData.MiddleInitial}. {submissionData.LastName}, " +
-                            $"a bona fide student of section {sectionData.Name} of the {academicYearData.CollegeName} of the University  of Santo Tomas to take an Internship or  Practicum  Course  " +
+                            $"This is to recommend {submissionData.StudentTitle} {submissionData.FirstName} {submissionData.MiddleInitial} {submissionData.LastName}, " +
+                            $"a bona fide student of section {submissionData.Student.Section.Name} of the {academicYearData.CollegeName} of the University  of Santo Tomas to take an Internship or  Practicum  Course  " +
                             $"this  {academicYearData.StartDate.ToString("MMMM")}  –  {academicYearData.EndDate.ToString("MMMM")}  {academicYearData.EndDate.ToString("yyyy")}  in  your  reputable  company.  As  part  of  our Outcomes-Based Education curriculum requirements " +
-                            $"in the  B. S. {programList.First(p => p.Id == submissionData.Student.ProgramId).Name} program, said  student  must  undertake  a  minimum  of  {programList.First(p => p.Id == submissionData.Student.ProgramId).NumberOfHours}  hours  of  relevant  company  " +
+                            $"in the  B. S. {submissionData.Student.Program.Name} program, said  student  must  undertake  a  minimum  of  {submissionData.Student.Program.NumberOfHours}  hours  of  relevant  company  " +
                             "or  industry immersion. ").SetFontSize(11)).SetTextAlignment(TextAlignment.JUSTIFIED)
                         .SetFixedLeading(11.0f).SetMarginBottom(11.0f));
 
@@ -307,17 +304,17 @@ namespace InternConnect.Service.ThirdParty
 
                     if (companyData.AddressThree != null)
                     {
-                        coordSignature.SetFixedPosition(165, 158).ScaleAbsolute(100, 30);
+                        coordSignature.SetFixedPosition(180, 158).ScaleAbsolute(100, 30);
                         deanSignature.SetFixedPosition(50, 158).ScaleAbsolute(100, 30);
                     }
                     else if (companyData.AddressTwo != null)
                     {
-                        coordSignature.SetFixedPosition(165, 169).ScaleAbsolute(100, 30);
+                        coordSignature.SetFixedPosition(180, 169).ScaleAbsolute(100, 30);
                         deanSignature.SetFixedPosition(50, 169).ScaleAbsolute(100, 30);
                     }
                     else
                     {
-                        coordSignature.SetFixedPosition(165, 180).ScaleAbsolute(100, 30);
+                        coordSignature.SetFixedPosition(180, 180).ScaleAbsolute(100, 30);
                         deanSignature.SetFixedPosition(50, 180).ScaleAbsolute(100, 30);
                     }
 
