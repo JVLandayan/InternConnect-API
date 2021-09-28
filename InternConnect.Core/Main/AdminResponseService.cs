@@ -47,8 +47,11 @@ namespace InternConnect.Service.Main
         {
             var responseData = _adminResponseRepository.Get(payload.Id);
             _mapper.Map(payload, responseData);
-            _logsRepository.Add(new Logs
-                {DateStamped = DateTime.Now, AdminId = adminId, SubmissionId = responseData.SubmissionId});
+            if (payload.AcceptedByCoordinator)
+            {
+                _logsRepository.Add(new Logs()
+                    { DateStamped = DateTime.Now, AdminId = adminId, SubmissionId = responseData.SubmissionId });
+            }
             _context.SaveChanges();
             _mailerService.NotifyChair(responseData.SubmissionId, adminId, payload.AcceptedByCoordinator);
         }
@@ -58,7 +61,7 @@ namespace InternConnect.Service.Main
             var responseData = _adminResponseRepository.Get(payload.Id);
             _mapper.Map(payload, responseData);
             _context.SaveChanges();
-            _mailerService.NotifyStudentCompanyApproves(responseData.SubmissionId);
+            _mailerService.NotifyStudentCompanyApproves(responseData.SubmissionId, payload.CompanyAgrees);
         }
 
         public void UpdateEmailSent(AdminResponseDto.UpdateEmailSentResponse payload)
@@ -66,7 +69,7 @@ namespace InternConnect.Service.Main
             var responseData = _adminResponseRepository.Get(payload.Id);
             _mapper.Map(payload, responseData);
             _context.SaveChanges();
-            _mailerService.NotifyStudentEmailSent(responseData.SubmissionId);
+            _mailerService.NotifyStudentEmailSent(responseData.SubmissionId, payload.EmailSentByCoordinator);
         }
 
 
@@ -74,10 +77,14 @@ namespace InternConnect.Service.Main
         {
             var responseData = _adminResponseRepository.Get(payload.Id);
             _mapper.Map(payload, responseData);
-            _logsRepository.Add(new Logs
-                {DateStamped = DateTime.Now, AdminId = adminId, SubmissionId = responseData.SubmissionId});
+            if (payload.AcceptedByDean)
+            {
+                _logsRepository.Add(new Logs
+                    { DateStamped = DateTime.Now, AdminId = adminId, SubmissionId = responseData.SubmissionId });
+            }
             _context.SaveChanges();
             _mailerService.NotifyCoordAndIgaarp(responseData.SubmissionId, payload.AcceptedByDean);
+
         }
 
 

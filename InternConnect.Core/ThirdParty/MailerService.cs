@@ -26,10 +26,10 @@ namespace InternConnect.Service.ThirdParty
         public void NotifyCoordAndIgaarp(int submissionId, bool isAccepted);
 
         //when emailSent -> updateStudent
-        public void NotifyStudentEmailSent(int submissionId);
+        public void NotifyStudentEmailSent(int submissionId, bool isAccepted);
 
         //when companyApproves -> updateStudent
-        public void NotifyStudentCompanyApproves(int submissionId);
+        public void NotifyStudentCompanyApproves(int submissionId, bool isAccepted);
 
         //reset password
         public void ForgotPassword(Account accountData);
@@ -238,9 +238,10 @@ namespace InternConnect.Service.ThirdParty
             }
         }
 
-        public void NotifyStudentEmailSent(int submissionId)
+        public void NotifyStudentEmailSent(int submissionId, bool isAccepted)
         {
             var mailText = ReadHtml("status-senttocompany");
+            var failText = ReadHtml("status-disapproved");
             var client = SmtpConfiguration();
             var submissionData = _submissionRepository.Get(submissionId);
             var studentData = _studentRepository.Get(submissionData.StudentId);
@@ -249,26 +250,33 @@ namespace InternConnect.Service.ThirdParty
             toStudent.To.Add(accountData.Email);
             toStudent.From = new MailAddress("postmaster@eco-tigers.com");
             toStudent.Subject = "Student Submission For Letter";
-            toStudent.Body = mailText;
+            toStudent.Body = isAccepted? mailText:failText;
             toStudent.IsBodyHtml = true;
             client.Send(toStudent);
         }
 
-        public void NotifyStudentCompanyApproves(int submissionId)
+        public void NotifyStudentCompanyApproves(int submissionId, bool isAccepted)
         {
             var mailText = ReadHtml("status-accepted");
-
+            var failText = ReadHtml("status-disapproved");
             var client = SmtpConfiguration();
+
             var submissionData = _submissionRepository.Get(submissionId);
-            var studentData = _studentRepository.Get(submissionData.StudentId);
-            var accountData = _accountRepository.Get(studentData.AccountId);
-            var toStudent = new MailMessage();
-            toStudent.To.Add(accountData.Email);
-            toStudent.From = new MailAddress("postmaster@eco-tigers.com");
-            toStudent.Subject = "Student Submission For Letter";
-            toStudent.Body = mailText;
-            toStudent.IsBodyHtml = true;
-            client.Send(toStudent);
+                var studentData = _studentRepository.Get(submissionData.StudentId);
+                var accountData = _accountRepository.Get(studentData.AccountId);
+                var toStudent = new MailMessage();
+                toStudent.To.Add(accountData.Email);
+                toStudent.From = new MailAddress("postmaster@eco-tigers.com");
+                toStudent.Subject = "Student Submission For Letter";
+                toStudent.Body = isAccepted ? mailText:failText;
+                toStudent.IsBodyHtml = true;
+                client.Send(toStudent);
+
+
+
+            
+            
+
         }
 
         public void ForgotPassword(Account accountData)
