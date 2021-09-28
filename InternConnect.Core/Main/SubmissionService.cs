@@ -50,11 +50,14 @@ namespace InternConnect.Service.Main
         public SubmissionDto.ReadSubmission AddSubmission(SubmissionDto.AddSubmission payload, int sectionId, int programId)
         {
             var submissionData = _mapper.Map<Submission>(payload);
-            if (_programService.GetById(programId).NumberOfHours == null)
+            var studentProgram = _programService.GetById(programId);
+            var submissionList = _submissionRepository.GetAllRelatedData().Where(s => s.Student.ProgramId == programId)
+                .ToList();
+            if (studentProgram.NumberOfHours == null || studentProgram.IsoCode == null || studentProgram.IsoCodeProgramNumber == null)
             {
                 return new SubmissionDto.ReadSubmission();
             }
-            submissionData.IsoCode = (int)_programService.GetById(programId).NumberOfHours;
+            submissionData.IsoCode = (int)((submissionList.Count+1) + studentProgram.IsoCode);
             var adminResponse = new AdminResponse();
             adminResponse.Comments = "";
             submissionData.AdminResponse = adminResponse;
