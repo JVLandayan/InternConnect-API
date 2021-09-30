@@ -15,6 +15,7 @@ namespace InternConnect.Dto.AdminLogs
             public DateTime DateStamped { get; set; }
             public int AdminId { get; set; }
             public AdminDto.ReadAdmin Admin { get; set; }
+            public string Status { get; set; }
         }
 
         public class AddLogs

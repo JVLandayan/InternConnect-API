@@ -59,7 +59,7 @@ namespace InternConnect.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "Student")]
+        //[Authorize(Roles = "Student")]
         [HttpPost]
         public ActionResult AddSubmission(SubmissionDto.AddSubmission payload, int sectionId, int programId)
         {

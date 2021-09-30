@@ -1,5 +1,4 @@
-﻿using System.IO;
-using InternConnect.Context.Models;
+﻿using InternConnect.Context.Models;
 using InternConnect.Service.ThirdParty;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -25,7 +24,7 @@ namespace InternConnect.Controllers
             _pdfService = pdfService;
         }
 
-        [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
+        //W[Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
         [HttpGet("excel")]
         public IActionResult GenerateExcel([FromQuery] int[] ids)
         {

@@ -47,12 +47,8 @@ namespace InternConnect.Controllers
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<AdminDto.ReadAdmin>> GetAdmin(int id)
         {
-            if (_adminService.GetById(id) != null)
-            {
-                return Ok(_adminService.GetById(id));
-            }
+            if (_adminService.GetById(id) != null) return Ok(_adminService.GetById(id));
             return BadRequest("Admin doesn't exist");
-
         }
 
         [Authorize(Roles = "Coordinator,Dean")]

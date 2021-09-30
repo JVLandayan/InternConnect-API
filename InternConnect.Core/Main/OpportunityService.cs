@@ -59,7 +59,8 @@ namespace InternConnect.Service.Main
 
         public IEnumerable<OpportunityDto.ReadOpportunity> GetByCompanyId(int companyId)
         {
-            var opportunityList = _opportunityRepository.GetAll().Where(o => o.CompanyId == companyId);
+            var opportunityList = _opportunityRepository.GetAllOpportunitiesAndCompanies()
+                .Where(o => o.CompanyId == companyId);
             var mappedList = new List<OpportunityDto.ReadOpportunity>();
             foreach (var opportunity in opportunityList)
                 mappedList.Add(_mapper.Map<OpportunityDto.ReadOpportunity>(opportunity));
@@ -69,7 +70,8 @@ namespace InternConnect.Service.Main
 
         public OpportunityDto.ReadOpportunity GetById(int id)
         {
-            return _mapper.Map<OpportunityDto.ReadOpportunity>(_opportunityRepository.Get(id));
+            return _mapper.Map<OpportunityDto.ReadOpportunity>(_opportunityRepository.GetAllOpportunitiesAndCompanies()
+                .First(c => c.Id == id));
         }
 
         public void UpdateOpportunity(OpportunityDto.UpdateOpportunity payload)

@@ -67,14 +67,8 @@ namespace InternConnect.Service.Main
         public void UpdateCompany(CompanyDto.UpdateCompany payload)
         {
             var companyData = _companyRepository.Get(payload.Id);
-            if (payload.AddressTwo == "")
-            {
-                payload.AddressTwo = null;
-            }
-            if (payload.AddressThree == "")
-            {
-                payload.AddressThree = null;
-            }
+            if (payload.AddressTwo == "") payload.AddressTwo = null;
+            if (payload.AddressThree == "") payload.AddressThree = null;
             _mapper.Map(payload, companyData);
             _context.SaveChanges();
         }

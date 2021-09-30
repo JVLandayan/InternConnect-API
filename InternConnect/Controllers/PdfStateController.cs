@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using InternConnect.Dto.AcademicYear;
 using InternConnect.Dto.PdfState;
 using InternConnect.Service.Main;
 using Microsoft.AspNetCore.Authorization;
@@ -50,10 +49,7 @@ namespace InternConnect.Controllers
             PdfStateDto.AddPdfState payload)
         {
             var pdfData = _pdfStateService.AddPdfState(payload);
-            if (pdfData == null)
-            {
-                return Ok();
-            }
+            if (pdfData == null) return Ok();
 
             return BadRequest("PdfState existing");
         }

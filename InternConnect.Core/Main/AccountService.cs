@@ -18,14 +18,9 @@ namespace InternConnect.Service.Main
         public AccountDto.ReadAccount AddCoordinator(AccountDto.AddAccountCoordinator entity);
         public AccountDto.ReadAccount AddStudent(AccountDto.AddAccountStudent payload);
         public List<AccountDto.AddAccountStudent> AddStudents(List<AccountDto.AddAccountStudent> payload);
-
         public AccountDto.ReadAccount AddChair(AccountDto.AddAccountChair payload);
         public AccountDto.ReadAccount AddTechCoordinator(AccountDto.AddAccountTechCoordinator entity);
-
-        //public void AddRange(List<Account> entity);
         public void Delete(int id);
-
-        //public void DeleteRange(List<Account> entities);
         public List<AccountDto.ReadAccount> GetAll();
         public void DeleteAll();
         public Account GetById(int id);
@@ -35,20 +30,19 @@ namespace InternConnect.Service.Main
     public class AccountService : IAccountService
     {
         private readonly IAccountRepository _accountRepository;
-        private readonly IAdminRepository _adminRepository;
         private readonly IAuthService _authService;
         private readonly IAcademicYearRepository _ayRepository;
-        private readonly ISectionRepository _sectionRepository;
-        private readonly IMailerService _mailerService;
         private readonly InternConnectContext _context;
+        private readonly IMailerService _mailerService;
         private readonly IMapper _mapper;
+        private readonly ISectionRepository _sectionRepository;
 
-        public AccountService(IAccountRepository account, IMapper mapper, IAdminRepository admin,
-            InternConnectContext context, IAuthService authService, IAcademicYearRepository ayRepository, ISectionRepository sectionRepository, IMailerService mailerService)
+        public AccountService(IAccountRepository account, IMapper mapper,
+            InternConnectContext context, IAuthService authService, IAcademicYearRepository ayRepository,
+            ISectionRepository sectionRepository, IMailerService mailerService)
         {
             _accountRepository = account;
             _mapper = mapper;
-            _adminRepository = admin;
             _context = context;
             _authService = authService;
             _ayRepository = ayRepository;
@@ -81,7 +75,6 @@ namespace InternConnect.Service.Main
             _accountRepository.Add(accountData);
             _context.SaveChanges();
             _authService.Onboard(accountData.Email);
-            
             return _mapper.Map<AccountDto.ReadAccount>(accountData);
         }
 
@@ -142,7 +135,7 @@ namespace InternConnect.Service.Main
             };
             var adminData = new Admin
             {
-                AuthId = 4,
+                AuthId = 4
             };
             accountData.Admin = adminData;
             _accountRepository.Add(accountData);
@@ -174,12 +167,13 @@ namespace InternConnect.Service.Main
             #region Reset Academic Year
 
             var ayData = _ayRepository.GetAll().First();
-            ayData.EndDate = new DateTime(1111,1,1);
+            ayData.EndDate = new DateTime(1111, 1, 1);
             ayData.StartDate = new DateTime(1111, 1, 1);
             ayData.IgaarpEmail = "";
             ayData.CollegeName = "";
 
             #endregion
+
             #region Delete Accounts
 
             var adminList = _accountRepository.GetAllAccountData().Where(acc => acc.Admin != null);
@@ -189,9 +183,13 @@ namespace InternConnect.Service.Main
             _accountRepository.RemoveRange(studentList);
 
             #endregion
+
             #region Delete Sections
+
             _sectionRepository.RemoveRange(_sectionRepository.GetAll().ToList());
+
             #endregion
+
             _context.SaveChanges();
         }
 
@@ -199,36 +197,27 @@ namespace InternConnect.Service.Main
         {
             return _accountRepository.Get(id);
         }
-        public void ChangeDean(string oldEmail, string newEmail ,int accountId)
+
+        public void ChangeDean(string oldEmail, string newEmail, int accountId)
         {
             var accountData = GetById(accountId);
-            _mailerService.ChangeDean(oldEmail,newEmail,accountData.ResetKey);
+            try
+            {
+                _mailerService.ChangeDean(oldEmail, newEmail, accountData.ResetKey);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
-        private string HashPassword(string password)
+        public List<AccountDto.AddAccountStudent> AddStudents(List<AccountDto.AddAccountStudent> payload)
         {
-            var passBytes = Encoding.ASCII.GetBytes(password);
-            var sha = new SHA512Managed();
-            var hash = sha.ComputeHash(passBytes);
-            var encryptedPass = "";
-            foreach (var b in hash) encryptedPass += b.ToString("x2");
-            return encryptedPass;
-        }
-
-        private string TokenConfig(string token)
-        {
-            var encodedToken = Encoding.UTF8.GetBytes(token);
-            var validToken = WebEncoders.Base64UrlEncode(encodedToken);
-            return validToken;
-        }
-
-        public List<AccountDto.AddAccountStudent>AddStudents(List<AccountDto.AddAccountStudent> payload)
-        {
-            List<Account> accountList = new List<Account>();
-            List<AccountDto.AddAccountStudent> rejectedAccounts = new List<AccountDto.AddAccountStudent>();
+            var accountList = new List<Account>();
+            var rejectedAccounts = new List<AccountDto.AddAccountStudent>();
 
             foreach (var data in payload)
-            {
                 if (_accountRepository.GetAll().FirstOrDefault(a => a.Email == data.Email.ToUpper()) != null)
                 {
                     rejectedAccounts.Add(data);
@@ -255,18 +244,28 @@ namespace InternConnect.Service.Main
                     accountList.Add(accountData);
                 }
 
-                
-            }
             _accountRepository.AddRange(accountList);
             _context.SaveChanges();
 
-            foreach (var accountData in accountList)
-            {
-                _authService.Onboard(accountData.Email);
-            }
+            foreach (var accountData in accountList) _authService.Onboard(accountData.Email);
             return rejectedAccounts;
+        }
 
+        private string HashPassword(string password)
+        {
+            var passBytes = Encoding.ASCII.GetBytes(password);
+            var sha = new SHA512Managed();
+            var hash = sha.ComputeHash(passBytes);
+            var encryptedPass = "";
+            foreach (var b in hash) encryptedPass += b.ToString("x2");
+            return encryptedPass;
+        }
 
+        private string TokenConfig(string token)
+        {
+            var encodedToken = Encoding.UTF8.GetBytes(token);
+            var validToken = WebEncoders.Base64UrlEncode(encodedToken);
+            return validToken;
         }
     }
 }

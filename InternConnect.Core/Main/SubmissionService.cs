@@ -16,6 +16,7 @@ namespace InternConnect.Service.Main
     {
         public SubmissionDto.ReadSubmission AddSubmission(SubmissionDto.AddSubmission payload, int sectionId,
             int programId);
+
         public void UpdateSubmission(SubmissionDto.UpdateSubmission payload);
         public SubmissionDto.ReadSubmission GetSubmission(int id);
         public IEnumerable<SubmissionDto.ReadSubmission> GetAllSubmissions();
@@ -25,16 +26,17 @@ namespace InternConnect.Service.Main
     public class SubmissionService : ISubmissionService
     {
         private readonly IAdminResponseRepository _adminResponseRepository;
+        private readonly ICompanyRepository _companyRepository;
         private readonly InternConnectContext _context;
         private readonly IMailerService _mailerService;
         private readonly IMapper _mapper;
-        private readonly IStudentService _studentService;
         private readonly IProgramService _programService;
-        private readonly ICompanyRepository _companyRepository;
+        private readonly IStudentService _studentService;
         private readonly ISubmissionRepository _submissionRepository;
 
         public SubmissionService(ISubmissionRepository submission, IMapper mapper,
-            InternConnectContext context, IAdminResponseRepository adminResponse, IMailerService mailerService, IProgramService programService,
+            InternConnectContext context, IAdminResponseRepository adminResponse, IMailerService mailerService,
+            IProgramService programService,
             IStudentService studentService, ICompanyRepository companyRepository)
         {
             _mapper = mapper;
@@ -47,19 +49,18 @@ namespace InternConnect.Service.Main
             _companyRepository = companyRepository;
         }
 
-        public SubmissionDto.ReadSubmission AddSubmission(SubmissionDto.AddSubmission payload, int sectionId, int programId)
+        public SubmissionDto.ReadSubmission AddSubmission(SubmissionDto.AddSubmission payload, int sectionId,
+            int programId)
         {
             var submissionData = _mapper.Map<Submission>(payload);
             var studentProgram = _programService.GetById(programId);
             var submissionList = _submissionRepository.GetAllRelatedData().Where(s => s.Student.ProgramId == programId)
                 .ToList();
-            if (studentProgram.NumberOfHours == null || studentProgram.IsoCode == null || studentProgram.IsoCodeProgramNumber == null)
-            {
-                return new SubmissionDto.ReadSubmission();
-            }
-            submissionData.IsoCode = (int)((submissionList.Count+1) + studentProgram.IsoCode);
+            if (studentProgram.NumberOfHours == null || studentProgram.IsoCode == null ||
+                studentProgram.IsoCodeProgramNumber == null) return new SubmissionDto.ReadSubmission();
+            submissionData.IsoCode = (int) (submissionList.Count + 1 + studentProgram.IsoCode);
             var adminResponse = new AdminResponse();
-            adminResponse.Comments = "";
+            adminResponse.Comments = null;
             submissionData.AdminResponse = adminResponse;
             submissionData.SubmissionDate = DateTime.Now;
             _submissionRepository.Add(submissionData);
@@ -76,9 +77,7 @@ namespace InternConnect.Service.Main
                 mappedList.Add(_mapper.Map<SubmissionDto.ReadSubmission>(submission));
 
             foreach (var submission in mappedList)
-            {
-                submission.Company =  _mapper.Map<CompanyDto.ReadCompany>(_companyRepository.Get(submission.CompanyId));
-            }
+                submission.Company = _mapper.Map<CompanyDto.ReadCompany>(_companyRepository.Get(submission.CompanyId));
 
 
             return mappedList;
@@ -86,7 +85,8 @@ namespace InternConnect.Service.Main
 
         public SubmissionDto.ReadSubmission GetSubmission(int id)
         {
-            return _mapper.Map<SubmissionDto.ReadSubmission>(_submissionRepository.GetAllRelatedData().ToList().First(s=>s.Id == id));
+            return _mapper.Map<SubmissionDto.ReadSubmission>(_submissionRepository.GetAllRelatedData().ToList()
+                .First(s => s.Id == id));
         }
 
         public IEnumerable<SubmissionDto.ReadSubmission> GetSubmissionsByStep(int stepNumber)
@@ -95,32 +95,31 @@ namespace InternConnect.Service.Main
             var mappedList = new List<SubmissionDto.ReadSubmission>();
 
             if (stepNumber == 1)
-            {
                 submissionList = _submissionRepository.GetAllRelatedData().ToList()
                     .FindAll(s => s.AdminResponse.AcceptedByCoordinator == null &&
-                                s.AdminResponse.AcceptedByChair == null);
-            }
+                                  s.AdminResponse.AcceptedByChair == null);
 
             else if (stepNumber == 2)
                 submissionList = _submissionRepository.GetAllRelatedData().ToList()
-                    .FindAll(s => s.AdminResponse.AcceptedByCoordinator == true && s.AdminResponse.AcceptedByChair == null);
+                    .FindAll(s =>
+                        s.AdminResponse.AcceptedByCoordinator == true && s.AdminResponse.AcceptedByChair == null);
             else if (stepNumber == 3)
                 submissionList = _submissionRepository.GetAllRelatedData().ToList()
-                .FindAll(s => s.AdminResponse.AcceptedByChair == true && s.AdminResponse.AcceptedByDean == null);
+                    .FindAll(s => s.AdminResponse.AcceptedByChair == true && s.AdminResponse.AcceptedByDean == null);
             else if (stepNumber == 4)
                 submissionList = _submissionRepository.GetAllRelatedData().ToList()
-                .FindAll(s => s.AdminResponse.AcceptedByDean == true && s.AdminResponse.EmailSentByCoordinator == null);
+                    .FindAll(s =>
+                        s.AdminResponse.AcceptedByDean == true && s.AdminResponse.EmailSentByCoordinator == null);
             else if (stepNumber == 5)
                 submissionList = _submissionRepository.GetAllRelatedData().ToList()
-                    .FindAll(s => s.AdminResponse.EmailSentByCoordinator == true && s.AdminResponse.CompanyAgrees == null);
+                    .FindAll(s =>
+                        s.AdminResponse.EmailSentByCoordinator == true && s.AdminResponse.CompanyAgrees == null);
 
             foreach (var submission in submissionList)
                 mappedList.Add(_mapper.Map<SubmissionDto.ReadSubmission>(submission));
 
             foreach (var submission in mappedList)
-            {
                 submission.Company = _mapper.Map<CompanyDto.ReadCompany>(_companyRepository.Get(submission.CompanyId));
-            }
 
 
             return mappedList;

@@ -49,8 +49,7 @@ namespace InternConnect.Service.Main
                 return null;
             }
 
-                return new AcademicYearDto.ReadAcademicYear();
-
+            return new AcademicYearDto.ReadAcademicYear();
         }
     }
 }

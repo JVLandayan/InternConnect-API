@@ -36,6 +36,7 @@ namespace InternConnect.Service.Main
                 _context.SaveChanges();
                 return null;
             }
+
             return new PdfStateDto.ReadPdfState();
         }
 

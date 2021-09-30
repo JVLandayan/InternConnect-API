@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using InternConnect.Dto.PdfState;
 
 namespace InternConnect.Dto.AcademicYear
 {
@@ -13,7 +12,6 @@ namespace InternConnect.Dto.AcademicYear
             public DateTime StartDate { get; set; }
             public DateTime EndDate { get; set; }
             public string IgaarpEmail { get; set; }
-
         }
 
         public class AddAcademicYear
@@ -38,7 +36,6 @@ namespace InternConnect.Dto.AcademicYear
             [Required] public DateTime EndDate { get; set; }
 
             [Required] public string IgaarpEmail { get; set; }
-
         }
     }
 }

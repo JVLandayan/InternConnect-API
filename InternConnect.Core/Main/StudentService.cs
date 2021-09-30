@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using InternConnect.Context;
 using InternConnect.Data.Interfaces;
@@ -14,7 +15,6 @@ namespace InternConnect.Service.Main
 
     public class StudentService : IStudentService
     {
-        private readonly InternConnectContext _context;
         private readonly IMapper _mapper;
         private readonly IStudentRepository _studentRepository;
 
@@ -22,7 +22,6 @@ namespace InternConnect.Service.Main
         {
             _studentRepository = student;
             _mapper = mapper;
-            _context = context;
         }
 
         public IEnumerable<StudentDto.ReadStudent> GetAll()
@@ -37,7 +36,8 @@ namespace InternConnect.Service.Main
 
         public StudentDto.ReadStudent GetById(int id)
         {
-            return _mapper.Map<StudentDto.ReadStudent>(_studentRepository.Get(id));
+            return _mapper.Map<StudentDto.ReadStudent>(_studentRepository.GetAllStudentWithRelatedData()
+                .First(s => s.Id == id);
         }
     }
 }

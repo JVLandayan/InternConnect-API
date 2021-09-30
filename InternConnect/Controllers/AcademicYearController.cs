@@ -53,13 +53,8 @@ namespace InternConnect.Controllers
             AcademicYearDto.AddAcademicYear payload)
         {
             var ayData = _academicYearService.AddAcademicYear(payload);
-            if (ayData == null)
-            {
-                return NoContent();
-            }
+            if (ayData == null) return NoContent();
             return BadRequest("Academic year existing");
-
-
         }
     }
 }

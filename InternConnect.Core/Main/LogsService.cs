@@ -15,8 +15,8 @@ namespace InternConnect.Service.Main
     public class LogsService : ILogsService
     {
         private readonly ILogsRepository _logsRepository;
-        private readonly ISubmissionRepository _submissionRepository;
         private readonly IMapper _mapper;
+        private readonly ISubmissionRepository _submissionRepository;
 
         public LogsService(IMapper mapper, ILogsRepository logsRepository, ISubmissionRepository submissionRepository)
         {
@@ -27,16 +27,43 @@ namespace InternConnect.Service.Main
 
         public IEnumerable<LogsDto.ReadLogs> GetLogs(int adminId)
         {
-            var logsList = _logsRepository.GetAll().Where(log => log.AdminId == adminId);
+            var logsList = _logsRepository.GetAll().Where(log => log.AdminId == adminId).ToList();
             var mappedList = new List<LogsDto.ReadLogs>();
             foreach (var log in logsList) mappedList.Add(_mapper.Map<LogsDto.ReadLogs>(log));
-            var submissionData = _submissionRepository.GetAllRelatedData().ToList();
+            var submissionList = _submissionRepository.GetAllRelatedData().ToList();
             foreach (var log in mappedList)
-            {
+            foreach (var submission in submissionList.Where(s => s.Id == log.SubmissionId).ToList())
                 log.Submission =
-                    _mapper.Map<SubmissionDto.ReadSubmission>(submissionData.First(s => s.Id == log.SubmissionId));
-            }
+                    _mapper.Map<SubmissionDto.ReadSubmission>(submission);
+
+            foreach (var log in mappedList)
+                if (mappedList.Last(l => l.SubmissionId == log.SubmissionId) == log)
+                    log.Status = LogStatus(log.Submission.AdminResponse.Id);
+                else
+                    log.Status = "Rejected";
+
+
             return mappedList;
+        }
+
+        private string LogStatus(int responseId)
+        {
+            var responseData = _submissionRepository.GetAllRelatedData().First(s => s.AdminResponse.Id == responseId)
+                .AdminResponse;
+
+            if (responseData.AcceptedByCoordinator == null && responseData.AcceptedByChair == null)
+                return Status.StatusList.NEW_SUBMISSION.ToString();
+            if (responseData.AcceptedByCoordinator == true && responseData.AcceptedByChair == null)
+                return Status.StatusList.ACCEPTEDBYCOORDINATOR.ToString();
+            if (responseData.AcceptedByChair == true && responseData.AcceptedByDean == null)
+                return Status.StatusList.ACCEPTEDBYCHAIR.ToString();
+            if (responseData.AcceptedByDean == true && responseData.EmailSentByCoordinator == null)
+                return Status.StatusList.ACCEPTEDBYDEAN.ToString();
+            if (responseData.EmailSentByCoordinator == true && responseData.CompanyAgrees == null)
+                return Status.StatusList.EMAILSENTTOCOMPANY.ToString();
+            if (responseData.CompanyAgrees == true) return Status.StatusList.COMPANYAGREES.ToString();
+
+            return "Error";
         }
     }
 }

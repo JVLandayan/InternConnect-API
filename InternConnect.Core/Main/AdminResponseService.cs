@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using InternConnect.Context;
 using InternConnect.Context.Models;
@@ -46,14 +44,21 @@ namespace InternConnect.Service.Main
             int adminId)
         {
             var responseData = _adminResponseRepository.Get(payload.Id);
+
             _mapper.Map(payload, responseData);
             if (payload.AcceptedByCoordinator)
-            {
-                _logsRepository.Add(new Logs()
-                    { DateStamped = DateTime.Now, AdminId = adminId, SubmissionId = responseData.SubmissionId });
-            }
+                _logsRepository.Add(new Logs
+                    {DateStamped = DateTime.Now, AdminId = adminId, SubmissionId = responseData.SubmissionId});
             _context.SaveChanges();
-            _mailerService.NotifyChair(responseData.SubmissionId, adminId, payload.AcceptedByCoordinator);
+            try
+            {
+                _mailerService.NotifyChair(responseData.SubmissionId, adminId, payload.AcceptedByCoordinator);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public void UpdateCompanyAgrees(AdminResponseDto.UpdateCompanyAgreesResponse payload)
@@ -61,7 +66,15 @@ namespace InternConnect.Service.Main
             var responseData = _adminResponseRepository.Get(payload.Id);
             _mapper.Map(payload, responseData);
             _context.SaveChanges();
-            _mailerService.NotifyStudentCompanyApproves(responseData.SubmissionId, payload.CompanyAgrees);
+            try
+            {
+                _mailerService.NotifyStudentCompanyApproves(responseData.SubmissionId, payload.CompanyAgrees);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public void UpdateEmailSent(AdminResponseDto.UpdateEmailSentResponse payload)
@@ -69,7 +82,15 @@ namespace InternConnect.Service.Main
             var responseData = _adminResponseRepository.Get(payload.Id);
             _mapper.Map(payload, responseData);
             _context.SaveChanges();
-            _mailerService.NotifyStudentEmailSent(responseData.SubmissionId, payload.EmailSentByCoordinator);
+            try
+            {
+                _mailerService.NotifyStudentEmailSent(responseData.SubmissionId, payload.EmailSentByCoordinator);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
 
@@ -78,13 +99,18 @@ namespace InternConnect.Service.Main
             var responseData = _adminResponseRepository.Get(payload.Id);
             _mapper.Map(payload, responseData);
             if (payload.AcceptedByDean)
-            {
                 _logsRepository.Add(new Logs
-                    { DateStamped = DateTime.Now, AdminId = adminId, SubmissionId = responseData.SubmissionId });
-            }
+                    {DateStamped = DateTime.Now, AdminId = adminId, SubmissionId = responseData.SubmissionId});
             _context.SaveChanges();
-            _mailerService.NotifyCoordAndIgaarp(responseData.SubmissionId, payload.AcceptedByDean);
-
+            try
+            {
+                _mailerService.NotifyCoordAndIgaarp(responseData.SubmissionId, payload.AcceptedByDean);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
 
@@ -93,39 +119,15 @@ namespace InternConnect.Service.Main
             var responseData = _adminResponseRepository.Get(payload.Id);
             _mapper.Map(payload, responseData);
             _context.SaveChanges();
-            _mailerService.NotifyDean(responseData.SubmissionId, payload.AcceptedByChair);
+            try
+            {
+                _mailerService.NotifyDean(responseData.SubmissionId, payload.AcceptedByChair);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
-
-        //public IEnumerable<AdminResponseDto.ReadResponse> GetAllEntriesByStep(int stepNumber)
-        //{
-        //    var responseList = _adminResponseRepository.GetAll().Where(ar => ar.AcceptedByCoordinator == null);
-
-        //    if (stepNumber == 2)
-        //        responseList = _adminResponseRepository.GetAll()
-        //            .Where(ar => ar.AcceptedByCoordinator == true && ar.AcceptedByChair == null);
-        //    if (stepNumber == 3)
-        //        responseList = _adminResponseRepository.GetAll()
-        //            .Where(ar => ar.AcceptedByChair == true && ar.AcceptedByDean == null);
-        //    if (stepNumber == 4)
-        //        responseList = _adminResponseRepository.GetAll()
-        //            .Where(ar => ar.AcceptedByDean == true && ar.EmailSentByCoordinator == null);
-        //    if (stepNumber == 5)
-        //        responseList = _adminResponseRepository.GetAll()
-        //            .Where(ar => ar.EmailSentByCoordinator == true && ar.CompanyAgrees == null);
-
-        //    var mappedList = new List<AdminResponseDto.ReadResponse>();
-        //    foreach (var response in responseList) mappedList.Add(_mapper.Map<AdminResponseDto.ReadResponse>(response));
-
-        //    return mappedList;
-        //}
-
-        //public IEnumerable<AdminResponseDto.ReadResponse> GetAllEntries()
-        //{
-        //    var responseList = _adminResponseRepository.GetAll();
-        //    var mappedList = new List<AdminResponseDto.ReadResponse>();
-        //    foreach (var response in responseList) mappedList.Add(_mapper.Map<AdminResponseDto.ReadResponse>(response));
-
-        //    return mappedList;
-        //}
     }
 }

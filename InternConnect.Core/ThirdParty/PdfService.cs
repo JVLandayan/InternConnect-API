@@ -66,7 +66,8 @@ namespace InternConnect.Service.ThirdParty
             var academicYearData = _academicYearRepository.GetAll().First();
             var pdfStateData = _pdfStateRepository.GetAll().First();
             var deanData = _adminRepository.GetAll().Where(a => a.AuthId == 1).First();
-            var coordinatorData = _adminRepository.GetAll().Where(a => a.SectionId != null).ToList().Find(a => a.SectionId == submissionData.Student.SectionId);
+            var coordinatorData = _adminRepository.GetAll().Where(a => a.SectionId != null).ToList()
+                .Find(a => a.SectionId == submissionData.Student.SectionId);
 
 
             var contentType = "application/pdf";
@@ -636,7 +637,7 @@ namespace InternConnect.Service.ThirdParty
 
         public ActionResult PreviewPdf(ControllerBase controller, int adminId)
         {
-            var adminData = _adminRepository.GetAllAdminsWithRelatedData().First(a=>a.Id == adminId);
+            var adminData = _adminRepository.GetAllAdminsWithRelatedData().First(a => a.Id == adminId);
             var academicYearData = _academicYearRepository.GetAll().First();
             var pdfStateData = _pdfStateRepository.GetAll().First();
 
@@ -678,7 +679,7 @@ namespace InternConnect.Service.ThirdParty
                         .SetFont(headerFont);
                     var subHeaderTwo =
                         new Text(
-                                $"Department Of Information Technology")
+                                "Department Of Information Technology")
                             .SetFont(subHeaderFont);
                     var pHead = new Paragraph().Add(header).SetTextAlignment(TextAlignment.CENTER);
                     var pSubHeadOne = new Paragraph().Add(subHeaderOne).SetTextAlignment(TextAlignment.CENTER);
@@ -718,7 +719,7 @@ namespace InternConnect.Service.ThirdParty
 
                     var isoCode =
                         new Text(
-                            $"UST:A022-09-LE100");
+                            "UST:A022-09-LE100");
                     var academicYear =
                         new Text(
                             $"AY {academicYearData.StartDate.ToString("yyyy")} - {academicYearData.EndDate.ToString("yyyy")}");
@@ -736,24 +737,24 @@ namespace InternConnect.Service.ThirdParty
 
                     document.Add(new Paragraph()
                         .Add(new Text(
-                                $"Mr. Juana Delos Reyes")
+                                "Mr. Juana Delos Reyes")
                             .SetFontSize(11))
                         .SetTextAlignment(TextAlignment.LEFT).SetMarginBottom(0f).SetFixedLeading(7.0f));
                     document.Add(new Paragraph()
-                        .Add(new Text($"Hr Manager").SetFontSize(11))
+                        .Add(new Text("Hr Manager").SetFontSize(11))
                         .SetTextAlignment(TextAlignment.LEFT).SetMarginBottom(0f).SetFixedLeading(7.0f));
-                    document.Add(new Paragraph().Add(new Text($"Accenture").SetFontSize(11))
+                    document.Add(new Paragraph().Add(new Text("Accenture").SetFontSize(11))
                         .SetTextAlignment(TextAlignment.LEFT).SetMarginBottom(0f).SetFixedLeading(7.0f));
 
 
-                        document.Add(new Paragraph().Add(new Text($"Address One").SetFontSize(11))
-                            .SetMarginBottom(0f).SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
-                        document.Add(new Paragraph().Add(new Text($"Address Two").SetFontSize(11))
-                            .SetMarginBottom(0f).SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
-                        document.Add(new Paragraph().Add(new Text($"Address Three").SetFontSize(11))
-                            .SetMarginBottom(11.0f).SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
+                    document.Add(new Paragraph().Add(new Text("Address One").SetFontSize(11))
+                        .SetMarginBottom(0f).SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
+                    document.Add(new Paragraph().Add(new Text("Address Two").SetFontSize(11))
+                        .SetMarginBottom(0f).SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
+                    document.Add(new Paragraph().Add(new Text("Address Three").SetFontSize(11))
+                        .SetMarginBottom(11.0f).SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
 
-                        //document.Add(new Paragraph().Add(new Text("AddressOne").SetFontSize(11))
+                    //document.Add(new Paragraph().Add(new Text("AddressOne").SetFontSize(11))
                     //    .SetMarginBottom(11.0f).SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
                     //document.Add(new Paragraph().Add(new Text("AddressTwo").SetFontSize(11))
                     //    .SetMarginBottom(11.0f).SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
@@ -762,15 +763,15 @@ namespace InternConnect.Service.ThirdParty
 
                     document.Add(new Paragraph()
                         .Add(new Text(
-                                $"Dear Mr. Delos Reyes")
+                                "Dear Mr. Delos Reyes")
                             .SetFontSize(11))
                         .SetMarginBottom(11.0f).SetTextAlignment(TextAlignment.LEFT));
 
                     document.Add(new Paragraph().Add(new Text(
-                            $"This is to recommend Mr. Juan Rizal. Kapitana, " +
-                            $"a bona fide student of section 4ITH of the College of Information and Computing Sciences of the University of Santo Tomas to take an Internship or  Practicum  Course  " +
+                            "This is to recommend Mr. Juan Rizal. Kapitana, " +
+                            "a bona fide student of section 4ITH of the College of Information and Computing Sciences of the University of Santo Tomas to take an Internship or  Practicum  Course  " +
                             $"this  {academicYearData.StartDate.ToString("MMMM")}  –  {academicYearData.EndDate.ToString("MMMM")}  {academicYearData.EndDate.ToString("yyyy")}  in  your  reputable  company.  As  part  of  our Outcomes-Based Education curriculum requirements " +
-                            $"in the  B. S. Information Technology program, said  student  must  undertake  a  minimum  of  750  hours  of  relevant  company  " +
+                            "in the  B. S. Information Technology program, said  student  must  undertake  a  minimum  of  750  hours  of  relevant  company  " +
                             "or  industry immersion. ").SetFontSize(11)).SetTextAlignment(TextAlignment.JUSTIFIED)
                         .SetFixedLeading(11.0f).SetMarginBottom(11.0f));
 
@@ -781,7 +782,7 @@ namespace InternConnect.Service.ThirdParty
                                       "to solve  computing problems; and/or  to  work  and  communicate  " +
                                       "effectively  in  a project involving a multidisciplinary team; and " +
                                       "to be updated with the latest trends and emerging  technologies in " +
-                                      $"his field of study. Since said student is pursuing a track in Web and Mobile Development, please assign said student in any combination of activities " +
+                                      "his field of study. Since said student is pursuing a track in Web and Mobile Development, please assign said student in any combination of activities " +
                                       "in line with the same track and other computer related activities except " +
                                       "encoding or clerical work. If possible, please allow our student to consult with his " +
                                       "assigned supervisor to conceptualize an industry-based research problem. This will enable our " +
@@ -885,7 +886,6 @@ namespace InternConnect.Service.ThirdParty
                     writer.Close();
                     var content = ms.ToArray();
                     return new FileContentResult(content, contentType);
-
                 }
             }
             catch (Exception e)

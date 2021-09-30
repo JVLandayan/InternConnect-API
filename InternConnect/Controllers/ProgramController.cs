@@ -81,7 +81,5 @@ namespace InternConnect.Controllers
             _programService.DeleteProgram(id);
             return NoContent();
         }
-
-
     }
 }

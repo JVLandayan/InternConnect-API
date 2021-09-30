@@ -62,10 +62,7 @@ namespace InternConnect.Controllers
         {
             var accountData = _accountService.AddStudents(payload);
             //if (accountData.Id == 0) return BadRequest("Email already exists");
-            if (accountData.Count == 0)
-            {
-                return Ok();
-            }
+            if (accountData.Count == 0) return Ok();
 
             return Ok(accountData);
         }

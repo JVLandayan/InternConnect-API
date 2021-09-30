@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using InternConnect.Dto.AdminResponse;
+﻿using InternConnect.Dto.AdminResponse;
 using InternConnect.Service.Main;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -80,17 +78,13 @@ namespace InternConnect.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "Dean")]
+        //[Authorize(Roles = "Dean")]
         [HttpPut("dean/{adminId}")]
         public ActionResult<AdminResponseDto.ReadResponse> UpdateAcceptanceByDean(
             AdminResponseDto.UpdateDeanResponse payload, int adminId)
         {
             _adminResponseService.UpdateAcceptanceByDean(payload, adminId);
-
-
             return NoContent();
         }
-
-
     }
 }

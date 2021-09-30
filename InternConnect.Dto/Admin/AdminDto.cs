@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using InternConnect.Context.Models;
-using InternConnect.Dto.Account;
+﻿using InternConnect.Dto.Account;
 using InternConnect.Dto.Program;
 using InternConnect.Dto.Section;
 

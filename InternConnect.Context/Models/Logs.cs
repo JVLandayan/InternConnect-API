@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InternConnect.Context.Models
 {
@@ -9,5 +10,7 @@ namespace InternConnect.Context.Models
         public DateTime DateStamped { get; set; }
         public int AdminId { get; set; }
         public Admin Admin { get; set; }
+        [NotMapped]
+        public string Status { get; set; }
     }
 }

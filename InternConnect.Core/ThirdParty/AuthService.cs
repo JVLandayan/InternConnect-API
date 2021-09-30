@@ -100,7 +100,15 @@ namespace InternConnect.Service.ThirdParty
             {
                 accountData.ResetKey = TokenConfig(Guid.NewGuid().ToString());
                 _context.SaveChanges();
-                _mailerService.Onboard(accountData);
+                try
+                {
+                    _mailerService.Onboard(accountData);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
             }
 
             return accountData;
