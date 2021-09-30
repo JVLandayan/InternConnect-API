@@ -64,6 +64,7 @@ namespace InternConnect.Service.Main
             var sectionData = _sectionRepository.Find(s => s.Id == payload.Id).First();
             _mapper.Map(payload, sectionData);
             _context.SaveChanges();
+
         }
     }
 }
