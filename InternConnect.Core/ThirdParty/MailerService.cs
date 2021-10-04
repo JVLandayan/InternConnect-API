@@ -1,9 +1,11 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
+using InternConnect.Dto.Event;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
@@ -38,12 +40,12 @@ namespace InternConnect.Service.ThirdParty
         public void Onboard(Account accountData);
 
         public void ChangeDean(string oldEmail, string newEmail, string resetkey);
+
+        public void NotifyStudentEvent(List<Student> studentList, EventDto.AddEvent payload);
     }
 
     public class MailerService : IMailerService
     {
-        private const string MailSubjectAdmin = "Student Submission For Endorsement Letter Request";
-        private const string MailSubjectStudent = "Endorsement Letter Request Update";
         private readonly IAcademicYearRepository _academicYearRepository;
         private readonly IAdminRepository _adminRepository;
         private readonly IConfiguration _configuration;
@@ -203,6 +205,16 @@ namespace InternConnect.Service.ThirdParty
             SendMail(accountData.Email, mailText, "Reset Password Link");
         }
 
+        public void NotifyStudentEvent(List<Student> studentList, EventDto.AddEvent payload)
+        {
+            var message
+            var mailText 
+            foreach (var student in studentList)
+            {
+                SendMail(student.Account.Email,"","");
+            }
+        }
+
 
         private string ReadHtml(string fileName)
         {
@@ -224,5 +236,7 @@ namespace InternConnect.Service.ThirdParty
             mail.IsBodyHtml = true;
             client.Send(mail);
         }
+
+
     }
 }

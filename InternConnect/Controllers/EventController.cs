@@ -35,10 +35,10 @@ namespace InternConnect.Controllers
         }
 
         [Authorize(Roles = "Chair")]
-        [HttpPost]
-        public ActionResult<EventDto.ReadEvent> AddEvent(EventDto.AddEvent payload)
+        [HttpPost("{adminId}")]
+        public ActionResult<EventDto.ReadEvent> AddEvent(EventDto.AddEvent payload, int adminId)
         {
-            var eventData = _eventsService.AddEvent(payload);
+            var eventData = _eventsService.AddEvent(payload, adminId);
             return CreatedAtRoute(nameof(GetEvent), new {eventData.Id}, eventData);
         }
 

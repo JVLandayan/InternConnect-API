@@ -9,7 +9,6 @@ namespace InternConnect.Dto.Event
         {
             public int Id { get; set; }
             public string Name { get; set; }
-            public DateTime StartDate { get; set; }
             public DateTime EndDate { get; set; }
             public int AdminId { get; set; }
         }
@@ -17,8 +16,6 @@ namespace InternConnect.Dto.Event
         public class AddEvent
         {
             [Required] public string Name { get; set; }
-
-            [Required] public DateTime StartDate { get; set; }
 
             [Required] public DateTime EndDate { get; set; }
 
@@ -30,8 +27,6 @@ namespace InternConnect.Dto.Event
             [Required] public int Id { get; set; }
 
             [Required] public string Name { get; set; }
-
-            [Required] public DateTime StartDate { get; set; }
 
             [Required] public DateTime EndDate { get; set; }
         }

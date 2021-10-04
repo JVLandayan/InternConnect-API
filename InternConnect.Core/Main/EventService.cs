@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
 using InternConnect.Dto.Event;
+using InternConnect.Service.ThirdParty;
 
 namespace InternConnect.Service.Main
 {
@@ -12,7 +14,7 @@ namespace InternConnect.Service.Main
     {
         public IEnumerable<EventDto.ReadEvent> GetAll(int adminId);
         public EventDto.ReadEvent GetbyId(int id);
-        public EventDto.ReadEvent AddEvent(EventDto.AddEvent payload);
+        public EventDto.ReadEvent AddEvent(EventDto.AddEvent payload, int adminId);
         public void UpdateEvent(EventDto.UpdateEvent payload);
 
         public void DeleteEvent(int id);
@@ -22,20 +24,29 @@ namespace InternConnect.Service.Main
     {
         private readonly InternConnectContext _context;
         private readonly IEventRepository _eventsRepository;
+        private readonly IMailerService _mailerService;
+        private readonly IStudentRepository _studentRepository;
+        private readonly IAdminRepository _adminRepository;
         private readonly IMapper _mapper;
 
-        public EventService(IMapper mapper, InternConnectContext context, IEventRepository events)
+        public EventService(IMapper mapper, InternConnectContext context, IEventRepository events, IMailerService mailerService, IStudentRepository studentRepository, IAdminRepository adminRepository)
         {
             _mapper = mapper;
             _context = context;
             _eventsRepository = events;
+            _mailerService = mailerService;
+            _studentRepository = studentRepository;
+            _adminRepository = adminRepository;
         }
 
-        public EventDto.ReadEvent AddEvent(EventDto.AddEvent payload)
+        public EventDto.ReadEvent AddEvent(EventDto.AddEvent payload,int adminId)
         {
             var payloadData = _mapper.Map<Event>(payload);
+            payloadData.StartDate = DateTime.Now;
             _eventsRepository.Add(payloadData);
             _context.SaveChanges();
+            var studentList = _studentRepository.GetAll().Where(s => s.ProgramId == _adminRepository.Get(adminId).ProgramId);
+            _mailerService.NotifyStudentEvent(studentList.ToList(), payload);
 
             return _mapper.Map<EventDto.ReadEvent>(payloadData);
         }
