@@ -181,6 +181,19 @@ namespace InternConnect
             });
 
 
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider =
+                    new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "resources")),
+                RequestPath = "/resources"
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider =
+                    new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "resources/moa")),
+                RequestPath = "/resources/moa"
+            });
+
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
