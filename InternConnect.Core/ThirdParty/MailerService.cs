@@ -96,11 +96,11 @@ namespace InternConnect.Service.ThirdParty
 
             if (isAccepted && adminResponses.Count == 10)
             {
-                if (adminResponses.Count == 10) SendMail(chairData.Account.Email, mailToAdmin, MailSubjectAdmin);
+                if (adminResponses.Count == 10) SendMail(chairData.Account.Email, mailToAdmin, "");
             }
             else
             {
-                SendMail(submissionData.Student.Account.Email, failText, MailSubjectStudent);
+                SendMail(submissionData.Student.Account.Email, failText, "");
             }
         }
 
@@ -115,9 +115,9 @@ namespace InternConnect.Service.ThirdParty
 
             if (isAccepted)
                 if (responseData.Count == 10)
-                    SendMail(deanData.Account.Email, mailText, MailSubjectAdmin);
+                    SendMail(deanData.Account.Email, mailText, "");
             var submissionData = _submissionRepository.GetAllRelatedData().First(s => s.Id == submissionId);
-            SendMail(submissionData.Student.Account.Email, failText, MailSubjectStudent);
+            SendMail(submissionData.Student.Account.Email, failText, "");
         }
 
         public void NotifyCoordAndIgaarp(int submissionId, bool isAccepted)
@@ -136,7 +136,7 @@ namespace InternConnect.Service.ThirdParty
 
             if (isAccepted)
             {
-                SendMail(accountData.Email, mailToAdmin, MailSubjectAdmin);
+                SendMail(accountData.Email, mailToAdmin, "");
 
                 #region MailToIgaarp
 
@@ -156,7 +156,7 @@ namespace InternConnect.Service.ThirdParty
                 #endregion
             }
 
-            SendMail(accountDataStudent.Email, isAccepted ? mailToStudent : failText, MailSubjectStudent);
+            SendMail(accountDataStudent.Email, isAccepted ? mailToStudent : failText, "");
         }
 
         public void NotifyStudentEmailSent(int submissionId, bool isAccepted)
@@ -165,7 +165,7 @@ namespace InternConnect.Service.ThirdParty
             var failText = ReadHtml("status-disapproved");
             var submissionData = _submissionRepository.GetAllRelatedData().First(s => s.Id == submissionId);
             SendMail(submissionData.Student.Account.Email, isAccepted ? mailText : failText,
-                MailSubjectStudent);
+                "");
         }
 
         public void NotifyStudentCompanyApproves(int submissionId, bool isAccepted)
@@ -174,7 +174,7 @@ namespace InternConnect.Service.ThirdParty
             var failText = ReadHtml("status-disapproved");
             var submissionData = _submissionRepository.GetAllRelatedData().First(s => s.Id == submissionId);
             SendMail(submissionData.Student.Account.Email, isAccepted ? mailText : failText,
-                MailSubjectStudent);
+                "");
         }
 
         public void ForgotPassword(Account accountData)
@@ -207,8 +207,8 @@ namespace InternConnect.Service.ThirdParty
 
         public void NotifyStudentEvent(List<Student> studentList, EventDto.AddEvent payload)
         {
-            var message
-            var mailText 
+            //var message
+            //var mailText 
             foreach (var student in studentList)
             {
                 SendMail(student.Account.Email,"","");

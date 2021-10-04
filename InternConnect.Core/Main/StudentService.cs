@@ -37,7 +37,7 @@ namespace InternConnect.Service.Main
         public StudentDto.ReadStudent GetById(int id)
         {
             return _mapper.Map<StudentDto.ReadStudent>(_studentRepository.GetAllStudentWithRelatedData()
-                .First(s => s.Id == id);
+                .First(s => s.Id == id));
         }
     }
 }
