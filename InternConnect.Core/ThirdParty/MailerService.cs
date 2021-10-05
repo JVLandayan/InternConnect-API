@@ -52,11 +52,12 @@ namespace InternConnect.Service.ThirdParty
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _env;
         private readonly IPdfService _pdfService;
+        private readonly IAdminResponseRepository _adminResponseRepository;
         private readonly ISubmissionRepository _submissionRepository;
 
         public MailerService(IAdminRepository adminRepository, ISubmissionRepository submissionRepository,
             IAcademicYearRepository academicYear, IConfiguration configuration, IWebHostEnvironment environment,
-            IPdfService pdfService)
+            IPdfService pdfService, IAdminResponseRepository adminResponse)
         {
             _adminRepository = adminRepository;
             _submissionRepository = submissionRepository;
@@ -64,6 +65,7 @@ namespace InternConnect.Service.ThirdParty
             _configuration = configuration;
             _env = environment;
             _pdfService = pdfService;
+            _adminResponseRepository = adminResponse;
         }
 
         public SmtpClient SmtpConfiguration()
@@ -81,21 +83,29 @@ namespace InternConnect.Service.ThirdParty
         {
             var adminData = _adminRepository.GetAllAdminsWithRelatedData().First(a => a.SectionId == sectionId);
             var mailText = ReadHtml("submission-new");
+            mailText = mailText.Replace("[new-submission]",
+                $"{_configuration["ClientAppUrl"]}/admin/new-submissions");
             SendMail(adminData.Account.Email, mailText, "You have a new endorsement request");
         }
 
         public void NotifyChair(int submissionId, int adminId, bool isAccepted)
         {
             var mailToAdmin = ReadHtml("submission-final");
+            mailToAdmin = mailToAdmin.Replace("[final-submission]",
+                $"{_configuration["ClientAppUrl"]}/admin/final-submissions");
+
             var failText = ReadHtml("status-disapproved");
+            failText = failText.Replace("[view-status]",
+                $"{_configuration["ClientAppUrl"]}/status");
+
             var coordinatorData = _adminRepository.GetAllAdminsWithRelatedData().First(a => a.Id == adminId);
             var chairData = _adminRepository.GetAllAdminsWithRelatedData()
                 .First(a => a.AuthId == 2 && a.ProgramId == coordinatorData.ProgramId);
             var submissionData = _submissionRepository.GetAllRelatedData().First(s => s.Id == submissionId);
-            var adminResponses = _submissionRepository.GetAllRelatedData().Where(s =>
-                s.AdminResponse.AcceptedByCoordinator == true && s.AdminResponse.AcceptedByChair == null).ToList();
+            var adminResponses = _adminResponseRepository.GetAll().Where(a =>
+                a.AcceptedByCoordinator == true && a.AcceptedByChair == null).ToList();
 
-            if (isAccepted && adminResponses.Count == 10)
+            if (isAccepted)
             {
                 if (adminResponses.Count == 10) SendMail(chairData.Account.Email, mailToAdmin, "You currently have a lot of requests today");
             }
@@ -108,11 +118,16 @@ namespace InternConnect.Service.ThirdParty
         public void NotifyDean(int submissionId, bool isAccepted)
         {
             var mailText = ReadHtml("submission-final");
+            mailText = mailText.Replace("[final-submission]",
+                $"{_configuration["ClientAppUrl"]}/admin/pending-submissions");
+
             var failText = ReadHtml("status-disapproved");
+            failText = failText.Replace("[view-status]",
+                $"{_configuration["ClientAppUrl"]}/status");
 
             var deanData = _adminRepository.GetAllAdminsWithRelatedData().First(a => a.AuthId == 1);
-            var responseData = _submissionRepository.GetAllRelatedData().Where(s =>
-                s.AdminResponse.AcceptedByChair == true && s.AdminResponse.AcceptedByDean == null).ToList();
+            var responseData = _adminResponseRepository.GetAll().Where(s =>
+                s.AcceptedByChair == true && s.AcceptedByDean == null).ToList();
 
             if (isAccepted)
                 if (responseData.Count == 10)
@@ -124,9 +139,18 @@ namespace InternConnect.Service.ThirdParty
         public void NotifyCoordAndIgaarp(int submissionId, bool isAccepted)
         {
             var mailToAdmin = ReadHtml("submission-pending");
+            mailToAdmin = mailToAdmin.Replace("[pending-submission]",
+                $"{_configuration["ClientAppUrl"]}/admin/pending-submissions");
+
             var mailToStudent = ReadHtml("status-signed");
+            mailToStudent = mailToStudent.Replace("[view-status]",
+                $"{_configuration["ClientAppUrl"]}/status");
+
             var mailToIgaarp = ReadHtml("submission-igaarp");
+
             var failText = ReadHtml("status-disapproved");
+            failText = failText.Replace("[view-status]",
+                $"{_configuration["ClientAppUrl"]}/status");
 
             var submissionData = _submissionRepository.GetAllRelatedData().First(s => s.Id == submissionId);
             var coordinatorData = _adminRepository.GetAllAdminsWithRelatedData()
@@ -163,7 +187,11 @@ namespace InternConnect.Service.ThirdParty
         public void NotifyStudentEmailSent(int submissionId, bool isAccepted)
         {
             var mailText = ReadHtml("status-senttocompany");
+            mailText = mailText.Replace("[view-status]",
+                $"{_configuration["ClientAppUrl"]}/status");
             var failText = ReadHtml("status-disapproved");
+            failText = failText.Replace("[view-status]",
+                $"{_configuration["ClientAppUrl"]}/status");
             var submissionData = _submissionRepository.GetAllRelatedData().First(s => s.Id == submissionId);
             SendMail(submissionData.Student.Account.Email, isAccepted ? mailText : failText,
                 isAccepted ? "Your endorsement letter has been sent to the company" : "Sorry, your request was disapproved");
@@ -172,7 +200,11 @@ namespace InternConnect.Service.ThirdParty
         public void NotifyStudentCompanyApproves(int submissionId, bool isAccepted)
         {
             var mailText = ReadHtml("status-accepted");
+            mailText = mailText.Replace("[view-status]",
+                $"{_configuration["ClientAppUrl"]}/status");
             var failText = ReadHtml("status-disapproved");
+            failText = failText.Replace("[view-status]",
+                $"{_configuration["ClientAppUrl"]}/status");
             var submissionData = _submissionRepository.GetAllRelatedData().First(s => s.Id == submissionId);
             SendMail(submissionData.Student.Account.Email, isAccepted ? mailText : failText,
                 isAccepted? "Congrats! Your endorsement is accepted": "Sorry, your request was disapproved");
@@ -209,12 +241,13 @@ namespace InternConnect.Service.ThirdParty
         public void NotifyStudentEvent(List<Student> studentList, EventDto.AddEvent payload)
         {
             //var message
-            var mailText = ReadHtml("events");
             string template;
+                var mailText = ReadHtml("events");
+            template = mailText.Replace("[[-insert-event-name-here]]", payload.Name);
+            template = template.Replace("[MM-DD-YYYY]", payload.EndDate.ToString("MMMM dd, yyyy"));
             //var mailText 
             foreach (var student in studentList)
             {
-                template = mailText.Replace("[[-insert-event-name-here]]", payload.Name);
                 SendMail(student.Account.Email, template, "Event reminder");
             }
         }

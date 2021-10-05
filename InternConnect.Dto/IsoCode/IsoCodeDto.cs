@@ -43,7 +43,8 @@ namespace InternConnect.Dto.IsoCode
         public class TransferIsoCode
         {
             public int Id { get; set; }
-            public int AdminId { get; set; }
+            public int Code { get; set; }
+            public int ProgramId { get; set; }
         }
 
         public class UpdateIsoCode

@@ -45,7 +45,7 @@ namespace InternConnect.Service.Main
             payloadData.StartDate = DateTime.Now;
             _eventsRepository.Add(payloadData);
             _context.SaveChanges();
-            var studentList = _studentRepository.GetAll().Where(s => s.ProgramId == _adminRepository.Get(adminId).ProgramId);
+            var studentList = _studentRepository.GetAllStudentWithRelatedData().Where(s => s.ProgramId == _adminRepository.Get(adminId).ProgramId);
             _mailerService.NotifyStudentEvent(studentList.ToList(), payload);
 
             return _mapper.Map<EventDto.ReadEvent>(payloadData);

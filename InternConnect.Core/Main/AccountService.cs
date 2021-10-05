@@ -7,8 +7,10 @@ using AutoMapper;
 using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
+using InternConnect.Dto;
 using InternConnect.Dto.Account;
 using InternConnect.Service.ThirdParty;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 
 namespace InternConnect.Service.Main
@@ -24,7 +26,7 @@ namespace InternConnect.Service.Main
         public List<AccountDto.ReadAccount> GetAll();
         public void DeleteAll();
         public Account GetById(int id);
-        public void ChangeDean(string oldEmail, string newEmail, int accountId);
+        public Account ChangeDean(ChangeDeanModel payload);
     }
 
     public class AccountService : IAccountService
@@ -198,18 +200,29 @@ namespace InternConnect.Service.Main
             return _accountRepository.Get(id);
         }
 
-        public void ChangeDean(string oldEmail, string newEmail, int accountId)
+        public Account ChangeDean(ChangeDeanModel payload)
         {
-            var accountData = GetById(accountId);
-            try
+            var accountData =_accountRepository.GetAll().First(a =>
+                a.Email == payload.OldEmail.ToUpper() && a.Password == HashPassword(payload.Password));
+
+            if (accountData != null)
             {
-                _mailerService.ChangeDean(oldEmail, newEmail, accountData.ResetKey);
+                try
+                {
+                    _mailerService.ChangeDean(payload.OldEmail, payload.NewEmail, accountData.ResetKey);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+
+                return null;
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            return new Account();
+            
+
+
         }
 
         public List<AccountDto.AddAccountStudent> AddStudents(List<AccountDto.AddAccountStudent> payload)

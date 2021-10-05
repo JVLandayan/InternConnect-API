@@ -105,10 +105,16 @@ namespace InternConnect.Controllers
 
         [Authorize(Roles = "Dean")]
         [HttpPost("changedean")]
-        public ActionResult ChangeDean(ChangeDeanModel payload)
+        public ActionResult<string> ChangeDean(ChangeDeanModel payload)
         {
-            _accountService.ChangeDean(payload.OldEmail, payload.NewEmail, payload.AccountId);
-            return NoContent();
+            var accountData = _accountService.ChangeDean(payload);
+
+            if (accountData == null)
+            {
+                return Ok("Email sent to the new Dean");
+            }
+
+            return BadRequest("Invalid password, please try again");
         }
     }
 }

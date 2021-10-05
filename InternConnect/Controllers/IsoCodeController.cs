@@ -45,10 +45,15 @@ namespace InternConnect.Controllers
 
         [Authorize(Roles = "Chair")]
         [HttpPost]
-        public ActionResult<AdminResponseDto.ReadResponse> AddIsoCodes(IList<IsoCodeDto.AddIsoCode> payload)
+        public ActionResult<IsoCodeDto.AddIsoCode> AddIsoCodes(IList<IsoCodeDto.AddIsoCode> payload)
         {
-            _isoCodeService.BulkAdd(payload);
+            var isoCodeData = _isoCodeService.BulkAdd(payload);
+            if (isoCodeData != null)
+            {
+                return BadRequest($"{isoCodeData.Code} already exists. Please try again");
+            }
             return NoContent();
+
         }
 
         [Authorize(Roles = "Chair")]
@@ -59,11 +64,19 @@ namespace InternConnect.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "Chair,Coordinator")]
-        [HttpPut("transfer/{adminId}")]
-        public ActionResult<IsoCodeDto.ReadIsoCode> TransferIsoCode(IList<IsoCodeDto.ReadIsoCode> payload, int adminId)
+        [Authorize(Roles = "Chair")]
+        [HttpPut("transfertocoordinator/{adminId}")]
+        public ActionResult<IsoCodeDto.ReadIsoCode> TransferIsoCodeToCoordinator(IList<IsoCodeDto.TransferIsoCode> payload, int adminId)
         {
-            _isoCodeService.TransferIsocode(payload,adminId);
+            _isoCodeService.TransferIsocodeToCoordinator(payload,adminId);
+            return NoContent();
+        }
+
+        [Authorize(Roles = "Coordinator")]
+        [HttpPut("transfertochair/{programId}")]
+        public ActionResult<IsoCodeDto.ReadIsoCode> TransferIsoCodeToChair(IList<IsoCodeDto.TransferIsoCode> payload, int programId)
+        {
+            _isoCodeService.TransferIsocodeToChair(payload, programId);
             return NoContent();
         }
     }
