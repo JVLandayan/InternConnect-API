@@ -51,7 +51,7 @@ namespace InternConnect.Controllers
             return Ok(_submissionService.GetSubmissionsByStep(stepNumber));
         }
 
-        [Authorize(Roles = "Student")]
+        //[Authorize(Roles = "Student")]
         [HttpPut]
         public ActionResult<SubmissionDto.ReadSubmission> UpdateSubmission(SubmissionDto.UpdateSubmission payload)
         {

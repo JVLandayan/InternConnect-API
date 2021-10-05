@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using AutoMapper;
 using InternConnect.Context;
 using InternConnect.Context.Models;
@@ -11,7 +12,7 @@ namespace InternConnect.Service.Main
     public interface IAdminResponseService
     {
         public void UpdateAcceptanceByCoordinator(AdminResponseDto.UpdateAcceptanceOfCoordinatorResponse payload,
-            int adminId);
+            int adminId, int isoCode);
 
         public void UpdateEmailSent(AdminResponseDto.UpdateEmailSentResponse payload);
         public void UpdateCompanyAgrees(AdminResponseDto.UpdateCompanyAgreesResponse payload);
@@ -28,27 +29,35 @@ namespace InternConnect.Service.Main
         private readonly InternConnectContext _context;
         private readonly ILogsRepository _logsRepository;
         private readonly IMailerService _mailerService;
+        private readonly ISubmissionRepository _submissionRepository;
+        private readonly IIsoCodeRepository _isoCodeRepository;
         private readonly IMapper _mapper;
 
         public AdminResponseService(InternConnectContext context, IMapper mapper,
-            IAdminResponseRepository adminResponse, ILogsRepository logsRepository, IMailerService mailerService)
+            IAdminResponseRepository adminResponse, ILogsRepository logsRepository, IMailerService mailerService, ISubmissionRepository submissionRepository, IIsoCodeRepository isoCodeRepository)
         {
             _context = context;
             _mapper = mapper;
             _adminResponseRepository = adminResponse;
             _logsRepository = logsRepository;
             _mailerService = mailerService;
+            _submissionRepository = submissionRepository;
+            _isoCodeRepository = isoCodeRepository;
         }
 
         public void UpdateAcceptanceByCoordinator(AdminResponseDto.UpdateAcceptanceOfCoordinatorResponse payload,
-            int adminId)
+            int adminId, int isoCode)
         {
             var responseData = _adminResponseRepository.Get(payload.Id);
-
             _mapper.Map(payload, responseData);
             if (payload.AcceptedByCoordinator)
                 _logsRepository.Add(new Logs
                     {DateStamped = DateTime.Now, AdminId = adminId, SubmissionId = responseData.SubmissionId});
+            var submissionData = _submissionRepository.Get(responseData.SubmissionId);
+            submissionData.IsoCode = isoCode;
+            var isoCodeData = _isoCodeRepository.GetAll().First(a => a.Code == isoCode);
+            isoCodeData.Used = true;
+            isoCodeData.SubmissionId = submissionData.Id;
             _context.SaveChanges();
             try
             {

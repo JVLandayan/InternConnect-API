@@ -4,14 +4,16 @@ using InternConnect.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InternConnect.Context.Migrations
 {
     [DbContext(typeof(InternConnectContext))]
-    partial class InternConnectContextModelSnapshot : ModelSnapshot
+    [Migration("20211004074457_AddIsoCodeTableToDB")]
+    partial class AddIsoCodeTableToDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -241,9 +243,6 @@ namespace InternConnect.Context.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AdminId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Code")
                         .HasColumnType("int");
 
@@ -257,8 +256,6 @@ namespace InternConnect.Context.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AdminId");
 
                     b.HasIndex("ProgramId");
 
@@ -350,6 +347,9 @@ namespace InternConnect.Context.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("IsoCode")
+                        .HasColumnType("int");
 
                     b.Property<string>("IsoCodeProgramNumber")
                         .HasColumnType("nvarchar(max)");
@@ -601,19 +601,11 @@ namespace InternConnect.Context.Migrations
 
             modelBuilder.Entity("InternConnect.Context.Models.IsoCode", b =>
                 {
-                    b.HasOne("InternConnect.Context.Models.Admin", "Admin")
-                        .WithMany("IsoCodes")
-                        .HasForeignKey("AdminId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("InternConnect.Context.Models.Program", "Program")
                         .WithMany("IsoCodes")
                         .HasForeignKey("ProgramId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Admin");
 
                     b.Navigation("Program");
                 });
@@ -705,8 +697,6 @@ namespace InternConnect.Context.Migrations
             modelBuilder.Entity("InternConnect.Context.Models.Admin", b =>
                 {
                     b.Navigation("Events");
-
-                    b.Navigation("IsoCodes");
 
                     b.Navigation("Logs");
                 });

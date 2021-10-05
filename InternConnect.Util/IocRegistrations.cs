@@ -28,10 +28,11 @@ namespace InternConnect.Util
             services.AddScoped<IAdminResponseRepository, AdminResponseRepository>();
             services.AddScoped<IAdminResponseService, AdminResponseService>();
 
+            services.AddScoped<IIsoCodeRepository, IsoCodeRepository>();
+            services.AddScoped<IIsoCodeService, IsoCodeService>();
 
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<ICompanyService, CompanyService>();
-
 
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<IEventService, EventService>();
@@ -45,6 +46,7 @@ namespace InternConnect.Util
 
             services.AddScoped<IPdfStateRepository, PdfStateRepository>();
             services.AddScoped<IPdfStateService, PdfStateService>();
+
 
 
             services.AddScoped<IProgramRepository, ProgramRepository>();
@@ -72,7 +74,6 @@ namespace InternConnect.Util
             services.AddScoped<IPdfService, PdfService>();
             services.AddScoped<IUploadService, UploadService>();
             services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IJwtUtils, JwtUtils>();
 
             return services;
         }

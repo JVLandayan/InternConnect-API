@@ -25,26 +25,24 @@ namespace InternConnect.Service.Main
 
     public class SubmissionService : ISubmissionService
     {
-        private readonly IAdminResponseRepository _adminResponseRepository;
         private readonly ICompanyRepository _companyRepository;
         private readonly InternConnectContext _context;
         private readonly IMailerService _mailerService;
         private readonly IMapper _mapper;
         private readonly IProgramService _programService;
-        private readonly IStudentService _studentService;
         private readonly ISubmissionRepository _submissionRepository;
 
         public SubmissionService(ISubmissionRepository submission, IMapper mapper,
-            InternConnectContext context, IAdminResponseRepository adminResponse, IMailerService mailerService,
+            InternConnectContext context, IMailerService mailerService,
             IProgramService programService,
-            IStudentService studentService, ICompanyRepository companyRepository)
+             ICompanyRepository companyRepository)
         {
             _mapper = mapper;
             _context = context;
             _submissionRepository = submission;
-            _adminResponseRepository = adminResponse;
+
             _mailerService = mailerService;
-            _studentService = studentService;
+
             _programService = programService;
             _companyRepository = companyRepository;
         }
@@ -54,11 +52,8 @@ namespace InternConnect.Service.Main
         {
             var submissionData = _mapper.Map<Submission>(payload);
             var studentProgram = _programService.GetById(programId);
-            var submissionList = _submissionRepository.GetAllRelatedData().Where(s => s.Student.ProgramId == programId)
-                .ToList();
             if (studentProgram.NumberOfHours == null || studentProgram.IsoCode == null ||
                 studentProgram.IsoCodeProgramNumber == null) return new SubmissionDto.ReadSubmission();
-            submissionData.IsoCode = (int) (submissionList.Count + 1 + studentProgram.IsoCode);
             var adminResponse = new AdminResponse();
             adminResponse.Comments = null;
             submissionData.AdminResponse = adminResponse;
@@ -78,8 +73,6 @@ namespace InternConnect.Service.Main
 
             foreach (var submission in mappedList)
                 submission.Company = _mapper.Map<CompanyDto.ReadCompany>(_companyRepository.Get(submission.CompanyId));
-
-
             return mappedList;
         }
 
@@ -127,16 +120,14 @@ namespace InternConnect.Service.Main
 
         public void UpdateSubmission(SubmissionDto.UpdateSubmission payload)
         {
-            payload.AdminResponse = new AdminResponseDto.AddResponse
-            {
-                AcceptedByChair = null,
-                AcceptedByDean = null,
-                EmailSentByCoordinator = null,
-                AcceptedByCoordinator = null,
-                Comments = null,
-                CompanyAgrees = null
-            };
-            var submissionData = _submissionRepository.Get(payload.Id);
+            var submissionData = _submissionRepository.GetAllRelatedData().Last(s => s.Id == payload.Id);
+            submissionData.AdminResponse.AcceptedByChair = null;
+            submissionData.AdminResponse.AcceptedByCoordinator = null;
+            submissionData.AdminResponse.AcceptedByDean = null;
+            submissionData.AdminResponse.Comments = null;
+            submissionData.AdminResponse.CompanyAgrees = null;
+            submissionData.AdminResponse.EmailSentByCoordinator = null;
+
             _mapper.Map(payload, submissionData);
             _context.SaveChanges();
         }

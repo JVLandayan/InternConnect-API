@@ -26,6 +26,7 @@ namespace InternConnect.Context
         public DbSet<Track> Tracks { get; set; }
         public DbSet<WebState> WebState { get; set; }
         public DbSet<AdminResponse> AdminResponses { get; set; }
+        public DbSet<IsoCode> IsoCode { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

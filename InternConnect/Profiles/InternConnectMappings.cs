@@ -7,6 +7,7 @@ using InternConnect.Dto.AdminLogs;
 using InternConnect.Dto.AdminResponse;
 using InternConnect.Dto.Company;
 using InternConnect.Dto.Event;
+using InternConnect.Dto.IsoCode;
 using InternConnect.Dto.Opportunity;
 using InternConnect.Dto.PdfState;
 using InternConnect.Dto.Program;
@@ -50,7 +51,6 @@ namespace InternConnect.Profiles
             CreateMap<AdminResponse, AdminResponseDto.UpdateEmailSentResponse>().ReverseMap();
             CreateMap<AdminResponse, AdminResponseDto.UpdateAcceptanceOfCoordinatorResponse>().ReverseMap();
             CreateMap<AdminResponse, AdminResponseDto.UpdateCompanyAgreesResponse>().ReverseMap();
-
             CreateMap<AdminResponse, AdminResponseDto.UpdateDeanResponse>().ReverseMap();
 
             //Company
@@ -63,6 +63,12 @@ namespace InternConnect.Profiles
             CreateMap<Event, EventDto.ReadEvent>().ReverseMap();
             CreateMap<Event, EventDto.UpdateEvent>().ReverseMap();
 
+            //IsoCodes
+            CreateMap<IsoCode, IsoCodeDto.AddIsoCode>().ReverseMap();
+            CreateMap<IsoCode, IsoCodeDto.DeleteIsoCode>().ReverseMap();
+            CreateMap<IsoCode, IsoCodeDto.ReadIsoCode>().ReverseMap();
+            CreateMap<IsoCode, IsoCodeDto.TransferIsoCode>().ReverseMap();
+            CreateMap<IsoCode, IsoCodeDto.UpdateIsoCode>().ReverseMap();
 
             //Logs 
             CreateMap<Logs, LogsDto.AddLogs>().ReverseMap();

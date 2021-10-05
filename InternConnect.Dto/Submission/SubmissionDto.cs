@@ -45,12 +45,13 @@ namespace InternConnect.Dto.Submission
             public string ContactPersonFirstName { get; set; }
             public string ContactPersonLastName { get; set; }
             public string ContactPersonEmail { get; set; }
+            public string CompanyProfileFileName { get; set; }  
             public string ContactPersonPosition { get; set; }
             public string AcceptanceLetterFileName { get; set; }
             public string JobDescription { get; set; }
+            public int CompanyId { get; set; }
             public int TrackId { get; set; }
             public int StudentId { get; set; }
-            public AdminResponseDto.AddResponse AdminResponse { get; set; }
         }
 
         public class AddSubmission

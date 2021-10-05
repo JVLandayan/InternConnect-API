@@ -438,7 +438,7 @@ namespace InternConnect.Service.ThirdParty
 
                     var isoCode =
                         new Text(
-                            $"UST:A022-{programList.First(p => p.Id == submissionData.Student.ProgramId).IsoCodeProgramNumber}-LE{programList.First(p => p.Id == submissionData.Student.ProgramId).IsoCode}");
+                            $"UST:A022-{programList.First(p => p.Id == submissionData.Student.ProgramId).IsoCodeProgramNumber}-LE{submissionData.IsoCode}");
                     var academicYear =
                         new Text(
                             $"AY {academicYearData.StartDate.ToString("yyyy")} - {academicYearData.EndDate.ToString("yyyy")}");

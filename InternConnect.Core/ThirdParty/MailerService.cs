@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -80,7 +81,7 @@ namespace InternConnect.Service.ThirdParty
         {
             var adminData = _adminRepository.GetAllAdminsWithRelatedData().First(a => a.SectionId == sectionId);
             var mailText = ReadHtml("submission-new");
-            SendMail(adminData.Account.Email, mailText, "Student Submission For Letter");
+            SendMail(adminData.Account.Email, mailText, "You have a new endorsement request");
         }
 
         public void NotifyChair(int submissionId, int adminId, bool isAccepted)
@@ -96,11 +97,11 @@ namespace InternConnect.Service.ThirdParty
 
             if (isAccepted && adminResponses.Count == 10)
             {
-                if (adminResponses.Count == 10) SendMail(chairData.Account.Email, mailToAdmin, "");
+                if (adminResponses.Count == 10) SendMail(chairData.Account.Email, mailToAdmin, "You currently have a lot of requests today");
             }
             else
             {
-                SendMail(submissionData.Student.Account.Email, failText, "");
+                SendMail(submissionData.Student.Account.Email, failText, "Sorry, your request was disapproved");
             }
         }
 
@@ -115,9 +116,9 @@ namespace InternConnect.Service.ThirdParty
 
             if (isAccepted)
                 if (responseData.Count == 10)
-                    SendMail(deanData.Account.Email, mailText, "");
+                    SendMail(deanData.Account.Email, mailText, "You currently have a lot of requests today");
             var submissionData = _submissionRepository.GetAllRelatedData().First(s => s.Id == submissionId);
-            SendMail(submissionData.Student.Account.Email, failText, "");
+            SendMail(submissionData.Student.Account.Email, failText, "Sorry, your request was disapproved");
         }
 
         public void NotifyCoordAndIgaarp(int submissionId, bool isAccepted)
@@ -136,7 +137,7 @@ namespace InternConnect.Service.ThirdParty
 
             if (isAccepted)
             {
-                SendMail(accountData.Email, mailToAdmin, "");
+                SendMail(accountData.Email, mailToAdmin, "You've received an endorsement letter from the Dean");
 
                 #region MailToIgaarp
 
@@ -146,17 +147,17 @@ namespace InternConnect.Service.ThirdParty
                 var toIgaarp = new MailMessage();
                 toIgaarp.To.Add(ayData.IgaarpEmail);
                 toIgaarp.From = new MailAddress("postmaster@eco-tigers.com");
-                toIgaarp.Subject = "Student Submission For Letter";
+                toIgaarp.Subject = "The CICS Dean recently signed an endorsement letter";
                 toIgaarp.Body = mailToIgaarp;
                 toIgaarp.Attachments.Add(new Attachment(new MemoryStream(content),
-                    $"{submissionData.StudentNumber}.pdf"));
+                    $"{submissionData.Student.Program.Name}_{submissionData.LastName}, {submissionData.FirstName} {submissionData.LastName} {submissionData.MiddleInitial}.pdf"));
                 toIgaarp.IsBodyHtml = true;
                 client.Send(toIgaarp);
 
                 #endregion
             }
 
-            SendMail(accountDataStudent.Email, isAccepted ? mailToStudent : failText, "");
+            SendMail(accountDataStudent.Email, isAccepted ? mailToStudent : failText, isAccepted ? "Your endorsement letter is signed" : "Sorry, your request was disapproved");
         }
 
         public void NotifyStudentEmailSent(int submissionId, bool isAccepted)
@@ -165,7 +166,7 @@ namespace InternConnect.Service.ThirdParty
             var failText = ReadHtml("status-disapproved");
             var submissionData = _submissionRepository.GetAllRelatedData().First(s => s.Id == submissionId);
             SendMail(submissionData.Student.Account.Email, isAccepted ? mailText : failText,
-                "");
+                isAccepted ? "Your endorsement letter has been sent to the company" : "Sorry, your request was disapproved");
         }
 
         public void NotifyStudentCompanyApproves(int submissionId, bool isAccepted)
@@ -174,7 +175,7 @@ namespace InternConnect.Service.ThirdParty
             var failText = ReadHtml("status-disapproved");
             var submissionData = _submissionRepository.GetAllRelatedData().First(s => s.Id == submissionId);
             SendMail(submissionData.Student.Account.Email, isAccepted ? mailText : failText,
-                "");
+                isAccepted? "Congrats! Your endorsement is accepted": "Sorry, your request was disapproved");
         }
 
         public void ForgotPassword(Account accountData)
@@ -184,7 +185,7 @@ namespace InternConnect.Service.ThirdParty
                 $"{_configuration["ClientAppUrl"]}" +
                 $"/forgotpassword?email={accountData.Email}&resetkey={accountData.ResetKey}");
 
-            SendMail(accountData.Email, mailText, "Reset Password Link");
+            SendMail(accountData.Email, mailText, "Password Reset Information");
         }
 
         public void ChangeDean(string oldEmail, string newEmail, string resetkey)
@@ -193,7 +194,7 @@ namespace InternConnect.Service.ThirdParty
                           $"changedean?oldemail={oldEmail}&newemail={newEmail}&resetkey={resetkey}";
             var mailText = ReadHtml("onboarding");
             mailText = mailText.Replace("[onboarding]", message);
-            SendMail(newEmail, mailText, "Reset Password Link");
+            SendMail(newEmail, mailText, "Welcome to InternConnect!");
         }
 
         public void Onboard(Account accountData)
@@ -202,16 +203,19 @@ namespace InternConnect.Service.ThirdParty
                           $"onboard?email={accountData.Email}&resetkey={accountData.ResetKey}";
             var mailText = ReadHtml("onboarding");
             mailText = mailText.Replace("[onboarding]", message);
-            SendMail(accountData.Email, mailText, "Reset Password Link");
+            SendMail(accountData.Email, mailText, "Welcome to InternConnect!");
         }
 
         public void NotifyStudentEvent(List<Student> studentList, EventDto.AddEvent payload)
         {
             //var message
+            var mailText = ReadHtml("events");
+            string template;
             //var mailText 
             foreach (var student in studentList)
             {
-                SendMail(student.Account.Email,"","");
+                template = mailText.Replace("[[-insert-event-name-here]]", payload.Name);
+                SendMail(student.Account.Email, template, "Event reminder");
             }
         }
 
