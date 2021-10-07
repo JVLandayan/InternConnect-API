@@ -36,12 +36,13 @@ namespace InternConnect.Service.Main
         private readonly IAcademicYearRepository _ayRepository;
         private readonly InternConnectContext _context;
         private readonly IMailerService _mailerService;
+        private readonly IIsoCodeRepository _isoCodeRepository;
         private readonly IMapper _mapper;
         private readonly ISectionRepository _sectionRepository;
 
         public AccountService(IAccountRepository account, IMapper mapper,
             InternConnectContext context, IAuthService authService, IAcademicYearRepository ayRepository,
-            ISectionRepository sectionRepository, IMailerService mailerService)
+            ISectionRepository sectionRepository, IMailerService mailerService, IIsoCodeRepository isoCodeRepository)
         {
             _accountRepository = account;
             _mapper = mapper;
@@ -50,6 +51,7 @@ namespace InternConnect.Service.Main
             _ayRepository = ayRepository;
             _sectionRepository = sectionRepository;
             _mailerService = mailerService;
+            _isoCodeRepository = isoCodeRepository;
         }
 
 
@@ -191,6 +193,11 @@ namespace InternConnect.Service.Main
             _sectionRepository.RemoveRange(_sectionRepository.GetAll().ToList());
 
             #endregion
+
+            #region Delete IsoCodes
+            _isoCodeRepository.RemoveRange(_isoCodeRepository.GetAll().ToList());
+            #endregion
+
 
             _context.SaveChanges();
         }

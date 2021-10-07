@@ -13,12 +13,12 @@ namespace InternConnect.Service.Main
 {
     public interface IIsoCodeService
     {
-        public IsoCodeDto.AddIsoCode BulkAdd(IList<IsoCodeDto.AddIsoCode> payload);
         public IList<IsoCodeDto.ReadIsoCode> GetAllByAdminId(int adminId);
         public IList<IsoCodeDto.ReadIsoCode> GetAllByProgramId(int programId);
-        public void TransferIsocodeToCoordinator(IList<IsoCodeDto.TransferIsoCode> payload, int adminId);
+        public IsoCodeDto.AddIsoCode AddIsocodeToCoordinator(IList<IsoCodeDto.AddIsoCode> payload, int adminId);
         public void TransferIsocodeToChair(IList<IsoCodeDto.TransferIsoCode> payload, int programId);
-        public void DeleteIsoCode(IList<IsoCodeDto.ReadIsoCode> payload);
+        public void DeleteIsoCode(int id);
+        public void TransferIsocodeToCoordinator(IsoCodeDto.TransferIsoCode payload, int adminId);
     }
 
     public class IsoCodeService : IIsoCodeService
@@ -36,39 +36,12 @@ namespace InternConnect.Service.Main
             _adminRepository = adminRepository;
         }
 
-        public IsoCodeDto.AddIsoCode BulkAdd(IList<IsoCodeDto.AddIsoCode> payload)
+
+
+        public void DeleteIsoCode(int id)
         {
-            List<IsoCode> isoCodeList = new List<IsoCode>();
-            List<IsoCode> isoCodeListFromDb = _isoCodeRepository.GetAll().Where(i=>i.ProgramId == payload.First().ProgramId).ToList();
-
-            foreach (var item in payload)
-            {
-                if (!isoCodeListFromDb.Exists(a=>a.Code == item.Code))
-                {
-                    isoCodeList.Add(new IsoCode() { AdminId = item.AdminId, SubmissionId = null, ProgramId = item.ProgramId, Code = item.Code });
-                }
-                else
-                {
-                    return item;
-                }
-            }
-            _isoCodeRepository.AddRange(isoCodeList);
+            _isoCodeRepository.Remove(_isoCodeRepository.Get(id));
             _context.SaveChanges();
-            return null;
-        }
-
-        public void DeleteIsoCode(IList<IsoCodeDto.ReadIsoCode> payload)
-        {
-            List<IsoCode> isoCodeList = new List<IsoCode>();
-
-            foreach (var item in payload)
-            {
-                isoCodeList.Add(_isoCodeRepository.Get(item.Id));
-            }
-            _isoCodeRepository.RemoveRange(isoCodeList);
-            _context.SaveChanges();
-
-
         }
 
         public IList<IsoCodeDto.ReadIsoCode> GetAllByAdminId(int adminId)
@@ -111,19 +84,63 @@ namespace InternConnect.Service.Main
             _context.UpdateRange(isoCodeList);
             _context.SaveChanges();
         }
-
-        public void TransferIsocodeToCoordinator(IList<IsoCodeDto.TransferIsoCode> payload, int adminId)
+        public void TransferIsocodeToCoordinator(IsoCodeDto.TransferIsoCode payload, int adminId)
         {
-            List<IsoCode> isoCodeList = new List<IsoCode>();
-            var isoCodeListFromDb = _isoCodeRepository.GetAll().ToList();
-            foreach (var item in payload)
-            {
-                var isoCodeData = isoCodeListFromDb.Find(i => i.Id == item.Id);
-                isoCodeData.AdminId = adminId;
-                isoCodeList.Add(isoCodeData);
-            }
-            _context.UpdateRange(isoCodeList);
+            IsoCode isoCodeData = _isoCodeRepository.Get(payload.Id);
+            isoCodeData.AdminId = adminId;
             _context.SaveChanges();
         }
+
+
+
+        public IsoCodeDto.AddIsoCode AddIsocodeToCoordinator(IList<IsoCodeDto.AddIsoCode> payload, int adminId)
+        {
+            List<IsoCode> isoCodeList = new List<IsoCode>();
+            List<IsoCode> isoCodeListFromDb = _isoCodeRepository.GetAll().Where(i => i.ProgramId == payload.First().ProgramId).ToList();
+            var adminData = _adminRepository.Get(adminId);
+            foreach (var item in payload)
+            {
+                if (!isoCodeListFromDb.Exists(a => a.Code == item.Code))
+                {
+                    isoCodeList.Add(new IsoCode()
+                    {
+                        Code = item.Code,
+                        AdminId = adminId,
+                        ProgramId = (int)adminData.ProgramId,
+                        SubmissionId = null,
+                        Used = false
+                    });
+                }
+                else
+                {
+                    return item;
+                }
+
+            }
+            _context.AddRange(isoCodeList);
+            _context.SaveChanges();
+            return null;
+        }
+
+        //public IsoCodeDto.AddIsoCode BulkAdd(IList<IsoCodeDto.AddIsoCode> payload)
+        //{
+        //    List<IsoCode> isoCodeList = new List<IsoCode>();
+        //    List<IsoCode> isoCodeListFromDb = _isoCodeRepository.GetAll().Where(i => i.ProgramId == payload.First().ProgramId).ToList();
+
+        //    foreach (var item in payload)
+        //    {
+        //        if (!isoCodeListFromDb.Exists(a => a.Code == item.Code))
+        //        {
+        //            isoCodeList.Add(new IsoCode() { AdminId = item.AdminId, SubmissionId = null, ProgramId = item.ProgramId, Code = item.Code });
+        //        }
+        //        else
+        //        {
+        //            return item;
+        //        }
+        //    }
+        //    _isoCodeRepository.AddRange(isoCodeList);
+        //    _context.SaveChanges();
+        //    return null;
+        //}
     }
 }

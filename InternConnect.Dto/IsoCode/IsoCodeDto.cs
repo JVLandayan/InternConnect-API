@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,6 @@ namespace InternConnect.Dto.IsoCode
         {
             public int Code { get; set; }
             public int ProgramId { get; set; }
-            public int AdminId { get; set; }
         }
 
         public class DeleteIsoCode
@@ -42,8 +42,11 @@ namespace InternConnect.Dto.IsoCode
 
         public class TransferIsoCode
         {
+            [Required]
             public int Id { get; set; }
+            [Required]
             public int Code { get; set; }
+            [Required]
             public int ProgramId { get; set; }
         }
 
