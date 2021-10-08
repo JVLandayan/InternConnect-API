@@ -16,7 +16,7 @@ namespace InternConnect.Data.Repositories
 
         public IEnumerable<IsoCode> GetAllCodesWithRelatedData()
         {
-           return Context.Set<IsoCode>().Include(i => i.Program).Include(i=>i.Admin.Account).ToList();
+           return Context.Set<IsoCode>().Include(i => i.Program).Include(i=>i.Admin.Account).Include(i=>i.Admin.Section).ToList();
         }
     }
 }

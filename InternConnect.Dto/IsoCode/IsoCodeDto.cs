@@ -38,6 +38,7 @@ namespace InternConnect.Dto.IsoCode
             public int? SubmissionId { get; set; }
             public int AdminId { get; set; }
             public AdminDto.ReadAdmin Admin { get; set; }
+            public string AdminEmail { get; set; }
         }
 
         public class TransferIsoCode

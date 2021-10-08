@@ -22,6 +22,7 @@ namespace InternConnect.Dto.Admin
 
             public SectionDto.ReadSection Section { get; set; }
             public ProgramDto.ReadProgram Program { get; set; }
+
         }
 
         public class ReadCoordinator

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
+using InternConnect.Dto.Account;
 using InternConnect.Dto.AdminResponse;
 using InternConnect.Dto.IsoCode;
 using InternConnect.Service.ThirdParty;
@@ -27,13 +29,15 @@ namespace InternConnect.Service.Main
         private readonly IMapper _mapper;
         private readonly InternConnectContext _context;
         private readonly IAdminRepository _adminRepository;
+        private readonly IAccountRepository _accountRepository;
 
-        public IsoCodeService(IIsoCodeRepository isoCodeRepository, IMapper mapper, InternConnectContext context, IAdminRepository adminRepository)
+        public IsoCodeService(IIsoCodeRepository isoCodeRepository, IMapper mapper, InternConnectContext context, IAdminRepository adminRepository, IAccountRepository accountRepository)
         {
             _isoCodeRepository = isoCodeRepository;
             _mapper = mapper;
             _context = context;
             _adminRepository = adminRepository;
+            _accountRepository = accountRepository;
         }
 
 
@@ -47,10 +51,16 @@ namespace InternConnect.Service.Main
         public IList<IsoCodeDto.ReadIsoCode> GetAllByAdminId(int adminId)
         {
             var isoCodeList = _isoCodeRepository.GetAllCodesWithRelatedData().Where(i => i.AdminId == adminId);
+            var accountList = _accountRepository.GetAll().ToList();
             IList<IsoCodeDto.ReadIsoCode> mappedList = new List<IsoCodeDto.ReadIsoCode>();
             foreach (var isoCode in isoCodeList)
             {
                 mappedList.Add(_mapper.Map<IsoCodeDto.ReadIsoCode>(isoCode));
+            }
+
+            foreach (var item in mappedList)
+            {
+                item.AdminEmail = accountList.First(a => a.Id == item.Admin.AccountId).Email;
             }
 
             return mappedList;
@@ -59,10 +69,15 @@ namespace InternConnect.Service.Main
         public IList<IsoCodeDto.ReadIsoCode> GetAllByProgramId(int programId)
         {
             var isoCodeList = _isoCodeRepository.GetAllCodesWithRelatedData().Where(i => i.ProgramId == programId);
+            var accountList = _accountRepository.GetAll().ToList();
             IList<IsoCodeDto.ReadIsoCode> mappedList = new List<IsoCodeDto.ReadIsoCode>();
             foreach (var isoCode in isoCodeList)
             {
                 mappedList.Add(_mapper.Map<IsoCodeDto.ReadIsoCode>(isoCode));
+            }
+            foreach (var item in mappedList)
+            {
+                item.AdminEmail = accountList.First(a => a.Id == item.Admin.AccountId).Email;
             }
 
             return mappedList;
