@@ -94,6 +94,8 @@ namespace InternConnect.Service.ThirdParty
             mailToAdmin = mailToAdmin.Replace("[final-submission]",
                 $"{_configuration["ClientAppUrl"]}/admin/final-submissions");
 
+            var mailToStudent = ReadHtml("status-acknowledged");
+
             var failText = ReadHtml("status-disapproved");
             failText = failText.Replace("[view-status]",
                 $"{_configuration["ClientAppUrl"]}/status");
@@ -108,6 +110,7 @@ namespace InternConnect.Service.ThirdParty
             if (isAccepted)
             {
                 if (adminResponses.Count == 10) SendMail(chairData.Account.Email, mailToAdmin, "You currently have a lot of requests today");
+                SendMail(submissionData.Student.Account.Email, mailToStudent, "Some Additional Updates");
             }
             else
             {
@@ -121,6 +124,8 @@ namespace InternConnect.Service.ThirdParty
             mailText = mailText.Replace("[final-submission]",
                 $"{_configuration["ClientAppUrl"]}/admin/pending-submissions");
 
+            var mailToStudent = ReadHtml("status-acknowledged-w-chair");
+
             var failText = ReadHtml("status-disapproved");
             failText = failText.Replace("[view-status]",
                 $"{_configuration["ClientAppUrl"]}/status");
@@ -128,12 +133,21 @@ namespace InternConnect.Service.ThirdParty
             var deanData = _adminRepository.GetAllAdminsWithRelatedData().First(a => a.AuthId == 1);
             var responseData = _adminResponseRepository.GetAll().Where(s =>
                 s.AcceptedByChair == true && s.AcceptedByDean == null).ToList();
+            var submissionData = _submissionRepository.GetAllRelatedData().First(s => s.Id == submissionId);
 
             if (isAccepted)
+            {
                 if (responseData.Count == 10)
+                {
                     SendMail(deanData.Account.Email, mailText, "You currently have a lot of requests today");
-            var submissionData = _submissionRepository.GetAllRelatedData().First(s => s.Id == submissionId);
-            SendMail(submissionData.Student.Account.Email, failText, "Sorry, your request was disapproved");
+                }
+                SendMail(submissionData.Student.Account.Email, mailToStudent, "Some Additional Updates");
+            }
+            else
+            {
+                SendMail(submissionData.Student.Account.Email, failText, "Sorry, your request was disapproved");
+            }
+            
         }
 
         public void NotifyCoordAndIgaarp(int submissionId, bool isAccepted)
