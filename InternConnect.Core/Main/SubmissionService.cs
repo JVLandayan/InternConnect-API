@@ -52,7 +52,7 @@ namespace InternConnect.Service.Main
         {
             var submissionData = _mapper.Map<Submission>(payload);
             var studentProgram = _programService.GetById(programId);
-            if (studentProgram.NumberOfHours == null || studentProgram.IsoCode == null ||
+            if (studentProgram.NumberOfHours == null ||
                 studentProgram.IsoCodeProgramNumber == null) return new SubmissionDto.ReadSubmission();
             var adminResponse = new AdminResponse();
             adminResponse.Comments = null;
