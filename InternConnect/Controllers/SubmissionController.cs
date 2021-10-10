@@ -24,12 +24,12 @@ namespace InternConnect.Controllers
 
         //GET /accounts
         [Authorize]
-        [HttpGet("{id}", Name = "GetSubmission")]
-        public ActionResult<IEnumerable<SubmissionDto.ReadSubmission>> GetSubmission(int id)
+        [HttpGet("{studentId}", Name = "GetSubmission")]
+        public ActionResult<IEnumerable<SubmissionDto.ReadSubmission>> GetSubmissionByStudentId(int studentId)
         {
             try
             {
-                return Ok(_submissionService.GetSubmission(id));
+                return Ok(_submissionService.GetSubmission(studentId));
             }
             catch (Exception e)
             {
@@ -64,7 +64,7 @@ namespace InternConnect.Controllers
         public ActionResult AddSubmission(SubmissionDto.AddSubmission payload, int sectionId, int programId)
         {
             var submissionData = _submissionService.AddSubmission(payload, sectionId, programId);
-            return CreatedAtRoute(nameof(GetSubmission), new {submissionData.Id}, submissionData);
+            return CreatedAtRoute(nameof(GetSubmissionByStudentId), new {submissionData.Id}, submissionData);
         }
     }
 }
