@@ -55,7 +55,7 @@ namespace InternConnect.Service.Main
                     {DateStamped = DateTime.Now, AdminId = adminId, SubmissionId = responseData.SubmissionId});
             var submissionData = _submissionRepository.Get(responseData.SubmissionId);
             submissionData.IsoCode = isoCode;
-            var isoCodeData = _isoCodeRepository.GetAll().First(a => a.Code == isoCode);
+            var isoCodeData = _isoCodeRepository.GetAll().First(a => a.Code == isoCode && a.AdminId == adminId);
             isoCodeData.Used = true;
             isoCodeData.SubmissionId = submissionData.Id;
             _context.SaveChanges();
