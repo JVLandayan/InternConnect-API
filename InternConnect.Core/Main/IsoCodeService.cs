@@ -68,7 +68,7 @@ namespace InternConnect.Service.Main
 
         public IList<IsoCodeDto.ReadIsoCode> GetAllByProgramId(int programId)
         {
-            var isoCodeList = _isoCodeRepository.GetAllCodesWithRelatedData().Where(i => i.ProgramId == programId);
+            var isoCodeList = _isoCodeRepository.GetAllCodesWithRelatedData().Where(i => i.ProgramId == programId && i.Admin.AuthId == 3);
             var accountList = _accountRepository.GetAll().ToList();
             IList<IsoCodeDto.ReadIsoCode> mappedList = new List<IsoCodeDto.ReadIsoCode>();
             foreach (var isoCode in isoCodeList)

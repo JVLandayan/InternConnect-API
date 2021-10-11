@@ -111,15 +111,8 @@ namespace InternConnect.Service.Main
                 _logsRepository.Add(new Logs
                     {DateStamped = DateTime.Now, AdminId = adminId, SubmissionId = responseData.SubmissionId});
             _context.SaveChanges();
-            try
-            {
-                _mailerService.NotifyCoordAndIgaarp(responseData.SubmissionId, payload.AcceptedByDean);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            _mailerService.NotifyCoordAndIgaarp(responseData.SubmissionId, payload.AcceptedByDean);
+
         }
 
 

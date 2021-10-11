@@ -24,7 +24,7 @@ namespace InternConnect.Controllers
 
         //GET /accounts
         [Authorize]
-        [HttpGet("{studentId}", Name = "GetSubmission")]
+        [HttpGet("{studentId}", Name = "GetSubmissionByStudentId")]
         public ActionResult<IEnumerable<SubmissionDto.ReadSubmission>> GetSubmissionByStudentId(int studentId)
         {
             try
@@ -64,7 +64,7 @@ namespace InternConnect.Controllers
         public ActionResult AddSubmission(SubmissionDto.AddSubmission payload, int sectionId, int programId)
         {
             var submissionData = _submissionService.AddSubmission(payload, sectionId, programId);
-            return CreatedAtRoute(nameof(GetSubmissionByStudentId), new {submissionData.Id}, submissionData);
+            return Ok();
         }
     }
 }
