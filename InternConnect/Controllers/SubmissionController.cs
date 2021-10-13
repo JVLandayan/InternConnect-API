@@ -33,7 +33,7 @@ namespace InternConnect.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest("Submission doesn't exist");
+                return Ok(null);
             }
         }
 
