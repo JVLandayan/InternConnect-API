@@ -52,7 +52,7 @@ namespace InternConnect.Service.Main
             _mapper.Map(payload, responseData);
             if (payload.AcceptedByCoordinator)
                 _logsRepository.Add(new Logs
-                    {DateStamped = DateTime.Now, AdminId = adminId, SubmissionId = responseData.SubmissionId});
+                    {DateStamped = GetDate(), AdminId = adminId, SubmissionId = responseData.SubmissionId});
             var submissionData = _submissionRepository.Get(responseData.SubmissionId);
             submissionData.IsoCode = isoCode;
             var isoCodeData = _isoCodeRepository.GetAll().First(a => a.Code == isoCode && a.AdminId == adminId);
@@ -109,7 +109,7 @@ namespace InternConnect.Service.Main
             _mapper.Map(payload, responseData);
             if (payload.AcceptedByDean)
                 _logsRepository.Add(new Logs
-                    {DateStamped = DateTime.Now, AdminId = adminId, SubmissionId = responseData.SubmissionId});
+                    {DateStamped = GetDate(), AdminId = adminId, SubmissionId = responseData.SubmissionId});
             _context.SaveChanges();
             _mailerService.NotifyCoordAndIgaarp(responseData.SubmissionId, payload.AcceptedByDean);
 
@@ -130,6 +130,10 @@ namespace InternConnect.Service.Main
                 Console.WriteLine(e);
                 throw;
             }
+        }
+        private DateTime GetDate()
+        {
+            return TimeZoneInfo.ConvertTime(GetDate(), TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
         }
     }
 }

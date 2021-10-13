@@ -43,7 +43,7 @@ namespace InternConnect.Service.ThirdParty
         public IActionResult GenerateExcel(int[] idList, ControllerBase controller)
         {
             var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            var fileName = $"{DateTime.Now}.xlsx";
+            var fileName = $"{GetDate()}.xlsx";
 
             using (var workBook = new XLWorkbook())
             {
@@ -172,6 +172,11 @@ namespace InternConnect.Service.ThirdParty
                     return controller.File(content, contentType, fileName);
                 }
             }
+        }
+
+        private DateTime GetDate()
+        {
+            return TimeZoneInfo.ConvertTime(GetDate(), TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
         }
     }
 }

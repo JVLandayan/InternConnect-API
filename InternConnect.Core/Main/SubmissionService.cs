@@ -57,7 +57,7 @@ namespace InternConnect.Service.Main
             var adminResponse = new AdminResponse();
             adminResponse.Comments = null;
             submissionData.AdminResponse = adminResponse;
-            submissionData.SubmissionDate = DateTime.Now;
+            submissionData.SubmissionDate = GetDate();
             _submissionRepository.Add(submissionData);
             _context.SaveChanges();
             _mailerService.NotifyCoordinator(sectionId);
@@ -130,6 +130,12 @@ namespace InternConnect.Service.Main
 
             _mapper.Map(payload, submissionData);
             _context.SaveChanges();
+        }
+
+
+        private DateTime GetDate()
+        {
+            return TimeZoneInfo.ConvertTime(GetDate(), TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
         }
     }
 }

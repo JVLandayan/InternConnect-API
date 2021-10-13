@@ -13,8 +13,6 @@ namespace InternConnect.Service.Main
         public void UpdateProgram(ProgramDto.UpdateProgram payload);
         public IEnumerable<ProgramDto.ReadProgram> GetAll();
         public ProgramDto.ReadProgram GetById(int id);
-        public void UpdateIsoCode(ProgramDto.UpdateIsoCode payload);
-        public void UpdateNumberOfHours(ProgramDto.UpdateNumberOfHours payload);
         public void DeleteProgram(int id);
     }
 
@@ -59,28 +57,25 @@ namespace InternConnect.Service.Main
             return _mapper.Map<ProgramDto.ReadProgram>(_programRepository.GetProgramAndTracks(id));
         }
 
-        public void UpdateIsoCode(ProgramDto.UpdateIsoCode payload)
-        {
-            var programData = _programRepository.Get(payload.Id);
-            _mapper.Map(payload, programData);
-            _context.SaveChanges();
-        }
+        //public void UpdateIsoCode(ProgramDto.UpdateIsoCode payload)
+        //{
+        //    var programData = _programRepository.Get(payload.Id);
+        //    _mapper.Map(payload, programData);
+        //    _context.SaveChanges();
+        //}
 
-        public void UpdateNumberOfHours(ProgramDto.UpdateNumberOfHours payload)
-        {
-            var programData = _programRepository.Get(payload.Id);
-            _mapper.Map(payload, programData);
-            _context.SaveChanges();
-        }
+        //public void UpdateNumberOfHours(ProgramDto.UpdateNumberOfHours payload)
+        //{
+        //    var programData = _programRepository.Get(payload.Id);
+        //    _mapper.Map(payload, programData);
+        //    _context.SaveChanges();
+        //}
 
         public void UpdateProgram(ProgramDto.UpdateProgram payload)
         {
             var programData = _programRepository.Get(payload.Id);
             _mapper.Map(payload, programData);
             _context.SaveChanges();
-
-
-
         }
     }
 }

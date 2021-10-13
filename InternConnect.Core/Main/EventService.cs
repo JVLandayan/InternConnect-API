@@ -42,7 +42,7 @@ namespace InternConnect.Service.Main
         public EventDto.ReadEvent AddEvent(EventDto.AddEvent payload,int adminId)
         {
             var payloadData = _mapper.Map<Event>(payload);
-            payloadData.StartDate = DateTime.Now;
+            payloadData.StartDate = GetDate();
             _eventsRepository.Add(payloadData);
             _context.SaveChanges();
             var studentList = _studentRepository.GetAllStudentWithRelatedData().Where(s => s.ProgramId == _adminRepository.Get(adminId).ProgramId);
@@ -77,6 +77,11 @@ namespace InternConnect.Service.Main
             var eventData = _eventsRepository.Get(payload.Id);
             _mapper.Map(payload, eventData);
             _context.SaveChanges();
+        }
+
+        private DateTime GetDate()
+        {
+            return TimeZoneInfo.ConvertTime(GetDate(), TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
         }
     }
 }

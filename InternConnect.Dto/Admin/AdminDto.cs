@@ -1,6 +1,7 @@
 ﻿using InternConnect.Dto.Account;
 using InternConnect.Dto.Program;
 using InternConnect.Dto.Section;
+using System.ComponentModel.DataAnnotations;
 
 namespace InternConnect.Dto.Admin
 {
@@ -8,7 +9,7 @@ namespace InternConnect.Dto.Admin
     {
         public class UpdateAdmin
         {
-            public string StampFileName { get; set; }
+            [Required] public string StampFileName { get; set; }
         }
 
         public class ReadAdmin

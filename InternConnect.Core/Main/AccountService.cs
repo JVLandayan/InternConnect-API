@@ -71,7 +71,7 @@ namespace InternConnect.Service.Main
             {
                 ProgramId = payload.ProgramId,
                 SectionId = payload.SectionId,
-                DateAdded = DateTime.Now,
+                DateAdded = GetDate(),
                 AddedBy = payload.AdminEmail,
                 AuthId = 5
             };
@@ -256,7 +256,7 @@ namespace InternConnect.Service.Main
                     {
                         ProgramId = data.ProgramId,
                         SectionId = data.SectionId,
-                        DateAdded = DateTime.Now,
+                        DateAdded = GetDate(),
                         AddedBy = data.AdminEmail,
                         AuthId = 5
                     };
@@ -286,6 +286,11 @@ namespace InternConnect.Service.Main
             var encodedToken = Encoding.UTF8.GetBytes(token);
             var validToken = WebEncoders.Base64UrlEncode(encodedToken);
             return validToken;
+        }
+
+        private DateTime GetDate()
+        {
+            return TimeZoneInfo.ConvertTime(GetDate(), TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
         }
     }
 }

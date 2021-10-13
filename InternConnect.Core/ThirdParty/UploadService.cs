@@ -29,7 +29,7 @@ namespace InternConnect.Service.ThirdParty
                 {
                     var path = _webHostEnvironment.ContentRootPath + "\\files\\";
                     var fileExtension = Path.GetExtension(uploadedFile.files.FileName);
-                    var fileName = DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + Guid.NewGuid() + fileExtension;
+                    var fileName = GetDate().ToString("yyyy-dd-M--HH-mm-ss") + Guid.NewGuid() + fileExtension;
                     if (!Directory.Exists(path)) Directory.CreateDirectory(path);
 
                     using (var fileStream = File.Create(Path.Combine(path, fileName)))
@@ -56,7 +56,7 @@ namespace InternConnect.Service.ThirdParty
                 {
                     string path;
                     var fileExtension = Path.GetExtension(uploadedFile.files.FileName);
-                    var fileName = DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + Guid.NewGuid() + fileExtension;
+                    var fileName = GetDate().ToString("yyyy-dd-M--HH-mm-ss") + Guid.NewGuid() + fileExtension;
                     if (entity == "company")
                         path = _webHostEnvironment.ContentRootPath + "\\images\\company\\";
                     else if (entity == "logo")
@@ -78,6 +78,11 @@ namespace InternConnect.Service.ThirdParty
             {
                 return e.Message;
             }
+        }
+
+        private DateTime GetDate()
+        {
+            return TimeZoneInfo.ConvertTime(GetDate(), TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
         }
     }
 }

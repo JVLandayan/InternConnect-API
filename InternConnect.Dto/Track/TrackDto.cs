@@ -1,4 +1,6 @@
-﻿namespace InternConnect.Dto.Track
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace InternConnect.Dto.Track
 {
     public class TrackDto
     {
@@ -11,15 +13,15 @@
 
         public class AddTrack
         {
-            public string Name { get; set; }
-            public int ProgramId { get; set; }
+            [Required] public string Name { get; set; }
+            [Required] public int ProgramId { get; set; }
         }
 
         public class UpdateTrack
         {
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public int ProgramId { get; set; }
+            [Required] public int Id { get; set; }
+            [Required] public string Name { get; set; }
+            [Required] public int ProgramId { get; set; }
         }
     }
 }

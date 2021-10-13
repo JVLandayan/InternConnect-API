@@ -50,27 +50,12 @@ namespace InternConnect.Controllers
             return CreatedAtRoute(nameof(GetProgram), new {programData.Id}, programData);
         }
 
-        [Authorize(Roles = "Dean,Chair")]
-        [HttpPut("ISO")]
-        public ActionResult<ProgramDto.ReadProgram> UpdateIsoCode(ProgramDto.UpdateIsoCode payload)
-        {
-            _programService.UpdateIsoCode(payload);
-            return NoContent();
-        }
 
         [Authorize(Roles = "Dean")]
         [HttpPut("program")]
         public ActionResult<ProgramDto.ReadProgram> UpdateProgram(ProgramDto.UpdateProgram payload)
         {
             _programService.UpdateProgram(payload);
-            return NoContent();
-        }
-
-        [Authorize(Roles = "Dean,Chair")]
-        [HttpPut("hours")]
-        public ActionResult<ProgramDto.ReadProgram> UpdateHours(ProgramDto.UpdateNumberOfHours payload)
-        {
-            _programService.UpdateNumberOfHours(payload);
             return NoContent();
         }
 

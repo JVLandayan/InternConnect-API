@@ -71,7 +71,6 @@ namespace InternConnect.Profiles
             CreateMap<IsoCode, IsoCodeDto.UpdateIsoCode>().ReverseMap();
 
             //Logs 
-            CreateMap<Logs, LogsDto.AddLogs>().ReverseMap();
             CreateMap<Logs, LogsDto.ReadLogs>().ReverseMap();
 
             //Opportunity
@@ -88,8 +87,6 @@ namespace InternConnect.Profiles
             CreateMap<Context.Models.Program, ProgramDto.ReadProgram>().ReverseMap();
             CreateMap<Context.Models.Program, ProgramDto.AddProgram>().ReverseMap();
             CreateMap<Context.Models.Program, ProgramDto.UpdateProgram>().ReverseMap();
-            CreateMap<Context.Models.Program, ProgramDto.UpdateIsoCode>().ReverseMap();
-            CreateMap<Context.Models.Program, ProgramDto.UpdateNumberOfHours>().ReverseMap();
 
             //Section
             CreateMap<Section, SectionDto.AddSection>().ReverseMap();

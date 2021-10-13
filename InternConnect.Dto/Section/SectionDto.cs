@@ -22,8 +22,8 @@ namespace InternConnect.Dto.Section
 
         public class AddSection
         {
-            public string Name { get; set; }
-            public int ProgramId { get; set; }
+            [Required] public string Name { get; set; }
+            [Required] public int ProgramId { get; set; }
         }
     }
 }

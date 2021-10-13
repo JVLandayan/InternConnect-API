@@ -160,7 +160,7 @@ namespace InternConnect.Service.ThirdParty
 
 
                     document.Add(new Paragraph()
-                        .Add(new Text($"{DateTime.Now.ToString("MMMM dd, yyyy")}").SetFontSize(11))
+                        .Add(new Text($"{GetDate().ToString("MMMM dd, yyyy")}").SetFontSize(11))
                         .SetMarginBottom(11.0f)
                         .SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
 
@@ -362,7 +362,7 @@ namespace InternConnect.Service.ThirdParty
 
             var contentType = "application/pdf";
             var fileName =
-                $"{submissionData.StudentNumber}-Endorsement-Letter-{DateTime.Now.ToString("MM/dd/yyyy")}.pdf";
+                $"{submissionData.StudentNumber}-Endorsement-Letter-{GetDate().ToString("MM/dd/yyyy")}.pdf";
 
             try
             {
@@ -450,7 +450,7 @@ namespace InternConnect.Service.ThirdParty
 
 
                     document.Add(new Paragraph()
-                        .Add(new Text($"{DateTime.Now.ToString("MMMM dd, yyyy")}").SetFontSize(11))
+                        .Add(new Text($"{GetDate().ToString("MMMM dd, yyyy")}").SetFontSize(11))
                         .SetMarginBottom(11.0f)
                         .SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
 
@@ -643,7 +643,7 @@ namespace InternConnect.Service.ThirdParty
 
             var contentType = "application/pdf";
             var fileName =
-                $"TestPDF-Endorsement-Letter-{DateTime.Now.ToString("MM/dd/yyyy")}.pdf";
+                $"TestPDF-Endorsement-Letter-{GetDate().ToString("MM/dd/yyyy")}.pdf";
 
             try
             {
@@ -731,7 +731,7 @@ namespace InternConnect.Service.ThirdParty
 
 
                     document.Add(new Paragraph()
-                        .Add(new Text($"{DateTime.Now.ToString("MMMM dd, yyyy")}").SetFontSize(11))
+                        .Add(new Text($"{GetDate().ToString("MMMM dd, yyyy")}").SetFontSize(11))
                         .SetMarginBottom(11.0f)
                         .SetTextAlignment(TextAlignment.LEFT).SetFixedLeading(7.0f));
 
@@ -920,6 +920,11 @@ namespace InternConnect.Service.ThirdParty
 
                 pdfCanvas.Release();
             }
+        }
+
+        private DateTime GetDate()
+        {
+            return TimeZoneInfo.ConvertTime(GetDate(), TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
         }
     }
 }
