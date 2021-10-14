@@ -176,7 +176,7 @@ namespace InternConnect.Service.ThirdParty
 
         private DateTime GetDate()
         {
-            return TimeZoneInfo.ConvertTime(GetDate(), TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
+            return TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
         }
     }
 }

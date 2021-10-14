@@ -27,6 +27,7 @@ namespace InternConnect.Controllers
         [HttpGet("{studentId}", Name = "GetSubmissionByStudentId")]
         public ActionResult<IEnumerable<SubmissionDto.ReadSubmission>> GetSubmissionByStudentId(int studentId)
         {
+
             try
             {
                 return Ok(_submissionService.GetSubmission(studentId));
@@ -35,6 +36,7 @@ namespace InternConnect.Controllers
             {
                 return Ok(null);
             }
+
         }
 
 //        [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
