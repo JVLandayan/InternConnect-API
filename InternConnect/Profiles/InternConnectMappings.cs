@@ -101,6 +101,7 @@ namespace InternConnect.Profiles
             CreateMap<Submission, SubmissionDto.AddSubmission>().ReverseMap();
             CreateMap<Submission, SubmissionDto.UpdateSubmission>().ReverseMap();
             CreateMap<Submission, SubmissionDto.ReadSubmission>().ReverseMap();
+            CreateMap<Submission, SubmissionDto.ReadStudentData>().ReverseMap();
 
             //Track
             CreateMap<Track, TrackDto.AddTrack>().ReverseMap();

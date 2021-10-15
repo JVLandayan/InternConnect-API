@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -24,7 +25,7 @@ namespace InternConnect.Service.Main
         public AccountDto.ReadAccount AddTechCoordinator(AccountDto.AddAccountTechCoordinator entity);
         public void Delete(int id);
         public List<AccountDto.ReadAccount> GetAll();
-        public void DeleteAll();
+        public void DeleteAll(string startDate, string endDate);
         public Account GetById(int id);
         public Account ChangeDean(ChangeDeanModel payload);
     }
@@ -37,12 +38,14 @@ namespace InternConnect.Service.Main
         private readonly InternConnectContext _context;
         private readonly IMailerService _mailerService;
         private readonly IIsoCodeRepository _isoCodeRepository;
+        private readonly ILogsRepository _logsRepository;
+        private readonly IEventRepository _eventRepository;
         private readonly IMapper _mapper;
         private readonly ISectionRepository _sectionRepository;
 
         public AccountService(IAccountRepository account, IMapper mapper,
             InternConnectContext context, IAuthService authService, IAcademicYearRepository ayRepository,
-            ISectionRepository sectionRepository, IMailerService mailerService, IIsoCodeRepository isoCodeRepository)
+            ISectionRepository sectionRepository, IMailerService mailerService, IIsoCodeRepository isoCodeRepository, ILogsRepository logsRepository, IEventRepository eventRepository)
         {
             _accountRepository = account;
             _mapper = mapper;
@@ -52,6 +55,8 @@ namespace InternConnect.Service.Main
             _sectionRepository = sectionRepository;
             _mailerService = mailerService;
             _isoCodeRepository = isoCodeRepository;
+            _logsRepository = logsRepository;
+            _eventRepository = eventRepository;
         }
 
 
@@ -166,18 +171,13 @@ namespace InternConnect.Service.Main
             return mappedData;
         }
 
-        public void DeleteAll()
+        public void DeleteAll(string startDate, string endDate)
         {
-            #region Reset Academic Year
-
-            var ayData = _ayRepository.GetAll().First();
-            ayData.EndDate = new DateTime(1111, 1, 1);
-            ayData.StartDate = new DateTime(1111, 1, 1);
-            ayData.IgaarpEmail = "";
-            ayData.CollegeName = "";
-
-            #endregion
-
+            var ayList = _ayRepository.GetAll().First();
+            var ayData = _ayRepository.Get(ayList.Id);
+            ayData.StartDate = DateTime.ParseExact(startDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            ayData.EndDate = DateTime.ParseExact(endDate, "yyyy-MM-dd", CultureInfo.InvariantCulture); ;
+            _context.SaveChanges();
             #region Delete Accounts
 
             var adminList = _accountRepository.GetAllAccountData().Where(acc => acc.Admin != null);
@@ -196,6 +196,20 @@ namespace InternConnect.Service.Main
 
             #region Delete IsoCodes
             _isoCodeRepository.RemoveRange(_isoCodeRepository.GetAll().ToList());
+            #endregion
+
+            #region Delete Logs
+
+            var logsData = _logsRepository.GetAll();
+            _logsRepository.RemoveRange(logsData);
+
+            #endregion
+
+            #region Delete Events
+
+            var eventsData = _eventRepository.GetAll();
+            _eventRepository.RemoveRange(eventsData);
+
             #endregion
 
 

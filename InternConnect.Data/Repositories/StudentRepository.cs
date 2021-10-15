@@ -17,5 +17,11 @@ namespace InternConnect.Data.Repositories
         {
             return Context.Set<Student>().Include(s => s.Account).Include(s => s.Section).Include(s => s.Program).ToList();
         }
+
+        public IEnumerable<Student> GetDataOfStudentsForDashboard()
+        {
+            return Context.Set<Student>().Include(s => s.Account).Include(s => s.Section).Include(s => s.Program)
+                .Include(s => s.Submissions).Include(s=>s.Submissions).ThenInclude(s=>s.AdminResponse);
+        }
     }
 }

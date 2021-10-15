@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using InternConnect.Dto.Account;
+using InternConnect.Dto.AdminResponse;
+using InternConnect.Dto.Company;
 using InternConnect.Dto.Program;
 using InternConnect.Dto.Section;
+using InternConnect.Dto.Submission;
 
 namespace InternConnect.Dto.Student
 {
@@ -19,6 +23,7 @@ namespace InternConnect.Dto.Student
             public int AuthId { get; set; }
             public int AccountId { get; set; }
             public AccountDto.ReadCoordinator Account { get; set; }
+            public IList<SubmissionDto.ReadStudentData> Submissions { get; set; }
         }
 
 

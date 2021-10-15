@@ -34,6 +34,14 @@ namespace InternConnect.Dto.Submission
             public AdminResponseDto.ReadResponse AdminResponse { get; set; }
         }
 
+        public class ReadStudentData
+        {
+            public int CompanyId { get; set; }
+            public AdminResponseDto.ReadResponse AdminResponse { get; set; }
+        }
+
+
+
         public class UpdateSubmission
         {
             public int Id { get; set; }

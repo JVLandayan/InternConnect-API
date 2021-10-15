@@ -8,4 +8,5 @@ namespace InternConnect.Dto.Account
 
         [Required] public string Password { get; set; }
     }
+
 }
