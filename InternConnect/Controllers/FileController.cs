@@ -24,7 +24,7 @@ namespace InternConnect.Controllers
             _pdfService = pdfService;
         }
 
-        //W[Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
+        [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
         [HttpGet("excel")]
         public IActionResult GenerateExcel([FromQuery] int[] ids)
         {
@@ -33,7 +33,7 @@ namespace InternConnect.Controllers
             return _reportService.GenerateExcel(ids, this);
         }
 
-        //[Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
+        [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
         [HttpGet("pdf/{submissionId}")]
         public IActionResult GeneratePdf(int submissionId)
         {
@@ -54,6 +54,7 @@ namespace InternConnect.Controllers
             return _uploadService.UploadImage(entity, this, uploadedFile);
         }
 
+        [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
         [HttpGet("{adminId}/previewPdf")]
         public ActionResult PreviewPdf(int adminId)
         {
