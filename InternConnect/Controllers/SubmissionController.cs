@@ -68,5 +68,11 @@ namespace InternConnect.Controllers
             var submissionData = _submissionService.AddSubmission(payload, sectionId, programId);
             return Ok();
         }
+
+        [HttpGet("dashboard")]
+        public ActionResult<IEnumerable<SubmissionDto.ReadSubmission>> GetSubmissionByHighestNumberOfCompanyOccurence()
+        {
+            return Ok(_submissionService.GetSubmissionByNumberOfCompanyOccurence());
+        }
     }
 }

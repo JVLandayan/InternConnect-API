@@ -34,22 +34,22 @@ namespace InternConnect.Controllers
         }
 
 
-        //Coordinators
-        //Authorize AuthCoordinatorClaim
-        [Authorize(Roles = "Dean,Chair,Tech Coordinator")]
-        [HttpDelete("{id}")]
-        public ActionResult DeleteCompany(int id)
-        {
-            try
-            {
-                _companyService.DeleteCompany(id);
-                return NoContent();
-            }
-            catch (Exception e)
-            {
-                return BadRequest("Company doesn't exist");
-            }
-        }
+        ////Coordinators
+        ////Authorize AuthCoordinatorClaim
+        //[Authorize(Roles = "Dean,Chair,Tech Coordinator")]
+        //[HttpDelete("{id}")]
+        //public ActionResult DeleteCompany(int id)
+        //{
+        //    try
+        //    {
+        //        _companyService.DeleteCompany(id);
+        //        return NoContent();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest("Company doesn't exist");
+        //    }
+        //}
 
         [Authorize(Roles = "Dean,Chair,Tech Coordinator")]
         [HttpPut]

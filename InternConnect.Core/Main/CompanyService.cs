@@ -14,7 +14,7 @@ namespace InternConnect.Service.Main
         public void UpdateCompany(CompanyDto.UpdateCompany payload);
         public CompanyDto.ReadCompany GetById(int id);
         public IEnumerable<CompanyDto.ReadCompany> GetAllCompanies();
-        public void DeleteCompany(int id);
+        //public void DeleteCompany(int id);
     }
 
     public class CompanyService : ICompanyService
@@ -36,18 +36,13 @@ namespace InternConnect.Service.Main
         public CompanyDto.ReadCompany AddCompany(CompanyDto.AddCompany payload)
         {
             var payloadData = _mapper.Map<Company>(payload);
+            payloadData.IsActive = true;
             _companyRepository.Add(payloadData);
             _context.SaveChanges();
 
             return _mapper.Map<CompanyDto.ReadCompany>(payloadData);
         }
 
-        public void DeleteCompany(int id)
-        {
-            _opportunityRepository.RemoveRange(_opportunityRepository.GetAll().Where(o => o.CompanyId == id));
-            _companyRepository.Remove(_companyRepository.Get(id));
-            _context.SaveChanges();
-        }
 
         public IEnumerable<CompanyDto.ReadCompany> GetAllCompanies()
         {

@@ -63,7 +63,7 @@ namespace InternConnect.Service.Main
                 item.AdminEmail = accountList.First(a => a.Id == item.Admin.AccountId).Email;
             }
 
-            return mappedList;
+            return mappedList.OrderBy(l=>l.Code).ToList();
         }
 
         public IList<IsoCodeDto.ReadIsoCode> GetAllByProgramId(int programId)
@@ -80,7 +80,7 @@ namespace InternConnect.Service.Main
                 item.AdminEmail = accountList.First(a => a.Id == item.Admin.AccountId).Email;
             }
 
-            return mappedList;
+            return mappedList.OrderBy(l => l.Code).ToList();
         }
 
         public void TransferIsocodeToChair(IList<IsoCodeDto.TransferIsoCode> payload, int programId)

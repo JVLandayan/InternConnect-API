@@ -17,7 +17,7 @@ namespace InternConnect.Dto.Event
         {
             [Required] public string Name { get; set; }
 
-            [Required] public DateTime EndDate { get; set; }
+            [Required] public string EndDate { get; set; }
 
             [Required] public int AdminId { get; set; }
         }

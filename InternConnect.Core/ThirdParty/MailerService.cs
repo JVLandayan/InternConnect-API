@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -255,10 +256,11 @@ namespace InternConnect.Service.ThirdParty
         public void NotifyStudentEvent(List<Student> studentList, EventDto.AddEvent payload)
         {
             //var message
+            var endDate = DateTime.ParseExact(payload.EndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture).ToString("MMMM dd, yyyy");
             string template;
                 var mailText = ReadHtml("events");
             template = mailText.Replace("[[-insert-event-name-here]]", payload.Name);
-            template = template.Replace("[MM-DD-YYYY]", payload.EndDate.ToString("MMMM dd, yyyy"));
+            template = template.Replace("[MM-DD-YYYY]", endDate);
             //var mailText 
             foreach (var student in studentList)
             {

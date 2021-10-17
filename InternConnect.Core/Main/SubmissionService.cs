@@ -5,6 +5,7 @@ using AutoMapper;
 using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
+using InternConnect.Dto;
 using InternConnect.Dto.AdminResponse;
 using InternConnect.Dto.Company;
 using InternConnect.Dto.Submission;
@@ -21,6 +22,8 @@ namespace InternConnect.Service.Main
         public SubmissionDto.ReadSubmission GetSubmission(int id);
         public IEnumerable<SubmissionDto.ReadSubmission> GetAllSubmissions();
         public IEnumerable<SubmissionDto.ReadSubmission> GetSubmissionsByStep(int stepNumber);
+
+        public IEnumerable<CompanyAndNumberOfStudentModel> GetSubmissionByNumberOfCompanyOccurence();
     }
 
     public class SubmissionService : ISubmissionService
@@ -80,6 +83,13 @@ namespace InternConnect.Service.Main
         {
             return _mapper.Map<SubmissionDto.ReadSubmission>(_submissionRepository.GetAllRelatedData().ToList()
                 .Last(s => s.StudentId == studentId));
+        }
+
+        public IEnumerable<CompanyAndNumberOfStudentModel> GetSubmissionByNumberOfCompanyOccurence()
+        {
+            var submissionList = _submissionRepository.GetAll();
+            return submissionList.GroupBy(x => x.CompanyId).Select(x => new CompanyAndNumberOfStudentModel() { CompanyId = x.Key, NumberOfOccurence = x.Count() });
+
         }
 
         public IEnumerable<SubmissionDto.ReadSubmission> GetSubmissionsByStep(int stepNumber)
