@@ -9,7 +9,7 @@
 
     public class CompanyAndNumberOfStudentModel
     {
-        public int CompanyId { get; set; }
+        public string  CompanyName { get; set; }
         public int NumberOfOccurence { get; set; }
     }
 }

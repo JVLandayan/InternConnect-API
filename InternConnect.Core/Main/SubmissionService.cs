@@ -88,7 +88,7 @@ namespace InternConnect.Service.Main
         public IEnumerable<CompanyAndNumberOfStudentModel> GetSubmissionByNumberOfCompanyOccurence()
         {
             var submissionList = _submissionRepository.GetAll();
-            return submissionList.GroupBy(x => x.CompanyId).Select(x => new CompanyAndNumberOfStudentModel() { CompanyId = x.Key, NumberOfOccurence = x.Count() });
+            return submissionList.GroupBy(x => x.CompanyId).Select(x => new CompanyAndNumberOfStudentModel() { CompanyName =  _companyRepository.Get(x.Key).Name, NumberOfOccurence = x.Count() }).OrderByDescending(c=>c.NumberOfOccurence).ToList();
 
         }
 
