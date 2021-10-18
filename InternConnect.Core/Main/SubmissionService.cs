@@ -6,7 +6,6 @@ using InternConnect.Context;
 using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
 using InternConnect.Dto;
-using InternConnect.Dto.AdminResponse;
 using InternConnect.Dto.Company;
 using InternConnect.Dto.Submission;
 using InternConnect.Service.ThirdParty;
@@ -23,7 +22,7 @@ namespace InternConnect.Service.Main
         public IEnumerable<SubmissionDto.ReadSubmission> GetAllSubmissions();
         public IEnumerable<SubmissionDto.ReadSubmission> GetSubmissionsByStep(int stepNumber);
 
-        public IEnumerable<CompanyAndNumberOfStudentModel> GetSubmissionByNumberOfCompanyOccurence();
+        public IEnumerable<CompanyAndNumberOfStudentModel> GetSubmissionByNumberOfCompanyOccurence(string type, int id);
     }
 
     public class SubmissionService : ISubmissionService
@@ -38,7 +37,7 @@ namespace InternConnect.Service.Main
         public SubmissionService(ISubmissionRepository submission, IMapper mapper,
             InternConnectContext context, IMailerService mailerService,
             IProgramService programService,
-             ICompanyRepository companyRepository)
+            ICompanyRepository companyRepository)
         {
             _mapper = mapper;
             _context = context;
@@ -85,10 +84,35 @@ namespace InternConnect.Service.Main
                 .Last(s => s.StudentId == studentId));
         }
 
-        public IEnumerable<CompanyAndNumberOfStudentModel> GetSubmissionByNumberOfCompanyOccurence()
+        public IEnumerable<CompanyAndNumberOfStudentModel> GetSubmissionByNumberOfCompanyOccurence(string type, int id)
         {
-            var submissionList = _submissionRepository.GetAll();
-            return submissionList.GroupBy(x => x.CompanyId).Select(x => new CompanyAndNumberOfStudentModel() { CompanyName =  _companyRepository.Get(x.Key).Name, NumberOfOccurence = x.Count() }).OrderByDescending(c=>c.NumberOfOccurence).ToList();
+            var submissionList = _submissionRepository.GetAllRelatedData();
+
+            if (type == "whole" && id == 0)
+            {
+                return submissionList.GroupBy(x => x.CompanyId)
+                    .Select(x => new CompanyAndNumberOfStudentModel
+                        { CompanyName = _companyRepository.Get(x.Key).Name, NumberOfOccurence = x.Count() })
+                    .OrderByDescending(c => c.NumberOfOccurence).ToList();
+            }
+
+            if (type == "program")
+            {
+                return submissionList.Where(s=>s.Student.ProgramId == id).GroupBy(x => x.CompanyId)
+                    .Select(x => new CompanyAndNumberOfStudentModel
+                        { CompanyName = _companyRepository.Get(x.Key).Name, NumberOfOccurence = x.Count() })
+                    .OrderByDescending(c => c.NumberOfOccurence).ToList();
+            }
+
+            if (type == "section")
+            {
+                return submissionList.Where(s => s.Student.SectionId == id).GroupBy(x => x.CompanyId)
+                    .Select(x => new CompanyAndNumberOfStudentModel
+                        { CompanyName = _companyRepository.Get(x.Key).Name, NumberOfOccurence = x.Count() })
+                    .OrderByDescending(c => c.NumberOfOccurence).ToList();
+            }
+
+            return null;
 
         }
 
@@ -145,7 +169,8 @@ namespace InternConnect.Service.Main
 
         private DateTime GetDate()
         {
-            return TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
+            return TimeZoneInfo.ConvertTime(DateTime.Now,
+                TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
         }
     }
 }

@@ -15,6 +15,7 @@ namespace InternConnect.Service.Main
 
         public IEnumerable<AdminDto.ReadCoordinator> GetAllCoordinatorByProgram(int programId);
         public IEnumerable<AdminDto.ReadCoordinator> GetAllChairByProgram();
+        public IEnumerable<AdminDto.ReadCoordinator> GetAllTechCoordinators();
     }
 
     public class AdminService : IAdminService
@@ -66,6 +67,14 @@ namespace InternConnect.Service.Main
             var mappedData = new List<AdminDto.ReadCoordinator>();
             foreach (var admin in adminList) mappedData.Add(_mapper.Map<AdminDto.ReadCoordinator>(admin));
             return mappedData;
+        }
+
+        public IEnumerable<AdminDto.ReadCoordinator> GetAllTechCoordinators()
+        {
+            var adminList = _adminRepository.GetAllAdminsWithRelatedData().Where(a => a.AuthId == 4);
+            var mappedData = new List<AdminDto.ReadCoordinator>();
+            foreach (var admin in adminList) mappedData.Add(_mapper.Map<AdminDto.ReadCoordinator>(admin));
+            return mappedData.OrderBy(a=>a.Account.Email);
         }
     }
 }

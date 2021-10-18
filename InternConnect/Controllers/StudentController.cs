@@ -28,10 +28,10 @@ namespace InternConnect.Controllers
         }
         //GET /admin
         [Authorize(Roles = "Dean,Chair,Coordinator,Tech Coordinator")]
-        [HttpGet("dashboard")]
-        public ActionResult<IEnumerable<StudentDto.ReadStudent>> GetAllStudentForDashboard()
+        [HttpGet("dashboard/{type}/{id}")]
+        public ActionResult<IEnumerable<StudentDto.ReadStudent>> GetAllStudentForDashboard(string type, int id)
         {
-            return Ok(_studentService.GetAllForDashboard());
+            return Ok(_studentService.GetAllForDashboard(type, id));
         }
 
         //GET /admin/id

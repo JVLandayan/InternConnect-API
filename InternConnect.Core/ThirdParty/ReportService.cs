@@ -43,7 +43,7 @@ namespace InternConnect.Service.ThirdParty
         public IActionResult GenerateExcel(int[] idList, ControllerBase controller)
         {
             var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            var fileName = $"{GetDate()}.xlsx";
+            var fileName = $"Reports {GetDate()}.xlsx";
 
             using (var workBook = new XLWorkbook())
             {
@@ -163,8 +163,6 @@ namespace InternConnect.Service.ThirdParty
                 worksheet.Rows().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
 
                 #endregion
-
-
                 using (var stream = new MemoryStream())
                 {
                     workBook.SaveAs(stream);

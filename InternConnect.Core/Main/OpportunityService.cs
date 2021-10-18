@@ -54,7 +54,7 @@ namespace InternConnect.Service.Main
             foreach (var opportunity in opportunityList)
                 mappedList.Add(_mapper.Map<OpportunityDto.ReadOpportunity>(opportunity));
 
-            return mappedList;
+            return mappedList.Where(o=>o.Company.IsActive).OrderBy(o=>o.Company.Name);
         }
 
         public IEnumerable<OpportunityDto.ReadOpportunity> GetByCompanyId(int companyId)

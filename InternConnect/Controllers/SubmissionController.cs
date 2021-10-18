@@ -28,7 +28,6 @@ namespace InternConnect.Controllers
         [HttpGet("{studentId}", Name = "GetSubmissionByStudentId")]
         public ActionResult<IEnumerable<SubmissionDto.ReadSubmission>> GetSubmissionByStudentId(int studentId)
         {
-
             try
             {
                 return Ok(_submissionService.GetSubmission(studentId));
@@ -37,7 +36,6 @@ namespace InternConnect.Controllers
             {
                 return Ok(null);
             }
-
         }
 
         [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
@@ -69,11 +67,13 @@ namespace InternConnect.Controllers
             var submissionData = _submissionService.AddSubmission(payload, sectionId, programId);
             return Ok();
         }
+
         [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
-        [HttpGet("dashboard")]
-        public ActionResult<IEnumerable<CompanyAndNumberOfStudentModel>> GetSubmissionByHighestNumberOfCompanyOccurence()
+        [HttpGet("dashboard/{type}/{id}")]
+        public ActionResult<IEnumerable<CompanyAndNumberOfStudentModel>>
+            GetSubmissionByHighestNumberOfCompanyOccurence(string type, int id)
         {
-            return Ok(_submissionService.GetSubmissionByNumberOfCompanyOccurence());
+            return Ok(_submissionService.GetSubmissionByNumberOfCompanyOccurence(type,id));
         }
     }
 }

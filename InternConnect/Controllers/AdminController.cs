@@ -42,6 +42,13 @@ namespace InternConnect.Controllers
             return Ok(_adminService.GetAllChairByProgram());
         }
 
+        [Authorize(Roles = "Dean")]
+        [HttpGet("techcoord")]
+        public ActionResult<IEnumerable<AdminDto.ReadAdmin>> GetAllTechCoordinators()
+        {
+            return Ok(_adminService.GetAllTechCoordinators());
+        }
+
         //GET /admin/id
         [Authorize(Roles = "Dean,Chair,Coordinator")]
         [HttpGet("{id}")]

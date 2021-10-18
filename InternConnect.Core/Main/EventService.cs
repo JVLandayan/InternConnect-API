@@ -13,6 +13,7 @@ namespace InternConnect.Service.Main
     public interface IEventService
     {
         public IEnumerable<EventDto.ReadEvent> GetAll(int adminId);
+        public IEnumerable<EventDto.ReadEvent> GetAllByProgramId(int programId);
         public EventDto.ReadEvent GetbyId(int id);
         public EventDto.ReadEvent AddEvent(EventDto.AddEvent payload, int adminId);
         public void UpdateEvent(EventDto.UpdateEvent payload);
@@ -67,10 +68,22 @@ namespace InternConnect.Service.Main
             return mappedList;
         }
 
+        public IEnumerable<EventDto.ReadEvent> GetAllByProgramId(int programId)
+        {
+            var eventsList = _eventsRepository.GetAllEventsWithAdmin().Where(e => e.Admin.AuthId == 2)
+                .Where(e => e.Admin.ProgramId == programId);
+            var mappedList = new List<EventDto.ReadEvent>();
+
+            foreach (var eventElement in eventsList) mappedList.Add(_mapper.Map<EventDto.ReadEvent>(eventElement));
+            return mappedList;
+        }
+
         public EventDto.ReadEvent GetbyId(int id)
         {
             return _mapper.Map<EventDto.ReadEvent>(_eventsRepository.Get(id));
         }
+
+        
 
         public void UpdateEvent(EventDto.UpdateEvent payload)
         {

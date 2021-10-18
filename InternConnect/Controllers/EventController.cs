@@ -25,6 +25,13 @@ namespace InternConnect.Controllers
             return Ok(_eventsService.GetAll(adminId));
         }
 
+        [Authorize]
+        [HttpGet("student/{programId}")]
+        public ActionResult<IEnumerable<EventDto.ReadEvent>> GetAllEventsByProgramId(int programId)
+        {
+            return Ok(_eventsService.GetAllByProgramId(programId));
+        }
+
         //GET /admin/id
         [Authorize(Roles = "Chair, Coordinator, Student")]
         [HttpGet("{id}", Name = "GetEvent")]

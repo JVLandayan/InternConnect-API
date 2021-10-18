@@ -11,7 +11,7 @@ namespace InternConnect.Service.Main
     {
         public StudentDto.ReadStudent GetById(int id);
         public IEnumerable<StudentDto.ReadStudent> GetAll();
-        public IEnumerable<StudentDto.ReadStudent> GetAllForDashboard();
+        public IEnumerable<StudentDto.ReadStudent> GetAllForDashboard(string type, int id);
     }
 
     public class StudentService : IStudentService
@@ -35,14 +35,32 @@ namespace InternConnect.Service.Main
             return mappedList;
         }
 
-        public IEnumerable<StudentDto.ReadStudent> GetAllForDashboard()
+        public IEnumerable<StudentDto.ReadStudent> GetAllForDashboard(string type, int id)
         {
+
+
+
             var studentList = _studentRepository.GetDataOfStudentsForDashboard().ToList();
             var mappedList = new List<StudentDto.ReadStudent>();
 
             foreach (var student in studentList) mappedList.Add(_mapper.Map<StudentDto.ReadStudent>(student));
 
-            return mappedList;
+            if (type == "program")
+            {
+                return mappedList.Where(s => s.ProgramId == id);
+            }
+            if (type == "section")
+            {
+                return mappedList.Where(s => s.SectionId == id);
+            }
+
+            if (type == "whole" && id == 0)
+            {
+
+                return mappedList;
+            }
+
+            return null;
         }
 
         public StudentDto.ReadStudent GetById(int id)
