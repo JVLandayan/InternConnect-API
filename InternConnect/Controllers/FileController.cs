@@ -54,11 +54,19 @@ namespace InternConnect.Controllers
             return _uploadService.UploadImage(entity, this, uploadedFile);
         }
 
-        [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
+        //[Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
         [HttpGet("{adminId}/previewPdf")]
-        public ActionResult PreviewPdf(int adminId)
+        public IActionResult PreviewPdf(int adminId)
         {
             return _pdfService.PreviewPdf(this, adminId);
+        }
+
+        // z    
+        [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
+        [HttpGet("previewPdf/submission/{submissionId}")]
+        public IActionResult PreviewSubmissionPdf(int submissionId)
+        {
+            return _pdfService.GeneratePreviewPdf(this,submissionId);
         }
     }
 }

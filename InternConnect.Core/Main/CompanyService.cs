@@ -75,6 +75,7 @@ namespace InternConnect.Service.Main
             if (payload.AddressTwo == "") payload.AddressTwo = null;
             if (payload.AddressThree == "") payload.AddressThree = null;
             _mapper.Map(payload, companyData);
+            companyData.IsActive = true;
             _context.SaveChanges();
         }
     }
