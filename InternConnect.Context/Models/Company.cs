@@ -19,5 +19,7 @@ namespace InternConnect.Context.Models
         public string ContactPersonEmail { get; set; }
         public string ContactPersonDesignation { get; set; }
         public string Status { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

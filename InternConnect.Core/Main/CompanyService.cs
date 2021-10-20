@@ -15,6 +15,7 @@ namespace InternConnect.Service.Main
         public CompanyDto.ReadCompany GetById(int id);
         public IEnumerable<CompanyDto.ReadCompany> GetAllCompanies();
         public void UpdateCompanyStatus(CompanyDto.UpdateCompanyStatus payload);
+        public void DeleteCompany(int id);
     }
 
     public class CompanyService : ICompanyService
@@ -37,12 +38,18 @@ namespace InternConnect.Service.Main
         {
             var payloadData = _mapper.Map<Company>(payload);
             payloadData.Status = Status.CompanyStatusList.NEW.ToString();
+            payloadData.IsActive = true;
             _companyRepository.Add(payloadData);
             _context.SaveChanges();
-
             return _mapper.Map<CompanyDto.ReadCompany>(payloadData);
         }
 
+        public void DeleteCompany(int id)
+        {
+            var companyData = _companyRepository.Get(id);
+            companyData.IsActive = false;
+            _context.SaveChanges();
+        }
 
         public IEnumerable<CompanyDto.ReadCompany> GetAllCompanies()
         {
@@ -50,13 +57,13 @@ namespace InternConnect.Service.Main
             var mappedList = new List<CompanyDto.ReadCompany>();
             foreach (var company in companyList) mappedList.Add(_mapper.Map<CompanyDto.ReadCompany>(company));
 
-            return mappedList.OrderBy(c => c.Name).ToList();
+            return mappedList.Where(c=>c.IsActive).OrderBy(c => c.Name).ToList();
         }
 
         public CompanyDto.ReadCompany GetById(int id)
         {
             var companyData = _companyRepository.Get(id);
-            if (companyData.Status == Status.CompanyStatusList.EXPIRED.ToString()) return null;
+            if (companyData.Status == Status.CompanyStatusList.EXPIRED.ToString() || companyData.IsActive == false) return null;
             return _mapper.Map<CompanyDto.ReadCompany>(companyData);
         }
 
@@ -66,6 +73,7 @@ namespace InternConnect.Service.Main
             if (payload.AddressTwo == "") payload.AddressTwo = null;
             if (payload.AddressThree == "") payload.AddressThree = null;
             _mapper.Map(payload, companyData);
+            companyData.IsActive = true;
             _context.SaveChanges();
         }
 

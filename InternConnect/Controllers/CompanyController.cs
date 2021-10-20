@@ -49,6 +49,16 @@ namespace InternConnect.Controllers
             return NoContent();
         }
 
+
+        [Authorize(Roles = "Dean,Chair,Tech Coordinator")]
+        [HttpDelete("{id}")]
+        public ActionResult<CompanyDto.ReadCompany> DeleteCompany(int id)
+        {
+            _companyService.DeleteCompany(id);
+            return NoContent();
+        }
+
+
         [Authorize(Roles = "Dean,Chair,Tech Coordinator")]
         [HttpPost]
         public ActionResult<CompanyDto.ReadCompany> AddCompany(CompanyDto.AddCompany payload)
