@@ -57,6 +57,7 @@ namespace InternConnect.Profiles
             CreateMap<Company, CompanyDto.AddCompany>().ReverseMap();
             CreateMap<Company, CompanyDto.ReadCompany>().ReverseMap();
             CreateMap<Company, CompanyDto.UpdateCompany>().ReverseMap();
+            CreateMap<Company, CompanyDto.UpdateCompanyStatus>().ReverseMap();
 
             //Event
             CreateMap<Event, EventDto.AddEvent>().ReverseMap();

@@ -73,7 +73,7 @@ namespace InternConnect.Controllers
         public ActionResult<IEnumerable<CompanyAndNumberOfStudentModel>>
             GetSubmissionByHighestNumberOfCompanyOccurence(string type, int id)
         {
-            return Ok(_submissionService.GetSubmissionByNumberOfCompanyOccurence(type,id));
+            return Ok(_submissionService.GetSubmissionByNumberOfCompanyOccurence(type, id));
         }
     }
 }

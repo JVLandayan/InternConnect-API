@@ -74,7 +74,7 @@ namespace InternConnect.Service.Main
             var adminList = _adminRepository.GetAllAdminsWithRelatedData().Where(a => a.AuthId == 4);
             var mappedData = new List<AdminDto.ReadCoordinator>();
             foreach (var admin in adminList) mappedData.Add(_mapper.Map<AdminDto.ReadCoordinator>(admin));
-            return mappedData.OrderBy(a=>a.Account.Email);
+            return mappedData.OrderBy(a => a.Account.Email);
         }
     }
 }

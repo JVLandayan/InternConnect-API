@@ -11,5 +11,12 @@
             EMAILSENTTOCOMPANY,
             COMPANYAGREES
         }
+
+        public enum CompanyStatusList
+        {
+            NEW,
+            EXISTING,
+            EXPIRED
+        }
     }
 }

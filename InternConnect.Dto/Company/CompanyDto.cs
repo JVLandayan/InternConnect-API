@@ -19,7 +19,7 @@ namespace InternConnect.Dto.Company
             public string ContactPersonName { get; set; }
             public string ContactPersonEmail { get; set; }
             public string ContactPersonDesignation { get; set; }
-            public bool IsActive { get; set; }
+            public string Status { get; set; }
         }
 
         public class UpdateCompany
@@ -43,7 +43,12 @@ namespace InternConnect.Dto.Company
             public string ContactPersonName { get; set; }
             public string ContactPersonEmail { get; set; }
             public string ContactPersonDesignation { get; set; }
-            public bool IsActive { get; set; }
+        }
+
+        public class UpdateCompanyStatus
+        {
+            [Required] public int Id { get; set; }
+            [Required]public string Status { get; set; }
         }
 
         public class AddCompany

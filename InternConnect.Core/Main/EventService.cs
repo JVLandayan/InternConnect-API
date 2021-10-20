@@ -23,14 +23,15 @@ namespace InternConnect.Service.Main
 
     public class EventService : IEventService
     {
+        private readonly IAdminRepository _adminRepository;
         private readonly InternConnectContext _context;
         private readonly IEventRepository _eventsRepository;
         private readonly IMailerService _mailerService;
-        private readonly IStudentRepository _studentRepository;
-        private readonly IAdminRepository _adminRepository;
         private readonly IMapper _mapper;
+        private readonly IStudentRepository _studentRepository;
 
-        public EventService(IMapper mapper, InternConnectContext context, IEventRepository events, IMailerService mailerService, IStudentRepository studentRepository, IAdminRepository adminRepository)
+        public EventService(IMapper mapper, InternConnectContext context, IEventRepository events,
+            IMailerService mailerService, IStudentRepository studentRepository, IAdminRepository adminRepository)
         {
             _mapper = mapper;
             _context = context;
@@ -40,13 +41,14 @@ namespace InternConnect.Service.Main
             _adminRepository = adminRepository;
         }
 
-        public EventDto.ReadEvent AddEvent(EventDto.AddEvent payload,int adminId)
+        public EventDto.ReadEvent AddEvent(EventDto.AddEvent payload, int adminId)
         {
             var payloadData = _mapper.Map<Event>(payload);
             payloadData.StartDate = GetDate();
             _eventsRepository.Add(payloadData);
             _context.SaveChanges();
-            var studentList = _studentRepository.GetAllStudentWithRelatedData().Where(s => s.ProgramId == _adminRepository.Get(adminId).ProgramId);
+            var studentList = _studentRepository.GetAllStudentWithRelatedData()
+                .Where(s => s.ProgramId == _adminRepository.Get(adminId).ProgramId);
             _mailerService.NotifyStudentEvent(studentList.ToList(), payload);
 
             return _mapper.Map<EventDto.ReadEvent>(payloadData);
@@ -83,7 +85,6 @@ namespace InternConnect.Service.Main
             return _mapper.Map<EventDto.ReadEvent>(_eventsRepository.Get(id));
         }
 
-        
 
         public void UpdateEvent(EventDto.UpdateEvent payload)
         {
@@ -94,7 +95,8 @@ namespace InternConnect.Service.Main
 
         private DateTime GetDate()
         {
-            return TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
+            return TimeZoneInfo.ConvertTime(DateTime.Now,
+                TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
         }
     }
 }

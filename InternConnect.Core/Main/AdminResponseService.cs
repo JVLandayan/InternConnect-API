@@ -27,14 +27,15 @@ namespace InternConnect.Service.Main
     {
         private readonly IAdminResponseRepository _adminResponseRepository;
         private readonly InternConnectContext _context;
+        private readonly IIsoCodeRepository _isoCodeRepository;
         private readonly ILogsRepository _logsRepository;
         private readonly IMailerService _mailerService;
-        private readonly ISubmissionRepository _submissionRepository;
-        private readonly IIsoCodeRepository _isoCodeRepository;
         private readonly IMapper _mapper;
+        private readonly ISubmissionRepository _submissionRepository;
 
         public AdminResponseService(InternConnectContext context, IMapper mapper,
-            IAdminResponseRepository adminResponse, ILogsRepository logsRepository, IMailerService mailerService, ISubmissionRepository submissionRepository, IIsoCodeRepository isoCodeRepository)
+            IAdminResponseRepository adminResponse, ILogsRepository logsRepository, IMailerService mailerService,
+            ISubmissionRepository submissionRepository, IIsoCodeRepository isoCodeRepository)
         {
             _context = context;
             _mapper = mapper;
@@ -112,7 +113,6 @@ namespace InternConnect.Service.Main
                     {DateStamped = GetDate(), AdminId = adminId, SubmissionId = responseData.SubmissionId});
             _context.SaveChanges();
             _mailerService.NotifyCoordAndIgaarp(responseData.SubmissionId, payload.AcceptedByDean);
-
         }
 
 
@@ -131,9 +131,11 @@ namespace InternConnect.Service.Main
                 throw;
             }
         }
+
         private DateTime GetDate()
         {
-            return TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
+            return TimeZoneInfo.ConvertTime(DateTime.Now,
+                TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
         }
     }
 }

@@ -26,6 +26,7 @@ namespace InternConnect.Controllers
         {
             return Ok(_studentService.GetAll());
         }
+
         //GET /admin
         [Authorize(Roles = "Dean,Chair,Coordinator,Tech Coordinator")]
         [HttpGet("dashboard/{type}/{id}")]
@@ -48,7 +49,5 @@ namespace InternConnect.Controllers
                 return BadRequest("Student doesn't exist");
             }
         }
-
-
     }
 }

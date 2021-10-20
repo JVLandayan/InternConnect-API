@@ -11,7 +11,6 @@ using InternConnect.Data.Interfaces;
 using InternConnect.Dto;
 using InternConnect.Dto.Account;
 using InternConnect.Service.ThirdParty;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 
 namespace InternConnect.Service.Main
@@ -36,16 +35,17 @@ namespace InternConnect.Service.Main
         private readonly IAuthService _authService;
         private readonly IAcademicYearRepository _ayRepository;
         private readonly InternConnectContext _context;
-        private readonly IMailerService _mailerService;
+        private readonly IEventRepository _eventRepository;
         private readonly IIsoCodeRepository _isoCodeRepository;
         private readonly ILogsRepository _logsRepository;
-        private readonly IEventRepository _eventRepository;
+        private readonly IMailerService _mailerService;
         private readonly IMapper _mapper;
         private readonly ISectionRepository _sectionRepository;
 
         public AccountService(IAccountRepository account, IMapper mapper,
             InternConnectContext context, IAuthService authService, IAcademicYearRepository ayRepository,
-            ISectionRepository sectionRepository, IMailerService mailerService, IIsoCodeRepository isoCodeRepository, ILogsRepository logsRepository, IEventRepository eventRepository)
+            ISectionRepository sectionRepository, IMailerService mailerService, IIsoCodeRepository isoCodeRepository,
+            ILogsRepository logsRepository, IEventRepository eventRepository)
         {
             _accountRepository = account;
             _mapper = mapper;
@@ -176,8 +176,10 @@ namespace InternConnect.Service.Main
             var ayList = _ayRepository.GetAll().First();
             var ayData = _ayRepository.Get(ayList.Id);
             ayData.StartDate = DateTime.ParseExact(startDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-            ayData.EndDate = DateTime.ParseExact(endDate, "yyyy-MM-dd", CultureInfo.InvariantCulture); ;
+            ayData.EndDate = DateTime.ParseExact(endDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            ;
             _context.SaveChanges();
+
             #region Delete Accounts
 
             var adminList = _accountRepository.GetAllAccountData().Where(acc => acc.Admin != null);
@@ -195,7 +197,9 @@ namespace InternConnect.Service.Main
             #endregion
 
             #region Delete IsoCodes
+
             _isoCodeRepository.RemoveRange(_isoCodeRepository.GetAll().ToList());
+
             #endregion
 
             #region Delete Logs
@@ -223,7 +227,7 @@ namespace InternConnect.Service.Main
 
         public Account ChangeDean(ChangeDeanModel payload)
         {
-            var accountData =_accountRepository.GetAll().First(a =>
+            var accountData = _accountRepository.GetAll().First(a =>
                 a.Email == payload.OldEmail.ToUpper() && a.Password == HashPassword(payload.Password));
 
             if (accountData != null)
@@ -240,10 +244,8 @@ namespace InternConnect.Service.Main
 
                 return null;
             }
+
             return new Account();
-            
-
-
         }
 
         public List<AccountDto.AddAccountStudent> AddStudents(List<AccountDto.AddAccountStudent> payload)
@@ -304,7 +306,8 @@ namespace InternConnect.Service.Main
 
         private DateTime GetDate()
         {
-            return TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
+            return TimeZoneInfo.ConvertTime(DateTime.Now,
+                TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
         }
     }
 }

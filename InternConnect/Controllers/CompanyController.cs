@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using InternConnect.Dto.Company;
 using InternConnect.Service.Main;
 using Microsoft.AspNetCore.Authorization;
@@ -34,28 +33,19 @@ namespace InternConnect.Controllers
         }
 
 
-        //Coordinators
-        //Authorize AuthCoordinatorClaim
-        [Authorize(Roles = "Dean,Chair,Tech Coordinator")]
-        [HttpDelete("status/{id}")]
-        public ActionResult DeleteCompany(int id)
-        {
-            try
-            {
-                _companyService.DeleteCompany(id);
-                return NoContent();
-            }
-            catch (Exception e)
-            {
-                return BadRequest("Company doesn't exist");
-            }
-        }
-
         [Authorize(Roles = "Dean,Chair,Tech Coordinator")]
         [HttpPut]
         public ActionResult<CompanyDto.ReadCompany> UpdateCompany(CompanyDto.UpdateCompany payload)
         {
             _companyService.UpdateCompany(payload);
+            return NoContent();
+        }
+
+        [Authorize(Roles = "Dean,Chair,Tech Coordinator")]
+        [HttpPut("status")]
+        public ActionResult<CompanyDto.ReadCompany> UpdateCompanyStatus(CompanyDto.UpdateCompanyStatus payload)
+        {
+            _companyService.UpdateCompanyStatus(payload);
             return NoContent();
         }
 

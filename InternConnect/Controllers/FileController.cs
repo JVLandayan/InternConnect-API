@@ -66,7 +66,7 @@ namespace InternConnect.Controllers
         [HttpGet("previewPdf/submission/{submissionId}")]
         public IActionResult PreviewSubmissionPdf(int submissionId)
         {
-            return _pdfService.GeneratePreviewPdf(this,submissionId);
+            return _pdfService.GeneratePreviewPdf(this, submissionId);
         }
     }
 }

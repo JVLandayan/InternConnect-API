@@ -37,28 +37,15 @@ namespace InternConnect.Service.Main
 
         public IEnumerable<StudentDto.ReadStudent> GetAllForDashboard(string type, int id)
         {
-
-
-
             var studentList = _studentRepository.GetDataOfStudentsForDashboard().ToList();
             var mappedList = new List<StudentDto.ReadStudent>();
 
             foreach (var student in studentList) mappedList.Add(_mapper.Map<StudentDto.ReadStudent>(student));
 
-            if (type == "program")
-            {
-                return mappedList.Where(s => s.ProgramId == id);
-            }
-            if (type == "section")
-            {
-                return mappedList.Where(s => s.SectionId == id);
-            }
+            if (type == "program") return mappedList.Where(s => s.ProgramId == id);
+            if (type == "section") return mappedList.Where(s => s.SectionId == id);
 
-            if (type == "whole" && id == 0)
-            {
-
-                return mappedList;
-            }
+            if (type == "whole" && id == 0) return mappedList;
 
             return null;
         }

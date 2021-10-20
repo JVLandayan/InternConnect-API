@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using InternConnect.Dto.AdminResponse;
 using InternConnect.Dto.IsoCode;
 using InternConnect.Service.Main;
 using Microsoft.AspNetCore.Authorization;
@@ -19,15 +18,12 @@ namespace InternConnect.Controllers
         }
 
 
-        [Authorize(Roles = "Coordinator,Chair")] 
+        [Authorize(Roles = "Coordinator,Chair")]
         [HttpGet("admin/{adminId}")]
         public ActionResult<IsoCodeDto.ReadIsoCode> GetAllByAdminId(int adminId)
         {
             var isoCodeList = _isoCodeService.GetAllByAdminId(adminId);
-            if (isoCodeList != null)
-            {
-                return Ok(isoCodeList);
-            }
+            if (isoCodeList != null) return Ok(isoCodeList);
             return BadRequest();
         }
 
@@ -36,10 +32,7 @@ namespace InternConnect.Controllers
         public ActionResult<IsoCodeDto.ReadIsoCode> GetAllByProgram(int programId)
         {
             var isoCodeList = _isoCodeService.GetAllByProgramId(programId);
-            if (isoCodeList != null)
-            {
-                return Ok(isoCodeList);
-            }
+            if (isoCodeList != null) return Ok(isoCodeList);
             return BadRequest();
         }
 
@@ -66,27 +59,27 @@ namespace InternConnect.Controllers
 
         [Authorize(Roles = "Chair")]
         [HttpPut("transfertocoordinator/{adminId}")]
-        public ActionResult<IsoCodeDto.ReadIsoCode> TransferIsoCodeToCoordinator(IsoCodeDto.TransferIsoCode payload, int adminId)
+        public ActionResult<IsoCodeDto.ReadIsoCode> TransferIsoCodeToCoordinator(IsoCodeDto.TransferIsoCode payload,
+            int adminId)
         {
-            _isoCodeService.TransferIsocodeToCoordinator(payload,adminId);
+            _isoCodeService.TransferIsocodeToCoordinator(payload, adminId);
             return NoContent();
         }
 
         [Authorize(Roles = "Chair")]
         [HttpPost("addisocode/{adminId}")]
-        public ActionResult<IsoCodeDto.ReadIsoCode> AddIsoCodeToCoordinator(IList<IsoCodeDto.AddIsoCode> payload, int adminId)
+        public ActionResult<IsoCodeDto.ReadIsoCode> AddIsoCodeToCoordinator(IList<IsoCodeDto.AddIsoCode> payload,
+            int adminId)
         {
-            var isoCodeData = _isoCodeService.AddIsocodeToCoordinator(payload,adminId);
-            if (isoCodeData != null)
-            {
-                return BadRequest($"Iso-Code {isoCodeData.Code} already exists. Please try again");
-            }
+            var isoCodeData = _isoCodeService.AddIsocodeToCoordinator(payload, adminId);
+            if (isoCodeData != null) return BadRequest($"Iso-Code {isoCodeData.Code} already exists. Please try again");
             return NoContent();
         }
 
         [Authorize(Roles = "Coordinator")]
         [HttpPut("transfertochair/{programId}")]
-        public ActionResult<IsoCodeDto.ReadIsoCode> TransferIsoCodeToChair(IList<IsoCodeDto.TransferIsoCode> payload, int programId)
+        public ActionResult<IsoCodeDto.ReadIsoCode> TransferIsoCodeToChair(IList<IsoCodeDto.TransferIsoCode> payload,
+            int programId)
         {
             _isoCodeService.TransferIsocodeToChair(payload, programId);
             return NoContent();

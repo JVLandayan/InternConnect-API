@@ -89,31 +89,24 @@ namespace InternConnect.Service.Main
             var submissionList = _submissionRepository.GetAllRelatedData();
 
             if (type == "whole" && id == 0)
-            {
                 return submissionList.GroupBy(x => x.CompanyId)
                     .Select(x => new CompanyAndNumberOfStudentModel
-                        { CompanyName = _companyRepository.Get(x.Key).Name, NumberOfOccurence = x.Count() })
+                        {CompanyName = _companyRepository.Get(x.Key).Name, NumberOfOccurence = x.Count()})
                     .OrderByDescending(c => c.NumberOfOccurence).ToList();
-            }
 
             if (type == "program")
-            {
-                return submissionList.Where(s=>s.Student.ProgramId == id).GroupBy(x => x.CompanyId)
+                return submissionList.Where(s => s.Student.ProgramId == id).GroupBy(x => x.CompanyId)
                     .Select(x => new CompanyAndNumberOfStudentModel
-                        { CompanyName = _companyRepository.Get(x.Key).Name, NumberOfOccurence = x.Count() })
+                        {CompanyName = _companyRepository.Get(x.Key).Name, NumberOfOccurence = x.Count()})
                     .OrderByDescending(c => c.NumberOfOccurence).ToList();
-            }
 
             if (type == "section")
-            {
                 return submissionList.Where(s => s.Student.SectionId == id).GroupBy(x => x.CompanyId)
                     .Select(x => new CompanyAndNumberOfStudentModel
-                        { CompanyName = _companyRepository.Get(x.Key).Name, NumberOfOccurence = x.Count() })
+                        {CompanyName = _companyRepository.Get(x.Key).Name, NumberOfOccurence = x.Count()})
                     .OrderByDescending(c => c.NumberOfOccurence).ToList();
-            }
 
             return null;
-
         }
 
         public IEnumerable<SubmissionDto.ReadSubmission> GetSubmissionsByStep(int stepNumber)

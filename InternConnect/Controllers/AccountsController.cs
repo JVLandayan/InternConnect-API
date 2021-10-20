@@ -109,10 +109,7 @@ namespace InternConnect.Controllers
         {
             var accountData = _accountService.ChangeDean(payload);
 
-            if (accountData == null)
-            {
-                return Ok("Email sent to the new Dean");
-            }
+            if (accountData == null) return Ok("Email sent to the new Dean");
 
             return BadRequest("Invalid password, please try again");
         }
