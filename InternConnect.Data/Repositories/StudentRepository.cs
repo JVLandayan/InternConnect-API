@@ -23,5 +23,10 @@ namespace InternConnect.Data.Repositories
             return Context.Set<Student>().Include(s => s.Account).Include(s => s.Section).Include(s => s.Program)
                 .Include(s => s.Submissions).Include(s=>s.Submissions).ThenInclude(s=>s.AdminResponse);
         }
+
+        public Student GetStudentWithAccountData(int studentId)
+        {
+            return Context.Set<Student>().Include(s => s.Account).SingleOrDefault(s => s.Id == studentId);
+        }
     }
 }

@@ -21,10 +21,7 @@ namespace InternConnect.Context.Models
         //[JsonIgnore]
         //[IgnoreDataMember]
         public Account Account { get; set; }
-
         public List<IsoCode> IsoCodes { get; set; }
-
-        public List<Logs> Logs { get; set; }
         public List<Event> Events { get; set; }
     }
 }

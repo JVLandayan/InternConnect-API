@@ -28,6 +28,8 @@ namespace InternConnect.Service.Main
     public class SubmissionService : ISubmissionService
     {
         private readonly ICompanyRepository _companyRepository;
+        private readonly ILogsRepository _logsRepository;
+        private readonly IStudentRepository _studentRepository;
         private readonly InternConnectContext _context;
         private readonly IMailerService _mailerService;
         private readonly IMapper _mapper;
@@ -37,7 +39,7 @@ namespace InternConnect.Service.Main
         public SubmissionService(ISubmissionRepository submission, IMapper mapper,
             InternConnectContext context, IMailerService mailerService,
             IProgramService programService,
-            ICompanyRepository companyRepository)
+            ICompanyRepository companyRepository, ILogsRepository logsRepository, IStudentRepository studentRepository)
         {
             _mapper = mapper;
             _context = context;
@@ -47,6 +49,8 @@ namespace InternConnect.Service.Main
 
             _programService = programService;
             _companyRepository = companyRepository;
+            _logsRepository = logsRepository;
+            _studentRepository = studentRepository;
         }
 
         public SubmissionDto.ReadSubmission AddSubmission(SubmissionDto.AddSubmission payload, int sectionId,
@@ -62,6 +66,20 @@ namespace InternConnect.Service.Main
             submissionData.SubmissionDate = GetDate();
             _submissionRepository.Add(submissionData);
             _context.SaveChanges();
+
+            var studentData = _studentRepository.GetStudentWithAccountData(payload.StudentId);
+            _logsRepository.Add(new Logs()
+                {
+                    Action =
+                        $"{studentData.Account.Email} CREATED A SUBMISSION",
+                    DateStamped = GetDate(),
+                    SubmissionId = submissionData.Id,
+                    ActorEmail = studentData.Account.Email,
+                    ActorType = _context.Set<Authorization>().Find(studentData.AuthId).Name
+                }
+            );
+            _context.SaveChanges();
+
             _mailerService.NotifyCoordinator(sectionId);
             return _mapper.Map<SubmissionDto.ReadSubmission>(submissionData);
         }

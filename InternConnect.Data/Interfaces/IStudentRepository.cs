@@ -7,6 +7,7 @@ namespace InternConnect.Data.Interfaces
     {
         public IEnumerable<Student> GetAllStudentWithRelatedData();
         public IEnumerable<Student> GetDataOfStudentsForDashboard();
+        public Student GetStudentWithAccountData(int studentId);
 
     }
 }

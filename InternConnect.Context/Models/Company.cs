@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace InternConnect.Context.Models
 {
@@ -19,7 +20,8 @@ namespace InternConnect.Context.Models
         public string ContactPersonEmail { get; set; }
         public string ContactPersonDesignation { get; set; }
         public string Status { get; set; }
-
         public bool IsActive { get; set; }
+        public DateTime DateAdded { get; set; }
+        public DateTime Expiration { get; set; }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
 
 namespace InternConnect.Context.Models
 {
@@ -25,5 +27,6 @@ namespace InternConnect.Context.Models
         public Student Student { get; set; }
         public int CompanyId { get; set; }
         public AdminResponse AdminResponse { get; set; }
+        public List<Logs> Logs { get; set; }
     }
 }

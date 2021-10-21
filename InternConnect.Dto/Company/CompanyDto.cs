@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace InternConnect.Dto.Company
 {
@@ -21,6 +22,8 @@ namespace InternConnect.Dto.Company
             public string ContactPersonDesignation { get; set; }
             public string Status { get; set; }
             public bool IsActive { get; set; }
+            public DateTime DateAdded { get; set; }
+            public DateTime Expiration { get; set; }
         }
 
         public class UpdateCompany
@@ -44,6 +47,7 @@ namespace InternConnect.Dto.Company
             public string ContactPersonName { get; set; }
             public string ContactPersonEmail { get; set; }
             public string ContactPersonDesignation { get; set; }
+            public DateTime Expiration { get; set; }
         }
 
         public class UpdateCompanyStatus
@@ -70,6 +74,7 @@ namespace InternConnect.Dto.Company
             public string ContactPersonName { get; set; }
             public string ContactPersonEmail { get; set; }
             public string ContactPersonDesignation { get; set; }
+            public DateTime Expiration { get; set; }
         }
     }
 }

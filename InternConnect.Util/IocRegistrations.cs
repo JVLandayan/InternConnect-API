@@ -75,6 +75,8 @@ namespace InternConnect.Util
             services.AddScoped<IUploadService, UploadService>();
             services.AddScoped<IAuthService, AuthService>();
 
+            services.AddSingleton<IBackgroundService, BackgroundService>();
+
             return services;
         }
     }

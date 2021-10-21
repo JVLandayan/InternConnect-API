@@ -8,6 +8,8 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="ClosedXML" Version="0.95.4" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.25" />
+    <PackageReference Include="Hangfire.MemoryStorage" Version="1.7.0" />
     <PackageReference Include="itext7" Version="7.1.16" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="5.0.8" />
@@ -42,6 +44,7 @@
   <ItemGroup>
     <Folder Include="images\company\" />
     <Folder Include="files\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>

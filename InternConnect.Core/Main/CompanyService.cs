@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using InternConnect.Context;
@@ -39,6 +40,7 @@ namespace InternConnect.Service.Main
             var payloadData = _mapper.Map<Company>(payload);
             payloadData.Status = Status.CompanyStatusList.NEW.ToString();
             payloadData.IsActive = true;
+            payloadData.DateAdded = GetDate();
             _companyRepository.Add(payloadData);
             _context.SaveChanges();
             return _mapper.Map<CompanyDto.ReadCompany>(payloadData);
@@ -82,6 +84,11 @@ namespace InternConnect.Service.Main
             var companyData = _companyRepository.Get(payload.Id);
             _mapper.Map(payload, companyData);
             _context.SaveChanges();
+        }
+
+        private DateTime GetDate()
+        {
+            return TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
         }
     }
 }

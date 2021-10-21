@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Hangfire;
+using Hangfire.MemoryStorage;
 using InternConnect.Context;
 using InternConnect.Profiles;
 using InternConnect.Service.ThirdParty;
@@ -32,6 +35,12 @@ namespace InternConnect
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Hangfire
+            services.AddHangfire(config =>
+                config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170).UseSimpleAssemblyNameTypeSerializer()
+                    .UseDefaultTypeSerializer().UseMemoryStorage());
+
+            services.AddHangfireServer();
             //Cors
             services.AddCors(options =>
             {
@@ -121,7 +130,7 @@ namespace InternConnect
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IBackgroundJobClient backgroundJobClient, IRecurringJobManager recurringJobManager, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -196,6 +205,9 @@ namespace InternConnect
 
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+            app.UseHangfireDashboard();
+            recurringJobManager.AddOrUpdate("Run every day",()=>serviceProvider.GetService<IBackgroundService>().CompanyStatus(),Cron.Daily);
         }
     }
 }

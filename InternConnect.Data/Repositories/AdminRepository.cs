@@ -13,6 +13,11 @@ namespace InternConnect.Data.Repositories
         {
         }
 
+        public Admin GetAdminWithEmail(int id)
+        {
+            return Context.Set<Admin>().Include(a=>a.Account).SingleOrDefault(a=>a.Id == id);
+        }
+
         public IEnumerable<Admin> GetAllAdminsWithRelatedData()
         {
             return Context.Set<Admin>().Include(a=>a.Section).Include(a=>a.Program).Include(a=>a.Account).ToList();

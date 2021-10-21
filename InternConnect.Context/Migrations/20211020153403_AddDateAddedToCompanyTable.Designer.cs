@@ -4,14 +4,16 @@ using InternConnect.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InternConnect.Context.Migrations
 {
     [DbContext(typeof(InternConnectContext))]
-    partial class InternConnectContextModelSnapshot : ModelSnapshot
+    [Migration("20211020153403_AddDateAddedToCompanyTable")]
+    partial class AddDateAddedToCompanyTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -284,15 +286,8 @@ namespace InternConnect.Context.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Action")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ActorEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ActorType")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("AdminId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateStamped")
                         .HasColumnType("datetime2");
@@ -302,7 +297,7 @@ namespace InternConnect.Context.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SubmissionId");
+                    b.HasIndex("AdminId");
 
                     b.ToTable("Logs");
                 });
@@ -639,13 +634,13 @@ namespace InternConnect.Context.Migrations
 
             modelBuilder.Entity("InternConnect.Context.Models.Logs", b =>
                 {
-                    b.HasOne("InternConnect.Context.Models.Submission", "Submission")
+                    b.HasOne("InternConnect.Context.Models.Admin", "Admin")
                         .WithMany("Logs")
-                        .HasForeignKey("SubmissionId")
+                        .HasForeignKey("AdminId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Submission");
+                    b.Navigation("Admin");
                 });
 
             modelBuilder.Entity("InternConnect.Context.Models.Opportunity", b =>
@@ -726,6 +721,8 @@ namespace InternConnect.Context.Migrations
                     b.Navigation("Events");
 
                     b.Navigation("IsoCodes");
+
+                    b.Navigation("Logs");
                 });
 
             modelBuilder.Entity("InternConnect.Context.Models.Authorization", b =>
@@ -766,8 +763,6 @@ namespace InternConnect.Context.Migrations
             modelBuilder.Entity("InternConnect.Context.Models.Submission", b =>
                 {
                     b.Navigation("AdminResponse");
-
-                    b.Navigation("Logs");
                 });
 #pragma warning restore 612, 618
         }

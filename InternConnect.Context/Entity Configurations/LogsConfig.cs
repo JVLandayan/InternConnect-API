@@ -11,7 +11,9 @@ namespace InternConnect.Context.Entity_Configurations
             modelBuilder.HasKey(l => l.Id);
             modelBuilder.Property(l => l.DateStamped).IsRequired();
             modelBuilder.Property(l => l.SubmissionId).IsRequired();
-            modelBuilder.Property(l => l.AdminId).IsRequired();
+            modelBuilder
+                .HasOne(l => l.Submission).WithMany(s => s.Logs).HasForeignKey(s => s.SubmissionId).IsRequired();
+            modelBuilder.Property(l => l.Action).IsRequired();
         }
     }
 }

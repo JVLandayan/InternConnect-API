@@ -4,14 +4,16 @@ using InternConnect.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InternConnect.Context.Migrations
 {
     [DbContext(typeof(InternConnectContext))]
-    partial class InternConnectContextModelSnapshot : ModelSnapshot
+    [Migration("20211021111547_DeleteAdminIdInLogsAndIncludeSubmissionWithRelationshipOfOneisToManyLogs")]
+    partial class DeleteAdminIdInLogsAndIncludeSubmissionWithRelationshipOfOneisToManyLogs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -286,12 +288,6 @@ namespace InternConnect.Context.Migrations
 
                     b.Property<string>("Action")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ActorEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ActorType")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateStamped")

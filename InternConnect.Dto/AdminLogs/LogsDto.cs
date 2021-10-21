@@ -9,13 +9,11 @@ namespace InternConnect.Dto.AdminLogs
         public class ReadLogs
         {
             public int Id { get; set; }
-            public string Email { get; set; }
-            public int SubmissionId { get; set; }
-            public SubmissionDto.ReadSubmission Submission { get; set; }
             public DateTime DateStamped { get; set; }
-            public int AdminId { get; set; }
-            public AdminDto.ReadAdmin Admin { get; set; }
-            public string Status { get; set; }
+            public string ActorEmail { get; set; }
+            public string ActorType { get; set; }
+            public string Action { get; set; }
+
         }
 
     }
