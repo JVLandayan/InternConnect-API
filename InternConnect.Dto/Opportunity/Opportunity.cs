@@ -1,4 +1,5 @@
-﻿using InternConnect.Dto.Company;
+﻿using System;
+using InternConnect.Dto.Company;
 using System.ComponentModel.DataAnnotations;
 
 namespace InternConnect.Dto.Opportunity
@@ -13,6 +14,7 @@ namespace InternConnect.Dto.Opportunity
             public string Introduction { get; set; }
             public int CompanyId { get; set; }
             public CompanyDto.ReadCompany Company { get; set; }
+            public DateTime DateAdded { get; set; }
         }
 
         public class UpdateOpportunity

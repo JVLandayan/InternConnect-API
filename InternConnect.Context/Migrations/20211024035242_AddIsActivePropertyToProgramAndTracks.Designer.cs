@@ -4,14 +4,16 @@ using InternConnect.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InternConnect.Context.Migrations
 {
     [DbContext(typeof(InternConnectContext))]
-    partial class InternConnectContextModelSnapshot : ModelSnapshot
+    [Migration("20211024035242_AddIsActivePropertyToProgramAndTracks")]
+    partial class AddIsActivePropertyToProgramAndTracks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -316,9 +318,6 @@ namespace InternConnect.Context.Migrations
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("DateAdded")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Introduction")
                         .HasColumnType("nvarchar(max)");

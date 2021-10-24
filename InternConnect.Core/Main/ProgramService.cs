@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using InternConnect.Context;
 using InternConnect.Context.Models;
@@ -32,6 +33,7 @@ namespace InternConnect.Service.Main
         public ProgramDto.ReadProgram AddProgram(ProgramDto.AddProgram payload)
         {
             var payloadData = _mapper.Map<Program>(payload);
+            payloadData.IsActive = true;
             _programRepository.Add(payloadData);
             _context.SaveChanges();
             return _mapper.Map<ProgramDto.ReadProgram>(payloadData);
@@ -39,13 +41,18 @@ namespace InternConnect.Service.Main
 
         public void DeleteProgram(int id)
         {
-            _programRepository.Remove(_programRepository.Get(id));
+            var programData = _programRepository.GetProgramAndTracks(id);
+            programData.IsActive = false;
+            foreach (var programTracks in programData.Tracks)
+            {
+                programTracks.IsActive = false;
+            }
             _context.SaveChanges();
         }
 
         public IEnumerable<ProgramDto.ReadProgram> GetAll()
         {
-            var programData = _programRepository.GetAllProgramAndTracks();
+            var programData = _programRepository.GetAllProgramAndTracks().Where(p=>p.IsActive);
             var mappedData = new List<ProgramDto.ReadProgram>();
             foreach (var program in programData) mappedData.Add(_mapper.Map<ProgramDto.ReadProgram>(program));
 
@@ -54,6 +61,11 @@ namespace InternConnect.Service.Main
 
         public ProgramDto.ReadProgram GetById(int id)
         {
+            var programData = _programRepository.GetProgramAndTracks(id);
+            if (programData.IsActive == false)
+            {
+                return null;
+            }
             return _mapper.Map<ProgramDto.ReadProgram>(_programRepository.GetProgramAndTracks(id));
         }
 
@@ -75,6 +87,7 @@ namespace InternConnect.Service.Main
         {
             var programData = _programRepository.Get(payload.Id);
             _mapper.Map(payload, programData);
+            programData.IsActive = true;
             _context.SaveChanges();
         }
     }

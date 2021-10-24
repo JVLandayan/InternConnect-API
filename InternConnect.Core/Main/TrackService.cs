@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using InternConnect.Context;
 using InternConnect.Context.Models;
@@ -33,35 +34,41 @@ namespace InternConnect.Service.Main
         {
             var payloadData = _mapper.Map<Track>(payload);
             _trackRepository.Add(payloadData);
+            payloadData.IsActive = true;
             _context.SaveChanges();
             return _mapper.Map<TrackDto.ReadTrack>(payloadData);
         }
 
         public IEnumerable<TrackDto.ReadTrack> GetAllTracks()
         {
-            var trackList = _trackRepository.GetAll();
+            var trackList = _trackRepository.GetAll().Where(t=>t.IsActive);
             var mappedList = new List<TrackDto.ReadTrack>();
             foreach (var track in trackList) mappedList.Add(_mapper.Map<TrackDto.ReadTrack>(track));
 
             return mappedList;
-            ;
         }
 
         public TrackDto.ReadTrack GetTrack(int id)
         {
-            return _mapper.Map<TrackDto.ReadTrack>(_trackRepository.Get(id));
+            var trackData = _trackRepository.Get(id);
+            if (trackData.IsActive == false)
+            {
+                return null;
+            }
+            return _mapper.Map<TrackDto.ReadTrack>(trackData);
         }
 
         public void UpdateTrack(TrackDto.UpdateTrack payload)
         {
             var trackData = _trackRepository.Get(payload.Id);
             _mapper.Map(payload, trackData);
+            trackData.IsActive = true;
             _context.SaveChanges();
         }
 
         public void DeleteTrack(int id)
         {
-            _trackRepository.Remove(_trackRepository.Get(id));
+            _trackRepository.Get(id).IsActive = false;
             _context.SaveChanges();
         }
     }

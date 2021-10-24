@@ -8,6 +8,7 @@ namespace InternConnect.Context.Models
         public string Name { get; set; }
         public string IsoCodeProgramNumber { get; set; }
         public int? NumberOfHours { get; set; }
+        public bool IsActive { get; set; }
         public List<Track> Tracks { get; set; }
 
         public List<Student> Students { get; set; }

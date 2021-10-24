@@ -173,7 +173,21 @@ namespace InternConnect.Service.Main
             submissionData.AdminResponse.CompanyAgrees = null;
             submissionData.AdminResponse.EmailSentByCoordinator = null;
 
+
             _mapper.Map(payload, submissionData);
+            _context.SaveChanges();
+
+            var studentData = _studentRepository.GetStudentWithAccountData(submissionData.StudentId);
+            _logsRepository.Add(new Logs()
+                {
+                    Action =
+                        $"{studentData.Account.Email} SUBMITTED AN UPDATED SUBMISSION",
+                    DateStamped = GetDate(),
+                    SubmissionId = submissionData.Id,
+                    ActorEmail = studentData.Account.Email,
+                    ActorType = _context.Set<Authorization>().Find(studentData.AuthId).Name
+                }
+            );
             _context.SaveChanges();
         }
 

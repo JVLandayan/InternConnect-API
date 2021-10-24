@@ -173,7 +173,7 @@ namespace InternConnect.Service.Main
             _logsRepository.Add(new Logs()
                 {
                     Action =
-                        $"ENDORSEMENT REQUEST OF {responseData.Submission.Student.Account.Email} {(payload.AcceptedByChair?"ACCEPTED":"REJECT")}",
+                        $"ENDORSEMENT REQUEST OF {responseData.Submission.Student.Account.Email} {(payload.AcceptedByChair?"ACCEPTED":"REJECTED")}",
                     DateStamped = GetDate(),
                     SubmissionId = responseData.SubmissionId,
                     ActorEmail = adminData.Account.Email,
