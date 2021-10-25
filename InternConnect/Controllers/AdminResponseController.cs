@@ -18,7 +18,7 @@ namespace InternConnect.Controllers
 
         [Authorize(Roles = "Coordinator")]
         [HttpPut("coordinator/{adminId}/{isoCode}")]
-        public ActionResult<AdminResponseDto.ReadResponse> UpdateAcceptanceByCoordinator(
+        public ActionResult UpdateAcceptanceByCoordinator(
             AdminResponseDto.UpdateAcceptanceOfCoordinatorResponse payload, int adminId, int isoCode)
         {
             _adminResponseService.UpdateAcceptanceByCoordinator(payload, adminId, isoCode);
@@ -27,7 +27,7 @@ namespace InternConnect.Controllers
 
         [Authorize(Roles = "Coordinator")]
         [HttpPut("coordinator/email")]
-        public ActionResult<AdminResponseDto.ReadResponse> UpdateEmailSent(
+        public ActionResult UpdateEmailSent(
             AdminResponseDto.UpdateEmailSentResponse payload)
         {
             _adminResponseService.UpdateEmailSent(payload);
@@ -37,18 +37,16 @@ namespace InternConnect.Controllers
 
         [Authorize(Roles = "Coordinator")]
         [HttpPut("coordinator/company")]
-        public ActionResult<AdminResponseDto.ReadResponse> UpdateCompanyAgrees(
+        public ActionResult UpdateCompanyAgrees(
             AdminResponseDto.UpdateCompanyAgreesResponse payload)
         {
             _adminResponseService.UpdateCompanyAgrees(payload);
-
-
             return NoContent();
         }
 
         [Authorize(Roles = "Chair")]
         [HttpPut("chair")]
-        public ActionResult<AdminResponseDto.ReadResponse> UpdateAcceptanceByChair(
+        public ActionResult UpdateAcceptanceByChair(
             AdminResponseDto.UpdateChairResponse payload)
         {
             _adminResponseService.UpdateAcceptanceByChair(payload);
@@ -57,7 +55,7 @@ namespace InternConnect.Controllers
 
         //[Authorize(Roles = "Dean")]
         [HttpPut("dean/{adminId}")]
-        public ActionResult<AdminResponseDto.ReadResponse> UpdateAcceptanceByDean(
+        public ActionResult UpdateAcceptanceByDean(
             AdminResponseDto.UpdateDeanResponse payload, int adminId)
         {
             _adminResponseService.UpdateAcceptanceByDean(payload, adminId);
