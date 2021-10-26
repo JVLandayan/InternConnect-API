@@ -10,6 +10,8 @@ using InternConnect.Data.Interfaces;
 using InternConnect.Dto.Event;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using RestSharp;
+using RestSharp.Authenticators;
 
 namespace InternConnect.Service.ThirdParty
 {
@@ -68,32 +70,32 @@ namespace InternConnect.Service.ThirdParty
             _adminResponseRepository = adminResponse;
         }
 
-        private SmtpClient SmtpConfiguration(int authId)
-        {
-            var client = new SmtpClient("mail5015.site4now.net", 8889);
-            client.EnableSsl = false;
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.UseDefaultCredentials = false;
-            if (authId == 1)
-            {
-                client.Credentials = new NetworkCredential("dean-noreply@internconnect-cics.com", "internconnect!0!");
-            }
-            else if (authId == 2)
-            {
-                client.Credentials = new NetworkCredential("chair-noreply@internconnect-cics.com", "internconnect!0!");
-            }
-            else if (authId == 3)
-            {
-                client.Credentials = new NetworkCredential("coordinator-noreply@internconnect-cics.com", "internconnect!0!");
-            }
-            else if (authId == 4)
-            {
-                client.Credentials = new NetworkCredential("postmaster-noreply@internconnect-cics.com", "internconnect!0!");
-            }
+        //private SmtpClient SmtpConfiguration(int authId)
+        //{
+        //    var client = new SmtpClient("mail5015.site4now.net", 8889);
+        //    client.EnableSsl = false;
+        //    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+        //    client.UseDefaultCredentials = false;
+        //    if (authId == 1)
+        //    {
+        //        client.Credentials = new NetworkCredential("dean-noreply@internconnect-cics.com", "internconnect!0!");
+        //    }
+        //    else if (authId == 2)
+        //    {
+        //        client.Credentials = new NetworkCredential("chair-noreply@internconnect-cics.com", "internconnect!0!");
+        //    }
+        //    else if (authId == 3)
+        //    {
+        //        client.Credentials = new NetworkCredential("coordinator-noreply@internconnect-cics.com", "internconnect!0!");
+        //    }
+        //    else if (authId == 4)
+        //    {
+        //        client.Credentials = new NetworkCredential("postmaster-noreply@internconnect-cics.com", "internconnect!0!");
+        //    }
 
 
-            return client;
-        }
+        //    return client;
+        //}
 
 
         public void NotifyCoordinator(int sectionId)
@@ -102,7 +104,7 @@ namespace InternConnect.Service.ThirdParty
             var mailText = ReadHtml("submission-new");
             mailText = mailText.Replace("[new-submission]",
                 $"{_configuration["ClientAppUrl"]}/admin/new-submissions");
-            SendMail(adminData.Account.Email, mailText, "You have a new endorsement request", 4);
+            SendMailToApi(adminData.Account.Email, mailText, "You have a new endorsement request");
         }
 
         public void NotifyChair(int submissionId, int adminId, bool isAccepted)
@@ -126,12 +128,12 @@ namespace InternConnect.Service.ThirdParty
 
             if (isAccepted)
             {
-                if (adminResponses.Count == 10) SendMail(chairData.Account.Email, mailToAdmin, "You currently have a lot of requests today",3);
-                SendMail(submissionData.Student.Account.Email, mailToStudent, "Some Additional Updates",3);
+                if (adminResponses.Count == 10) SendMailToApi(chairData.Account.Email, mailToAdmin, "You currently have a lot of requests today");
+                SendMailToApi(submissionData.Student.Account.Email, mailToStudent, "Some Additional Updates");
             }
             else
             {
-                SendMail(submissionData.Student.Account.Email, failText, "Sorry, your request was disapproved",3);
+                SendMailToApi(submissionData.Student.Account.Email, failText, "Sorry, your request was disapproved");
             }
         }
 
@@ -156,13 +158,13 @@ namespace InternConnect.Service.ThirdParty
             {
                 if (responseData.Count == 10)
                 {
-                    SendMail(deanData.Account.Email, mailText, "You currently have a lot of requests today", 2);
+                    SendMailToApi(deanData.Account.Email, mailText, "You currently have a lot of requests today");
                 }
-                SendMail(submissionData.Student.Account.Email, mailToStudent, "Some Additional Updates", 2);
+                SendMailToApi(submissionData.Student.Account.Email, mailToStudent, "Some Additional Updates");
             }
             else
             {
-                SendMail(submissionData.Student.Account.Email, failText, "Sorry, your request was disapproved", 2);
+                SendMailToApi(submissionData.Student.Account.Email, failText, "Sorry, your request was disapproved");
             }
             
         }
@@ -192,27 +194,28 @@ namespace InternConnect.Service.ThirdParty
 
             if (isAccepted)
             {
-                SendMail(accountData.Email, mailToAdmin, "You've received an endorsement letter from the Dean", 1);
 
                 #region MailToIgaarp
-
-                var client = SmtpConfiguration(1);
                 var content = _pdfService.AddPdf(submissionId).ToArray();
                 var ayData = _academicYearRepository.GetAll().First();
-                var toIgaarp = new MailMessage();
-                toIgaarp.To.Add(ayData.IgaarpEmail);
-                toIgaarp.From = new MailAddress("dean-noreply@internconnect-cics.com");
-                toIgaarp.Subject = "The CICS Dean recently signed an endorsement letter";
-                toIgaarp.Body = mailToIgaarp;
-                toIgaarp.Attachments.Add(new Attachment(new MemoryStream(content),
-                    $"{submissionData.Student.Program.Name}_{submissionData.LastName}, {submissionData.FirstName} {submissionData.LastName} {submissionData.MiddleInitial}.pdf"));
-                toIgaarp.IsBodyHtml = true;
-                client.Send(toIgaarp);
+                //var toIgaarp = new MailMessage();
+                //toIgaarp.To.Add(ayData.IgaarpEmail);
+                //toIgaarp.From = new MailAddress("dean-noreply@internconnect-cics.com");
+                //toIgaarp.Subject = "The CICS Dean recently signed an endorsement letter";
+                //toIgaarp.Body = mailToIgaarp;
+                //toIgaarp.Attachments.Add(new Attachment(new MemoryStream(content),
+                //    $"{submissionData.Student.Program.Name}_{submissionData.LastName}, {submissionData.FirstName} {submissionData.LastName} {submissionData.MiddleInitial}.pdf"));
+                //toIgaarp.IsBodyHtml = true;
+                //client.Send(toIgaarp);
+                SendMailToApiWithAttachment(ayData.IgaarpEmail, mailToIgaarp,
+                        "The CICS Dean recently signed an endorsement letter", new MemoryStream(content),
+                        submissionData)
+                    .Content.ToString();
 
                 #endregion
             }
 
-            SendMail(accountDataStudent.Email, isAccepted ? mailToStudent : failText, isAccepted ? "Your endorsement letter is signed" : "Sorry, your request was disapproved", 1);
+            SendMailToApi(accountDataStudent.Email, isAccepted ? mailToStudent : failText, isAccepted ? "Your endorsement letter is signed" : "Sorry, your request was disapproved");
         }
 
         public void NotifyStudentEmailSent(int submissionId, bool isAccepted)
@@ -224,8 +227,8 @@ namespace InternConnect.Service.ThirdParty
             failText = failText.Replace("[view-status]",
                 $"{_configuration["ClientAppUrl"]}/status");
             var submissionData = _submissionRepository.GetAllRelatedData().First(s => s.Id == submissionId);
-            SendMail(submissionData.Student.Account.Email, isAccepted ? mailText : failText,
-                isAccepted ? "Your endorsement letter has been sent to the company" : "Sorry, your request was disapproved", 3);
+            SendMailToApi(submissionData.Student.Account.Email, isAccepted ? mailText : failText,
+                isAccepted ? "Your endorsement letter has been sent to the company" : "Sorry, your request was disapproved");
         }
 
         public void NotifyStudentCompanyApproves(int submissionId, bool isAccepted)
@@ -237,18 +240,19 @@ namespace InternConnect.Service.ThirdParty
             failText = failText.Replace("[view-status]",
                 $"{_configuration["ClientAppUrl"]}/status");
             var submissionData = _submissionRepository.GetAllRelatedData().First(s => s.Id == submissionId);
-            SendMail(submissionData.Student.Account.Email, isAccepted ? mailText : failText,
-                isAccepted? "Congrats! Your endorsement is accepted": "Sorry, your request was disapproved", 3);
+            SendMailToApi(submissionData.Student.Account.Email, isAccepted ? mailText : failText,
+                isAccepted? "Congrats! Your endorsement is accepted": "Sorry, your request was disapproved");
         }
 
         public void ForgotPassword(Account accountData)
         {
+
             var mailText = ReadHtml("resetpassword");
             mailText = mailText.Replace("[forgotpassword]",
                 $"{_configuration["ClientAppUrl"]}" +
                 $"/forgotpassword?email={accountData.Email}&resetkey={accountData.ResetKey}");
-
-            SendMail(accountData.Email, mailText, "Password Reset Information", 4);
+            SendMailToApi(accountData.Email, mailText, "Password Reset Information").Content.ToString();
+            //SendMail(accountData.Email, mailText, "Password Reset Information", 4);
         }
 
         public void ChangeDean(string oldEmail, string newEmail, string resetkey)
@@ -257,7 +261,7 @@ namespace InternConnect.Service.ThirdParty
                           $"changedean?oldemail={oldEmail}&newemail={newEmail}&resetkey={resetkey}";
             var mailText = ReadHtml("onboarding");
             mailText = mailText.Replace("[onboarding]", message);
-            SendMail(newEmail, mailText, "Welcome to InternConnect!",1);
+            SendMailToApi(newEmail, mailText, "Welcome to InternConnect!");
         }
 
         public void Onboard(Account accountData)
@@ -266,7 +270,7 @@ namespace InternConnect.Service.ThirdParty
                           $"onboard?email={accountData.Email}&resetkey={accountData.ResetKey}";
             var mailText = ReadHtml("onboarding");
             mailText = mailText.Replace("[onboarding]", message);
-            SendMail(accountData.Email, mailText, "Welcome to InternConnect!", 4);
+            SendMailToApi(accountData.Email, mailText, "Welcome to InternConnect!");
         }
 
         public void NotifyStudentEvent(List<Student> studentList, EventDto.AddEvent payload)
@@ -280,7 +284,7 @@ namespace InternConnect.Service.ThirdParty
             //var mailText 
             foreach (var student in studentList)
             {
-                SendMail(student.Account.Email, template, "Event reminder", 2);
+                SendMailToApi(student.Account.Email, template, "Event reminder");
             }
         }
 
@@ -294,35 +298,75 @@ namespace InternConnect.Service.ThirdParty
             return mailText;
         }
 
-        private void SendMail(string email, string emailTemplate, string subject, int authId)
+        //private void SendMail(string email, string emailTemplate, string subject, int authId)
+        //{
+        //    var client = SmtpConfiguration(authId);
+        //    var mail = new MailMessage();
+        //    mail.To.Add(email);
+        //    mail.From = new MailAddress(
+        //        authId == 1? "dean-noreply@internconnect-cics.com":
+        //        authId == 2? "chair-noreply@internconnect-cics.com":
+        //        authId == 3? "coordinator-noreply@internconnect-cics.com":
+        //        "postmaster-noreply@internconnect-cics.com");
+        //    mail.Subject = subject;
+        //    mail.Body = emailTemplate;
+        //    mail.IsBodyHtml = true;
+        //    client.Send(mail);
+        //}
+
+        private IRestResponse SendMailToApi(string email, string payload, string subject)
         {
-            var client = SmtpConfiguration(authId);
-            var mail = new MailMessage();
-            mail.To.Add(email);
-            mail.From = new MailAddress(
-                authId == 1? "dean-noreply@internconnect-cics.com":
-                authId == 2? "chair-noreply@internconnect-cics.com":
-                authId == 3? "coordinator-noreply@internconnect-cics.com":
-                "postmaster-noreply@internconnect-cics.com");
-            mail.Subject = subject;
-            mail.Body = emailTemplate;
-            mail.IsBodyHtml = true;
-            client.Send(mail);
+            RestClient client = new RestClient();
+            client.BaseUrl = new Uri("https://api.mailgun.net/v3/internconnect-cics.com");
+
+            client.Authenticator = new HttpBasicAuthenticator("api",
+                "67bcb6bd8d580970b4017b5511acf438-20ebde82-4078e5bb");
+            RestRequest request = new RestRequest();
+            request.AddParameter("domain", "internconnect-cics.com", ParameterType.UrlSegment);
+            request.Resource = "https://api.mailgun.net/v3/internconnect-cics.com/messages";
+            request.AddParameter("from", "Excited User <mailgun@internconnect-cics.com>");
+            request.AddParameter("to", email);
+            request.AddParameter("subject", subject);
+            request.AddParameter("html", payload);
+            request.Method = Method.POST;
+            return client.Execute(request);
         }
 
-    //    client.Credentials = new NetworkCredential("dean-noreply@internconnect-cics.com", "internconnect!0!");
-    //}
-    //else if (authId == 2)
-    //{
-    //client.Credentials = new NetworkCredential("chair-noreply@internconnect-cics.com", "internconnect!0!");
-    //}
-    //else if (authId == 3)
-    //{
-    //client.Credentials = new NetworkCredential("coordinator-noreply@internconnect-cics.com", "internconnect!0!");
-    //}
-    //else if (authId == 4)
-    //{
-    //client.Credentials = new NetworkCredential("postmaster@internconnect-cics.com", "internconnect!0!");
 
-}
+        private IRestResponse SendMailToApiWithAttachment(string email, string payload, string subject, MemoryStream content, Submission submissionData)
+        {
+            RestClient client = new RestClient();
+            client.BaseUrl = new Uri("https://api.mailgun.net/v3/internconnect-cics.com");
+
+            client.Authenticator = new HttpBasicAuthenticator("api",
+                "67bcb6bd8d580970b4017b5511acf438-20ebde82-4078e5bb");
+            RestRequest request = new RestRequest();
+            request.AddParameter("domain", "internconnect-cics.com", ParameterType.UrlSegment);
+            request.Resource = "https://api.mailgun.net/v3/internconnect-cics.com/messages";
+            request.AddParameter("from", "Excited User <mailgun@internconnect-cics.com>");
+            request.AddParameter("to", email);
+            request.AddParameter("subject", subject);
+            request.AddParameter("html", payload);
+            request.AddFile("attachment",content.ToArray(),
+                $"{submissionData.Student.Program.Name}_{submissionData.LastName}, {submissionData.FirstName} {submissionData.LastName} {submissionData.MiddleInitial}.pdf");
+
+            request.Method = Method.POST;
+            return client.Execute(request);
+        }
+
+        //    client.Credentials = new NetworkCredential("dean-noreply@internconnect-cics.com", "internconnect!0!");
+        //}
+        //else if (authId == 2)
+        //{
+        //client.Credentials = new NetworkCredential("chair-noreply@internconnect-cics.com", "internconnect!0!");
+        //}
+        //else if (authId == 3)
+        //{
+        //client.Credentials = new NetworkCredential("coordinator-noreply@internconnect-cics.com", "internconnect!0!");
+        //}
+        //else if (authId == 4)
+        //{
+        //client.Credentials = new NetworkCredential("postmaster@internconnect-cics.com", "internconnect!0!");
+
+    }
 }
