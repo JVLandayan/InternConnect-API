@@ -320,7 +320,7 @@ namespace InternConnect.Service.ThirdParty
             client.BaseUrl = new Uri("https://api.mailgun.net/v3/internconnect-cics.com");
 
             client.Authenticator = new HttpBasicAuthenticator("api",
-                "67bcb6bd8d580970b4017b5511acf438-20ebde82-4078e5bb");
+                "");
             RestRequest request = new RestRequest();
             request.AddParameter("domain", "internconnect-cics.com", ParameterType.UrlSegment);
             request.Resource = "https://api.mailgun.net/v3/internconnect-cics.com/messages";
