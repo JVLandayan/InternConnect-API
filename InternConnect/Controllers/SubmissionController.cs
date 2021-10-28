@@ -46,6 +46,20 @@ namespace InternConnect.Controllers
         }
 
         [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
+        [HttpGet("program/{programId}")]
+        public ActionResult<IEnumerable<SubmissionDto.ReadSubmission>> GetSubmissionByProgram(int programId)
+        {
+            return Ok(_submissionService.GetSubmissionByProgram(programId));
+        }
+
+        [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
+        [HttpGet("section/{sectionId}")]
+        public ActionResult<IEnumerable<SubmissionDto.ReadSubmission>> GetSubmissionBySection(int sectionId)
+        {
+            return Ok(_submissionService.GetSubmissionBySection(sectionId));
+        }
+
+        [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
         [HttpGet("bystep/{stepNumber}")]
         public ActionResult<IEnumerable<SubmissionDto.ReadSubmission>> GetSubmissionByStep(int stepNumber)
         {

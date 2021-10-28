@@ -72,5 +72,22 @@ namespace InternConnect.Controllers
                 return BadRequest("Something went wrong");
             }
         }
+
+        [Authorize(Roles = "Dean")]
+        [HttpPut("program")]
+        public ActionResult UpdateProgram(List<AdminDto.UpdateAdminProgram> payload)
+        {
+            _adminService.UpdateAdminProgram(payload[0], payload[1]);
+            return NoContent();
+        }
+
+
+        [Authorize(Roles = "Chair")]
+        [HttpPut("section")]
+        public ActionResult UpdateSection(List<AdminDto.UpdateAdminSection> payload)
+        {
+            _adminService.UpdateAdminSection(payload[0],payload[1]);
+            return NoContent();
+        }
     }
 }

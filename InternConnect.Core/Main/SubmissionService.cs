@@ -20,6 +20,8 @@ namespace InternConnect.Service.Main
         public void UpdateSubmission(SubmissionDto.UpdateSubmission payload);
         public SubmissionDto.ReadSubmission GetSubmission(int id);
         public IEnumerable<SubmissionDto.ReadSubmission> GetAllSubmissions();
+        public IEnumerable<SubmissionDto.ReadSubmission> GetSubmissionBySection(int sectionId);
+        public IEnumerable<SubmissionDto.ReadSubmission> GetSubmissionByProgram(int programId);
         public IEnumerable<SubmissionDto.ReadSubmission> GetSubmissionsByStep(int stepNumber);
 
         public IEnumerable<CompanyAndNumberOfStudentModel> GetSubmissionByNumberOfCompanyOccurence(string type, int id);
@@ -125,6 +127,29 @@ namespace InternConnect.Service.Main
                     .OrderByDescending(c => c.NumberOfOccurence).ToList();
 
             return null;
+        }
+
+        public IEnumerable<SubmissionDto.ReadSubmission> GetSubmissionByProgram(int programId)
+        {
+            var submissionList = _submissionRepository.GetAllRelatedData().Where(s=>s.Student.ProgramId == programId);
+            var mappedList = new List<SubmissionDto.ReadSubmission>();
+            foreach (var submission in submissionList)
+            {
+                mappedList.Add(_mapper.Map<SubmissionDto.ReadSubmission>(submission));
+            }
+            return mappedList;
+        }
+
+        public IEnumerable<SubmissionDto.ReadSubmission> GetSubmissionBySection(int sectionId)
+        {
+            var submissionList = _submissionRepository.GetAllRelatedData().Where(s => s.Student.SectionId == sectionId);
+            var mappedList = new List<SubmissionDto.ReadSubmission>();
+            foreach (var submission in submissionList)
+            {
+                mappedList.Add(_mapper.Map<SubmissionDto.ReadSubmission>(submission));
+            }
+
+            return mappedList;
         }
 
         public IEnumerable<SubmissionDto.ReadSubmission> GetSubmissionsByStep(int stepNumber)

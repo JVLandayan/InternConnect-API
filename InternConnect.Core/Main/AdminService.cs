@@ -12,10 +12,11 @@ namespace InternConnect.Service.Main
         public void UpdateAdmin(AdminDto.UpdateAdmin entity, int id);
         public AdminDto.ReadAdmin GetById(int id);
         public IEnumerable<AdminDto.ReadAdmin> GetAll();
-
         public IEnumerable<AdminDto.ReadCoordinator> GetAllCoordinatorByProgram(int programId);
         public IEnumerable<AdminDto.ReadCoordinator> GetAllChairByProgram();
         public IEnumerable<AdminDto.ReadCoordinator> GetAllTechCoordinators();
+        public void UpdateAdminSection(AdminDto.UpdateAdminSection payloadFrom, AdminDto.UpdateAdminSection payloadTo);
+        public void UpdateAdminProgram(AdminDto.UpdateAdminProgram payloadFrom, AdminDto.UpdateAdminProgram payloadTo);
     }
 
     public class AdminService : IAdminService
@@ -75,6 +76,34 @@ namespace InternConnect.Service.Main
             var mappedData = new List<AdminDto.ReadCoordinator>();
             foreach (var admin in adminList) mappedData.Add(_mapper.Map<AdminDto.ReadCoordinator>(admin));
             return mappedData.OrderBy(a => a.Account.Email);
+        }
+
+        public void UpdateAdminSection(AdminDto.UpdateAdminSection payloadFrom, AdminDto.UpdateAdminSection payloadTo)
+        {
+            var adminDataFrom = _adminRepository.Get(payloadFrom.Id);
+            var adminDataTo = _adminRepository.Get(payloadTo.Id);
+
+            //coord section to coord section target
+            adminDataFrom.SectionId = payloadTo.SectionId;
+
+            //coord section target to coord section from
+            adminDataTo.SectionId = payloadFrom.SectionId;
+            _context.SaveChanges();
+
+
+        }
+
+        public void UpdateAdminProgram(AdminDto.UpdateAdminProgram payloadFrom, AdminDto.UpdateAdminProgram payloadTo)
+        {
+            var adminDataFrom = _adminRepository.Get(payloadFrom.Id);
+            var adminDataTo = _adminRepository.Get(payloadTo.Id);
+
+            //coord section to coord section target
+            adminDataFrom.ProgramId = payloadTo.ProgramId;
+
+            //coord section target to coord section from
+            adminDataTo.ProgramId = payloadFrom.ProgramId;
+            _context.SaveChanges();
         }
     }
 }

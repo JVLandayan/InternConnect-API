@@ -51,7 +51,7 @@ namespace InternConnect.Service.Main
             var mappedData = new List<SectionDto.ReadSection>();
             foreach (var section in sectionData) mappedData.Add(_mapper.Map<SectionDto.ReadSection>(section));
 
-            return mappedData;
+            return mappedData.OrderBy(s=>s.Name);
         }
 
         public SectionDto.ReadSection GetById(int id)

@@ -1,4 +1,6 @@
-﻿using InternConnect.Context.Models;
+﻿using System.Collections.Generic;
+using InternConnect.Context.Models;
+using InternConnect.Dto;
 using InternConnect.Service.ThirdParty;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -25,12 +27,12 @@ namespace InternConnect.Controllers
         }
 
         [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
-        [HttpGet("excel")]
-        public IActionResult GenerateExcel([FromQuery] int[] ids)
+        [HttpPost("excel")]
+        public IActionResult GenerateExcel(List<ReportsId> idList)
         {
-            if (ids.Length == 0) return NotFound("Submission not found");
+            if (idList.Count == 0) return NotFound("Submission not found");
 
-            return _reportService.GenerateExcel(ids, this);
+            return _reportService.GenerateExcel(idList, this);
         }
 
         [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]

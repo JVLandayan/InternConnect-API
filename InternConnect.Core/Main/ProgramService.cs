@@ -55,8 +55,7 @@ namespace InternConnect.Service.Main
             var programData = _programRepository.GetAllProgramAndTracks().Where(p=>p.IsActive);
             var mappedData = new List<ProgramDto.ReadProgram>();
             foreach (var program in programData) mappedData.Add(_mapper.Map<ProgramDto.ReadProgram>(program));
-
-            return mappedData;
+            return mappedData.OrderBy(p=>p.Name);
         }
 
         public ProgramDto.ReadProgram GetById(int id)

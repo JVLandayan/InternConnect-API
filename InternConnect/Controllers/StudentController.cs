@@ -49,5 +49,13 @@ namespace InternConnect.Controllers
                 return BadRequest("Student doesn't exist");
             }
         }
+
+        [Authorize(Roles = "Dean,Chair,Coordinator,Tech Coordinator")]
+        [HttpPut]
+        public ActionResult UpdateStudent(StudentDto.UpdateStudent payload)
+        {
+            _studentService.UpdateStudentSection(payload);
+            return Ok();
+        }
     }
 }

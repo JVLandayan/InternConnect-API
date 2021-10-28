@@ -5,14 +5,16 @@ using System.Linq;
 using ClosedXML.Excel;
 using InternConnect.Context.Models;
 using InternConnect.Data.Interfaces;
+using InternConnect.Dto;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace InternConnect.Service.ThirdParty
 {
     public interface IReportService
     {
-        public IActionResult GenerateExcel(int[] idList, ControllerBase controller);
+        public IActionResult GenerateExcel(List<ReportsId> idList, ControllerBase controller);
     }
 
     public class ReportService : IReportService
@@ -20,6 +22,7 @@ namespace InternConnect.Service.ThirdParty
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyRepository;
         private readonly IWebHostEnvironment _environment;
+        private readonly IConfiguration _configuration;
         private readonly IProgramRepository _programRepository;
         private readonly ISectionRepository _sectionRepository;
         private readonly IStudentRepository _studentRepository;
@@ -28,7 +31,7 @@ namespace InternConnect.Service.ThirdParty
         public ReportService(ISubmissionRepository submissionRepository, IStudentRepository studentRepository,
             IAccountRepository accountRepository, ISectionRepository sectionRepository,
             ICompanyRepository companyRepository,
-            IProgramRepository programRepository, IWebHostEnvironment env)
+            IProgramRepository programRepository, IWebHostEnvironment env, IConfiguration configuration)
         {
             _submissionRepository = submissionRepository;
             _studentRepository = studentRepository;
@@ -37,10 +40,11 @@ namespace InternConnect.Service.ThirdParty
             _sectionRepository = sectionRepository;
             _programRepository = programRepository;
             _environment = env;
+            _configuration = configuration;
         }
 
 
-        public IActionResult GenerateExcel(int[] idList, ControllerBase controller)
+        public IActionResult GenerateExcel(List<ReportsId> idList, ControllerBase controller)
         {
             var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             var fileName = $"Reports {GetDate()}.xlsx";
@@ -50,14 +54,12 @@ namespace InternConnect.Service.ThirdParty
                 var worksheet = workBook.Worksheets.Add("Submissions");
 
                 #region Headers
-
-                worksheet.Cell(1, 1).Value = "Email Address";
-                worksheet.Cell(1, 1).Style.Font.Bold = true;
-                worksheet.Cell(1, 2).Value = "ISO Code";
-                worksheet.Cell(1, 3).Value = "Student Title";
-                worksheet.Cell(1, 4).Value = "Lastname of Requesting Students";
-                worksheet.Cell(1, 5).Value = "Firstname of Requesting Student";
-                worksheet.Cell(1, 6).Value = "Middle Initial of Requesting Student";
+                worksheet.Cell(1, 1).Value = "Lastname of Requesting Students";
+                worksheet.Cell(1, 2).Value = "Firstname of Requesting Student";
+                worksheet.Cell(1, 3).Value = "Middle Initial of Requesting Student";
+                worksheet.Cell(1, 4).Value = "ISO Code";
+                worksheet.Cell(1, 5).Value = "Email Address";
+                worksheet.Cell(1, 6).Value = "Student Title";
                 worksheet.Cell(1, 7).Value = "Student Number";
                 worksheet.Cell(1, 8).Value = "Section";
                 worksheet.Cell(1, 9).Value = "Degree Program";
@@ -91,21 +93,22 @@ namespace InternConnect.Service.ThirdParty
                 #endregion
 
                 var mappedSubmissionList = new List<Submission>();
-                foreach (var id in idList) mappedSubmissionList.Add(submissionList.First(s => s.Id == id));
+                foreach (var id in idList) mappedSubmissionList.Add(submissionList.First(s => s.Id == id.SubmissionId));
 
                 #region Body
 
                 var index = 1;
                 foreach (var submission in mappedSubmissionList)
                 {
-                    worksheet.Cell(1 + index, 1).Value =
+                    worksheet.Cell(1 + index, 1).Value = submission.LastName;
+                    worksheet.Cell(1 + index, 2).Value = submission.FirstName;
+                    worksheet.Cell(1 + index, 3).Value = submission.MiddleInitial;
+                    worksheet.Cell(1 + index, 4).Value = submission.IsoCode;
+                    worksheet.Cell(1 + index, 5).Value =
                         accountList.Find(s => s.Id == submission.Student.AccountId)
-                            .Email; //_accountRepository.Get(_studentRepository.Get(_submissionRepository.Get(submission.Id).StudentId).AccountId).Email;
-                    worksheet.Cell(1 + index, 2).Value = submission.IsoCode;
-                    worksheet.Cell(1 + index, 3).Value = submission.StudentTitle;
-                    worksheet.Cell(1 + index, 4).Value = submission.LastName;
-                    worksheet.Cell(1 + index, 5).Value = submission.FirstName;
-                    worksheet.Cell(1 + index, 6).Value = submission.MiddleInitial;
+                            .Email;
+                    worksheet.Cell(1 + index, 6).Value = submission.StudentTitle;
+                   
                     worksheet.Cell(1 + index, 7).Value = submission.StudentNumber;
                     worksheet.Cell(1 + index, 8).Value =
                         sectionList.Find(s => s.Id == submission.Student.SectionId).Name;
@@ -151,10 +154,10 @@ namespace InternConnect.Service.ThirdParty
 
                     #endregion
 
-                    worksheet.Cell(1 + index, 23).Value =
-                        $"http://localhost:5000/files/{submission.AcceptanceLetterFileName}";
-                    worksheet.Cell(1 + index, 24).Value =
-                        $"http://localhost:5000/files/{submission.CompanyProfileFileName}";
+                    worksheet.Cell(1 + index, 23).SetValue("Download").Hyperlink = new XLHyperlink(
+                        $"{_configuration["ClientAppUrl"]}/images/company/{submission.AcceptanceLetterFileName}");
+                    worksheet.Cell(1 + index, 24).SetValue("Download").Hyperlink = new XLHyperlink(
+                        $"{_configuration["ClientAppUrl"]}/images/company/{submission.CompanyProfileFileName}");
                     index++;
                 }
 

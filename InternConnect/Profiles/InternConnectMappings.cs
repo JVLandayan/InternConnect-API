@@ -41,8 +41,11 @@ namespace InternConnect.Profiles
             //Admin
 
             CreateMap<Admin, AdminDto.UpdateAdmin>().ReverseMap();
+            CreateMap<Admin, AdminDto.UpdateAdminProgram>().ReverseMap();
+            CreateMap<Admin, AdminDto.UpdateAdminSection>().ReverseMap();
             CreateMap<Admin, AdminDto.ReadAdmin>().ReverseMap();
             CreateMap<Admin, AdminDto.ReadCoordinator>().ReverseMap();
+
 
             //AdminResponse
             CreateMap<AdminResponse, AdminResponseDto.ReadResponse>().ReverseMap();

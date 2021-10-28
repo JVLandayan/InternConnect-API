@@ -12,6 +12,18 @@ namespace InternConnect.Dto.Admin
             [Required] public string StampFileName { get; set; }
         }
 
+        public class UpdateAdminSection
+        {
+            public int Id { get; set; }
+            public int? SectionId { get; set; }
+        }
+        public class UpdateAdminProgram
+        {
+            public int Id { get; set; }
+            public int? ProgramId { get; set; }
+        }
+
+
         public class ReadAdmin
         {
             public int Id { get; set; }

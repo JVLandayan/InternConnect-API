@@ -58,7 +58,7 @@ namespace InternConnect.Controllers
 
         //[Authorize(Roles = "Coordinator, Chair")]
         [HttpPost("students")]
-        public ActionResult<AccountDto.AddAccountStudent> AddStudents(List<AccountDto.AddAccountStudent> payload)
+        public ActionResult<List<AccountDto.AddAccountStudent>> AddStudents(List<AccountDto.AddAccountStudent> payload)
         {
             var accountData = _accountService.AddStudents(payload);
             //if (accountData.Id == 0) return BadRequest("Email already exists");

@@ -10,6 +10,7 @@ using InternConnect.Data.Interfaces;
 using InternConnect.Dto.Event;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Authenticators;
 
@@ -104,7 +105,7 @@ namespace InternConnect.Service.ThirdParty
             var mailText = ReadHtml("submission-new");
             mailText = mailText.Replace("[new-submission]",
                 $"{_configuration["ClientAppUrl"]}/admin/new-submissions");
-            SendMailToApi(adminData.Account.Email, mailText, "You have a new endorsement request");
+            SendMailToApi(adminData.Account.Email, mailText, "You have a new endorsement request").Content.ToString();
         }
 
         public void NotifyChair(int submissionId, int adminId, bool isAccepted)
@@ -128,12 +129,12 @@ namespace InternConnect.Service.ThirdParty
 
             if (isAccepted)
             {
-                if (adminResponses.Count == 10) SendMailToApi(chairData.Account.Email, mailToAdmin, "You currently have a lot of requests today");
-                SendMailToApi(submissionData.Student.Account.Email, mailToStudent, "Some Additional Updates");
+                if (adminResponses.Count == 10) SendMailToApi(chairData.Account.Email, mailToAdmin, "You currently have a lot of requests today").Content.ToString();
+                SendMailToApi(submissionData.Student.Account.Email, mailToStudent, "Some Additional Updates").Content.ToString();
             }
             else
             {
-                SendMailToApi(submissionData.Student.Account.Email, failText, "Sorry, your request was disapproved");
+                SendMailToApi(submissionData.Student.Account.Email, failText, "Sorry, your request was disapproved").Content.ToString();
             }
         }
 
@@ -158,13 +159,13 @@ namespace InternConnect.Service.ThirdParty
             {
                 if (responseData.Count == 10)
                 {
-                    SendMailToApi(deanData.Account.Email, mailText, "You currently have a lot of requests today");
+                    SendMailToApi(deanData.Account.Email, mailText, "You currently have a lot of requests today").Content.ToString();
                 }
-                SendMailToApi(submissionData.Student.Account.Email, mailToStudent, "Some Additional Updates");
+                SendMailToApi(submissionData.Student.Account.Email, mailToStudent, "Some Additional Updates").Content.ToString();
             }
             else
             {
-                SendMailToApi(submissionData.Student.Account.Email, failText, "Sorry, your request was disapproved");
+                SendMailToApi(submissionData.Student.Account.Email, failText, "Sorry, your request was disapproved").Content.ToString();
             }
             
         }
@@ -194,7 +195,7 @@ namespace InternConnect.Service.ThirdParty
 
             if (isAccepted)
             {
-
+                SendMailToApi(accountData.Email, mailToAdmin, "You've received an endorsement letter from the Dean").Content.ToString();
                 #region MailToIgaarp
                 var content = _pdfService.AddPdf(submissionId).ToArray();
                 var ayData = _academicYearRepository.GetAll().First();
@@ -252,7 +253,6 @@ namespace InternConnect.Service.ThirdParty
                 $"{_configuration["ClientAppUrl"]}" +
                 $"/forgotpassword?email={accountData.Email}&resetkey={accountData.ResetKey}");
             SendMailToApi(accountData.Email, mailText, "Password Reset Information").Content.ToString();
-            //SendMail(accountData.Email, mailText, "Password Reset Information", 4);
         }
 
         public void ChangeDean(string oldEmail, string newEmail, string resetkey)
@@ -281,11 +281,11 @@ namespace InternConnect.Service.ThirdParty
                 var mailText = ReadHtml("events");
             template = mailText.Replace("[[-insert-event-name-here]]", payload.Name);
             template = template.Replace("[MM-DD-YYYY]", endDate);
-            //var mailText 
             foreach (var student in studentList)
             {
-                SendMailToApi(student.Account.Email, template, "Event reminder");
+                SendMailToApi(student.Account.Email, template, "Event reminder").Content.ToString();
             }
+
         }
 
 
@@ -297,6 +297,83 @@ namespace InternConnect.Service.ThirdParty
 
             return mailText;
         }
+
+
+
+        private IRestResponse SendMailToApi(string email, string payload, string subject)
+        {
+            RestClient client = new RestClient();
+            client.BaseUrl = new Uri("https://api.mailgun.net/v3/internconnect-cics.com");
+
+            client.Authenticator = new HttpBasicAuthenticator("api",
+                "key-6b82a3acac6564095c9dac25eb3e2e09");
+            RestRequest request = new RestRequest();
+            request.AddParameter("domain", "internconnect-cics.com", ParameterType.UrlSegment);
+            request.Resource = "https://api.mailgun.net/v3/internconnect-cics.com/messages";
+            request.AddParameter("from", "postmaster-noreply<mailgun@internconnect-cics.com>");
+            request.AddParameter("to", email);
+            request.AddParameter("subject", subject);
+            request.AddParameter("html", payload);
+            request.Method = Method.POST;
+            return client.Execute(request);
+        }
+        
+
+        private IRestResponse SendMailToApiWithAttachment(string email, string payload, string subject, MemoryStream content, Submission submissionData)
+        {
+            RestClient client = new RestClient();
+            client.BaseUrl = new Uri("https://api.mailgun.net/v3/internconnect-cics.com");
+
+            client.Authenticator = new HttpBasicAuthenticator("api",
+                "67bcb6bd8d580970b4017b5511acf438-20ebde82-4078e5bb");
+            RestRequest request = new RestRequest();
+            request.AddParameter("domain", "internconnect-cics.com", ParameterType.UrlSegment);
+            request.Resource = "https://api.mailgun.net/v3/internconnect-cics.com/messages";
+            request.AddParameter("from", "postmaster-noreply<mailgun@internconnect-cics.com>");
+            request.AddParameter("to", email);
+            request.AddParameter("subject", subject);
+            request.AddParameter("html", payload);
+            request.AddFile("attachment",content.ToArray(),
+                $"{submissionData.Student.Program.Name}_{submissionData.LastName}, {submissionData.FirstName} {submissionData.LastName} {submissionData.MiddleInitial}.pdf");
+
+            request.Method = Method.POST;
+            return client.Execute(request);
+        }
+
+        //private IRestResponse SendMailToMultiplePeople(string payload, string subject, List<Student> studentList)
+        //{
+        //    Dictionary<string, Dictionary<string, string>> recipientVariables =
+        //        new Dictionary<string, Dictionary<string, string>>();
+
+        //    RestClient client = new RestClient();
+        //    client.BaseUrl = new Uri("https://api.mailgun.net/v3/internconnect-cics.com");
+
+        //    client.Authenticator = new HttpBasicAuthenticator("api",
+        //        "key-6b82a3acac6564095c9dac25eb3e2e09");
+        //    RestRequest request = new RestRequest();
+        //    request.AddParameter("domain", "internconnect-cics.com", ParameterType.UrlSegment);
+        //    request.Resource = "https://api.mailgun.net/v3/internconnect-cics.com/messages";
+        //    request.AddParameter("from", "Excited User <mailgun@internconnect-cics.com>");
+        //    foreach (var student in studentList)
+        //    {
+        //        request.AddParameter("to", student.Account.Email);
+        //        recipientVariables.Add(student.Account.Email,new Dictionary<string, string>
+        //        {
+        //            {"unique_id",student.Account.Id.ToString()}
+        //        });
+        //    }
+
+
+        //    var json = JsonConvert.SerializeObject(recipientVariables);
+
+        //    request.AddParameter("subject", subject);
+        //    request.AddParameter("html", payload);
+        //    request.AddParameter("recipient-variables", json);
+
+        //    request.Method = Method.POST;
+        //    return client.Execute(request);
+        //}
+
 
         //private void SendMail(string email, string emailTemplate, string subject, int authId)
         //{
@@ -313,46 +390,6 @@ namespace InternConnect.Service.ThirdParty
         //    mail.IsBodyHtml = true;
         //    client.Send(mail);
         //}
-
-        private IRestResponse SendMailToApi(string email, string payload, string subject)
-        {
-            RestClient client = new RestClient();
-            client.BaseUrl = new Uri("https://api.mailgun.net/v3/internconnect-cics.com");
-
-            client.Authenticator = new HttpBasicAuthenticator("api",
-                "");
-            RestRequest request = new RestRequest();
-            request.AddParameter("domain", "internconnect-cics.com", ParameterType.UrlSegment);
-            request.Resource = "https://api.mailgun.net/v3/internconnect-cics.com/messages";
-            request.AddParameter("from", "Excited User <mailgun@internconnect-cics.com>");
-            request.AddParameter("to", email);
-            request.AddParameter("subject", subject);
-            request.AddParameter("html", payload);
-            request.Method = Method.POST;
-            return client.Execute(request);
-        }
-
-
-        private IRestResponse SendMailToApiWithAttachment(string email, string payload, string subject, MemoryStream content, Submission submissionData)
-        {
-            RestClient client = new RestClient();
-            client.BaseUrl = new Uri("https://api.mailgun.net/v3/internconnect-cics.com");
-
-            client.Authenticator = new HttpBasicAuthenticator("api",
-                "67bcb6bd8d580970b4017b5511acf438-20ebde82-4078e5bb");
-            RestRequest request = new RestRequest();
-            request.AddParameter("domain", "internconnect-cics.com", ParameterType.UrlSegment);
-            request.Resource = "https://api.mailgun.net/v3/internconnect-cics.com/messages";
-            request.AddParameter("from", "Excited User <mailgun@internconnect-cics.com>");
-            request.AddParameter("to", email);
-            request.AddParameter("subject", subject);
-            request.AddParameter("html", payload);
-            request.AddFile("attachment",content.ToArray(),
-                $"{submissionData.Student.Program.Name}_{submissionData.LastName}, {submissionData.FirstName} {submissionData.LastName} {submissionData.MiddleInitial}.pdf");
-
-            request.Method = Method.POST;
-            return client.Execute(request);
-        }
 
         //    client.Credentials = new NetworkCredential("dean-noreply@internconnect-cics.com", "internconnect!0!");
         //}

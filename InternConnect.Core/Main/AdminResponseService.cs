@@ -66,8 +66,10 @@ namespace InternConnect.Service.Main
                         ActorType = _context.Set<Authorization>().Find(adminData.AuthId).Name
                     }
                 );
-
-            responseData.Submission.IsoCode = isoCode;
+            if (payload.AcceptedByCoordinator)
+            {
+                responseData.Submission.IsoCode = isoCode;
+            }
             var isoCodeData = _isoCodeRepository.GetAll().First(a => a.Code == isoCode && a.AdminId == getAdminId);
             isoCodeData.Used = true;
             isoCodeData.SubmissionId = responseData.Submission.Id;

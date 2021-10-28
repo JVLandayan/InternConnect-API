@@ -31,9 +31,6 @@ namespace InternConnect.Dto.Student
         {
             public int Id { get; set; }
             public int SectionId { get; set; }
-            public SectionDto.ReadSection Section { get; set; }
-            public int ProgramId { get; set; }
-            public ProgramDto.ReadProgram Program { get; set; }
         }
     }
 }
