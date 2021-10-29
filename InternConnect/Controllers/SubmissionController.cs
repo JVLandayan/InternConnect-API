@@ -40,30 +40,30 @@ namespace InternConnect.Controllers
 
         [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
         [HttpGet]
-        public ActionResult<IEnumerable<SubmissionDto.ReadSubmission>> GetAllSubmission()
+        public ActionResult<IEnumerable<SubmissionDto.SubmissionReports>> GetAllSubmission()
         {
             return Ok(_submissionService.GetAllSubmissions());
         }
 
         [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
         [HttpGet("program/{programId}")]
-        public ActionResult<IEnumerable<SubmissionDto.ReadSubmission>> GetSubmissionByProgram(int programId)
+        public ActionResult<IEnumerable<SubmissionDto.SubmissionReports>> GetSubmissionByProgram(int programId)
         {
             return Ok(_submissionService.GetSubmissionByProgram(programId));
         }
 
         [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
         [HttpGet("section/{sectionId}")]
-        public ActionResult<IEnumerable<SubmissionDto.ReadSubmission>> GetSubmissionBySection(int sectionId)
+        public ActionResult<IEnumerable<SubmissionDto.SubmissionReports>> GetSubmissionBySection(int sectionId)
         {
             return Ok(_submissionService.GetSubmissionBySection(sectionId));
         }
 
         [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
-        [HttpGet("bystep/{stepNumber}")]
-        public ActionResult<IEnumerable<SubmissionDto.ReadSubmission>> GetSubmissionByStep(int stepNumber)
+        [HttpGet("bystep/{stepNumber}/{uniqueId}")]
+        public ActionResult<IEnumerable<SubmissionDto.SubmissionStatus>> GetSubmissionByStep(int stepNumber, int uniqueId)
         {
-            return Ok(_submissionService.GetSubmissionsByStep(stepNumber));
+            return Ok(_submissionService.GetSubmissionsByStep(stepNumber, uniqueId));
         }
 
         [Authorize(Roles = "Student")]

@@ -69,10 +69,11 @@ namespace InternConnect.Service.Main
             if (payload.AcceptedByCoordinator)
             {
                 responseData.Submission.IsoCode = isoCode;
+                var isoCodeData = _isoCodeRepository.GetAll().First(a => a.Code == isoCode && a.AdminId == getAdminId);
+                isoCodeData.Used = true;
+                isoCodeData.SubmissionId = responseData.Submission.Id;
             }
-            var isoCodeData = _isoCodeRepository.GetAll().First(a => a.Code == isoCode && a.AdminId == getAdminId);
-            isoCodeData.Used = true;
-            isoCodeData.SubmissionId = responseData.Submission.Id;
+
             _context.SaveChanges();
             try
             {
