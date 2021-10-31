@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace InternConnect.Context.Models
 {
@@ -8,6 +9,8 @@ namespace InternConnect.Context.Models
         public string Name { get; set; }
         public string IsoCodeProgramNumber { get; set; }
         public int? NumberOfHours { get; set; }
+        public DateTime PracticumStart { get; set; }
+        public DateTime PracticumEnd { get; set; }
         public bool IsActive { get; set; }
         public List<Track> Tracks { get; set; }
 

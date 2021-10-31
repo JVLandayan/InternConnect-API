@@ -9,8 +9,8 @@ namespace InternConnect.Dto.AcademicYear
         {
             public int Id { get; set; }
             public string CollegeName { get; set; }
-            public DateTime StartDate { get; set; }
-            public DateTime EndDate { get; set; }
+            public int StartYear { get; set; }
+            public int EndYear { get; set; }
             public string IgaarpEmail { get; set; }
         }
 
@@ -18,9 +18,8 @@ namespace InternConnect.Dto.AcademicYear
         {
             [Required] public string CollegeName { get; set; }
 
-            [Required] public DateTime StartDate { get; set; }
-
-            [Required] public DateTime EndDate { get; set; }
+            [Required] public int StartYear { get; set; }
+            [Required] public int EndYear { get; set; }
 
             [Required] public string IgaarpEmail { get; set; }
         }

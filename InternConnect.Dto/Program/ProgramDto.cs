@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using InternConnect.Dto.Track;
 
@@ -14,6 +15,8 @@ namespace InternConnect.Dto.Program
             public int? NumberOfHours { get; set; }
             public int IsActive { get; set; }
             public List<TrackDto.ReadTrack> Tracks { get; set; }
+            public DateTime PracticumStart { get; set; }
+            public DateTime PracticumEnd { get; set; }
         }
 
         public class UpdateProgram
@@ -26,6 +29,10 @@ namespace InternConnect.Dto.Program
             public string IsoCodeProgramNumber { get; set; }
             [Required]
             public int NumberOfHours { get; set; }
+            [Required]
+            public DateTime PracticumStart { get; set; }
+            [Required]
+            public DateTime PracticumEnd { get; set; }
         }
 
 
@@ -37,6 +44,10 @@ namespace InternConnect.Dto.Program
             public string IsoCodeProgramNumber { get; set; }
             [Required]
             public int NumberOfHours { get; set; }
+            [Required]
+            public DateTime PracticumStart { get; set; }
+            [Required]
+            public DateTime PracticumEnd { get; set; }
         }
     }
 }

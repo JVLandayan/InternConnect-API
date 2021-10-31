@@ -96,10 +96,10 @@ namespace InternConnect.Controllers
 
         //[Authorize(Roles = "Dean")]
         [HttpPost("DeleteAll")]
-        public ActionResult<string> DeleteAllAccounts(AuthenticationModel payload, string startDate, string endDate)
+        public ActionResult<string> DeleteAllAccounts(AuthenticationModel payload, int startYear, int endYear)
         {
             if (_authService.Authenticate(payload) == null) return BadRequest("Wrong Password");
-            _accountService.DeleteAll(startDate, endDate);
+            _accountService.DeleteAll(startYear, endYear);
             return NoContent();
         }
 

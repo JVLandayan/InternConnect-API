@@ -9,9 +9,9 @@ namespace InternConnect.Context.Entity_Configurations
         public void Configure(EntityTypeBuilder<AcademicYear> modelBuilder)
         {
             modelBuilder.HasKey(ay => ay.Id);
-            modelBuilder.Property(ay => ay.StartDate).IsRequired();
+            modelBuilder.Property(ay => ay.StartYear).IsRequired();
             modelBuilder.Property(ay => ay.IgaarpEmail).IsRequired();
-            modelBuilder.Property(ay => ay.EndDate).IsRequired();
+            modelBuilder.Property(ay => ay.EndYear).IsRequired();
         }
     }
 }

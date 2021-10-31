@@ -24,7 +24,7 @@ namespace InternConnect.Service.Main
         public AccountDto.ReadAccount AddTechCoordinator(AccountDto.AddAccountTechCoordinator entity);
         public void Delete(int id);
         public List<AccountDto.ReadAccount> GetAll();
-        public void DeleteAll(string startDate, string endDate);
+        public void DeleteAll(int startYear, int endYear);
         public Account GetById(int id);
         public Account ChangeDean(ChangeDeanModel payload);
     }
@@ -171,12 +171,12 @@ namespace InternConnect.Service.Main
             return mappedData;
         }
 
-        public void DeleteAll(string startDate, string endDate)
+        public void DeleteAll(int startYear, int endYear)
         {
             var ayList = _ayRepository.GetAll().First();
             var ayData = _ayRepository.Get(ayList.Id);
-            ayData.StartDate = DateTime.ParseExact(startDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-            ayData.EndDate = DateTime.ParseExact(endDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            ayData.StartYear = startYear;
+            ayData.EndYear = endYear;
             ;
             _context.SaveChanges();
 

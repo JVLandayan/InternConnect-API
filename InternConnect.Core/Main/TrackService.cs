@@ -41,7 +41,7 @@ namespace InternConnect.Service.Main
 
         public IEnumerable<TrackDto.ReadTrack> GetAllTracks()
         {
-            var trackList = _trackRepository.GetAll().Where(t=>t.IsActive);
+            var trackList = _trackRepository.GetAll();
             var mappedList = new List<TrackDto.ReadTrack>();
             foreach (var track in trackList) mappedList.Add(_mapper.Map<TrackDto.ReadTrack>(track));
 

@@ -152,7 +152,7 @@ namespace InternConnect.Service.ThirdParty
                             $"UST:A022-0{submissionData.Student.Program.IsoCodeProgramNumber}-LE{submissionData.IsoCode}");
                     var academicYear =
                         new Text(
-                            $"AY {academicYearData.StartDate.ToString("yyyy")} - {academicYearData.EndDate.ToString("yyyy")}");
+                            $"AY {academicYearData.StartYear} - {academicYearData.EndYear}");
                     var isoCodep = new Paragraph().Add(isoCode).SetTextAlignment(TextAlignment.LEFT).SetFontSize(11);
                     var academicYearp = new Paragraph().Add(academicYear).SetTextAlignment(TextAlignment.LEFT)
                         .SetFontSize(11);
@@ -214,7 +214,7 @@ namespace InternConnect.Service.ThirdParty
                     document.Add(new Paragraph().Add(new Text(
                             $"This is to recommend {submissionData.StudentTitle} {submissionData.FirstName} {submissionData.MiddleInitial} {submissionData.LastName}, " +
                             $"a bona fide student of section {submissionData.Student.Section.Name} of the {academicYearData.CollegeName} of the University  of Santo Tomas to take an Internship or  Practicum  Course  " +
-                            $"this  {academicYearData.StartDate.ToString("MMMM")}  –  {academicYearData.EndDate.ToString("MMMM")}  {academicYearData.EndDate.ToString("yyyy")}  in  your  reputable  company.  As  part  of  our Outcomes-Based Education curriculum requirements " +
+                            $"this  {submissionData.Student.Program.PracticumStart.ToString("MMMM")}  –  {submissionData.Student.Program.PracticumEnd.ToString("MMMM")}  {submissionData.Student.Program.PracticumEnd.ToString("yyyy")}  in  your  reputable  company.  As  part  of  our Outcomes-Based Education curriculum requirements " +
                             $"in the  B. S. {submissionData.Student.Program.Name} program, said  student  must  undertake  a  minimum  of  {submissionData.Student.Program.NumberOfHours}  hours  of  relevant  company  " +
                             "or  industry immersion. ").SetFontSize(11)).SetTextAlignment(TextAlignment.JUSTIFIED)
                         .SetFixedLeading(11.0f).SetMarginBottom(11.0f));
@@ -441,7 +441,7 @@ namespace InternConnect.Service.ThirdParty
                             $"UST:A022-0{submissionData.Student.Program.IsoCodeProgramNumber}-LE{submissionData.IsoCode}");
                     var academicYear =
                         new Text(
-                            $"AY {academicYearData.StartDate.ToString("yyyy")} - {academicYearData.EndDate.ToString("yyyy")}");
+                            $"AY {submissionData.Student.Program.PracticumStart.ToString("yyyy")} - {submissionData.Student.Program.PracticumEnd.ToString("yyyy")}");
                     var isoCodep = new Paragraph().Add(isoCode).SetTextAlignment(TextAlignment.LEFT).SetFontSize(11);
                     var academicYearp = new Paragraph().Add(academicYear).SetTextAlignment(TextAlignment.LEFT)
                         .SetFontSize(11);
@@ -503,7 +503,7 @@ namespace InternConnect.Service.ThirdParty
                     document.Add(new Paragraph().Add(new Text(
                             $"This is to recommend {submissionData.StudentTitle} {submissionData.FirstName} {submissionData.MiddleInitial} {submissionData.LastName}, " +
                             $"a bona fide student of section {submissionData.Student.Section.Name} of the {academicYearData.CollegeName} of the University  of Santo Tomas to take an Internship or  Practicum  Course  " +
-                            $"this  {academicYearData.StartDate.ToString("MMMM")}  –  {academicYearData.EndDate.ToString("MMMM")}  {academicYearData.EndDate.ToString("yyyy")}  in  your  reputable  company.  As  part  of  our Outcomes-Based Education curriculum requirements " +
+                            $"this  {submissionData.Student.Program.PracticumStart.ToString("MMMM")}  –  {submissionData.Student.Program.PracticumEnd.ToString("MMMM")}  {submissionData.Student.Program.PracticumEnd.ToString("yyyy")}  in  your  reputable  company.  As  part  of  our Outcomes-Based Education curriculum requirements " +
                             $"in the  B. S. {submissionData.Student.Program.Name} program, said  student  must  undertake  a  minimum  of  {submissionData.Student.Program.NumberOfHours}  hours  of  relevant  company  " +
                             "or  industry immersion. ").SetFontSize(11)).SetTextAlignment(TextAlignment.JUSTIFIED)
                         .SetFixedLeading(11.0f).SetMarginBottom(11.0f));
@@ -737,7 +737,7 @@ namespace InternConnect.Service.ThirdParty
                             $"UST:A022-{programList.First(p => p.Id == submissionData.Student.ProgramId).IsoCodeProgramNumber}-LE{submissionData.IsoCode}");
                     var academicYear =
                         new Text(
-                            $"AY {academicYearData.StartDate.ToString("yyyy")} - {academicYearData.EndDate.ToString("yyyy")}");
+                            $"AY {academicYearData.StartYear} - {academicYearData.EndYear}");
                     var isoCodep = new Paragraph().Add(isoCode).SetTextAlignment(TextAlignment.LEFT).SetFontSize(11);
                     var academicYearp = new Paragraph().Add(academicYear).SetTextAlignment(TextAlignment.LEFT)
                         .SetFontSize(11);
@@ -799,7 +799,7 @@ namespace InternConnect.Service.ThirdParty
                     document.Add(new Paragraph().Add(new Text(
                             $"This is to recommend {submissionData.StudentTitle}. {submissionData.FirstName} {submissionData.MiddleInitial}. {submissionData.LastName}, " +
                             $"a bona fide student of section {sectionData.Name} of the {academicYearData.CollegeName} of the University  of Santo Tomas to take an Internship or  Practicum  Course  " +
-                            $"this  {academicYearData.StartDate.ToString("MMMM")}  –  {academicYearData.EndDate.ToString("MMMM")}  {academicYearData.EndDate.ToString("yyyy")}  in  your  reputable  company.  As  part  of  our Outcomes-Based Education curriculum requirements " +
+                            $"this  {submissionData.Student.Program.PracticumStart.ToString("MMMM")}  –  {submissionData.Student.Program.PracticumEnd.ToString("MMMM")}  {submissionData.Student.Program.PracticumEnd.ToString("yyyy")}  in  your  reputable  company.  As  part  of  our Outcomes-Based Education curriculum requirements " +
                             $"in the  B. S. {programList.First(p => p.Id == submissionData.Student.ProgramId).Name} program, said  student  must  undertake  a  minimum  of  {programList.First(p => p.Id == submissionData.Student.ProgramId).NumberOfHours}  hours  of  relevant  company  " +
                             "or  industry immersion. ").SetFontSize(11)).SetTextAlignment(TextAlignment.JUSTIFIED)
                         .SetFixedLeading(11.0f).SetMarginBottom(11.0f));
@@ -1018,7 +1018,7 @@ namespace InternConnect.Service.ThirdParty
                             "UST:A022-09-LE100");
                     var academicYear =
                         new Text(
-                            $"AY {academicYearData.StartDate.ToString("yyyy")} - {academicYearData.EndDate.ToString("yyyy")}");
+                            $"AY {academicYearData.StartYear} - {academicYearData.EndYear}");
                     var isoCodep = new Paragraph().Add(isoCode).SetTextAlignment(TextAlignment.LEFT).SetFontSize(11);
                     var academicYearp = new Paragraph().Add(academicYear).SetTextAlignment(TextAlignment.LEFT)
                         .SetFontSize(11);
@@ -1066,7 +1066,7 @@ namespace InternConnect.Service.ThirdParty
                     document.Add(new Paragraph().Add(new Text(
                             "This is to recommend Mr. Juan Rizal. Kapitana, " +
                             "a bona fide student of section 4ITH of the College of Information and Computing Sciences of the University of Santo Tomas to take an Internship or  Practicum  Course  " +
-                            $"this  {academicYearData.StartDate.ToString("MMMM")}  –  {academicYearData.EndDate.ToString("MMMM")}  {academicYearData.EndDate.ToString("yyyy")}  in  your  reputable  company.  As  part  of  our Outcomes-Based Education curriculum requirements " +
+                            $"this  June  –  August  2020  in  your  reputable  company.  As  part  of  our Outcomes-Based Education curriculum requirements " +
                             "in the  B. S. Information Technology program, said  student  must  undertake  a  minimum  of  750  hours  of  relevant  company  " +
                             "or  industry immersion. ").SetFontSize(11)).SetTextAlignment(TextAlignment.JUSTIFIED)
                         .SetFixedLeading(11.0f).SetMarginBottom(11.0f));
