@@ -55,7 +55,7 @@ namespace InternConnect.Controllers
         public ActionResult<SectionDto.ReadSection> AddSection(SectionDto.AddSection payload)
         {
             var sectionData = _sectionService.AddSection(payload);
-            return CreatedAtRoute(nameof(GetSection), new {sectionData.Id}, sectionData);
+            return CreatedAtRoute(nameof(GetSection), new { sectionData.Id }, sectionData);
         }
 
         [Authorize(Roles = "Dean,Chair,Coordinator")]

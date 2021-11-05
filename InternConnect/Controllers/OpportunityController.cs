@@ -67,7 +67,7 @@ namespace InternConnect.Controllers
         public ActionResult<OpportunityDto.ReadOpportunity> AddOpportunity(OpportunityDto.AddOpportunity payload)
         {
             var opportunityData = _opportunityService.AddOpportunity(payload);
-            return CreatedAtRoute(nameof(GetOpportunity), new {opportunityData.Id}, opportunityData);
+            return CreatedAtRoute(nameof(GetOpportunity), new { opportunityData.Id }, opportunityData);
         }
     }
 }

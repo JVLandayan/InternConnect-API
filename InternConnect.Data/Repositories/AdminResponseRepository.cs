@@ -10,7 +10,6 @@ namespace InternConnect.Data.Repositories
     {
         public AdminResponseRepository(InternConnectContext context) : base(context)
         {
-
         }
 
         public AdminResponse GetAdminResponseWithSubmission(int id)

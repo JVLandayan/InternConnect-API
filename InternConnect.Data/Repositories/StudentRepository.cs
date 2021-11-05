@@ -15,13 +15,14 @@ namespace InternConnect.Data.Repositories
 
         public IEnumerable<Student> GetAllStudentWithRelatedData()
         {
-            return Context.Set<Student>().Include(s => s.Account).Include(s => s.Section).Include(s => s.Program).ToList();
+            return Context.Set<Student>().Include(s => s.Account).Include(s => s.Section).Include(s => s.Program)
+                .ToList();
         }
 
         public IEnumerable<Student> GetDataOfStudentsForDashboard()
         {
             return Context.Set<Student>().Include(s => s.Account).Include(s => s.Section).Include(s => s.Program)
-                .Include(s => s.Submissions).Include(s=>s.Submissions).ThenInclude(s=>s.AdminResponse);
+                .Include(s => s.Submissions).Include(s => s.Submissions).ThenInclude(s => s.AdminResponse);
         }
 
         public Student GetStudentWithAccountData(int studentId)

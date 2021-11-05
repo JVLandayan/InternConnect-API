@@ -1,7 +1,7 @@
-﻿using InternConnect.Dto.Account;
+﻿using System.ComponentModel.DataAnnotations;
+using InternConnect.Dto.Account;
 using InternConnect.Dto.Program;
 using InternConnect.Dto.Section;
-using System.ComponentModel.DataAnnotations;
 
 namespace InternConnect.Dto.Admin
 {
@@ -17,6 +17,7 @@ namespace InternConnect.Dto.Admin
             public int Id { get; set; }
             public int? SectionId { get; set; }
         }
+
         public class UpdateAdminProgram
         {
             public int Id { get; set; }
@@ -35,7 +36,6 @@ namespace InternConnect.Dto.Admin
 
             public SectionDto.ReadSection Section { get; set; }
             public ProgramDto.ReadProgram Program { get; set; }
-
         }
 
         public class ReadCoordinator

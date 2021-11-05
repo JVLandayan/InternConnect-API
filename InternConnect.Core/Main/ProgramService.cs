@@ -43,28 +43,22 @@ namespace InternConnect.Service.Main
         {
             var programData = _programRepository.GetProgramAndTracks(id);
             programData.IsActive = false;
-            foreach (var programTracks in programData.Tracks)
-            {
-                programTracks.IsActive = false;
-            }
+            foreach (var programTracks in programData.Tracks) programTracks.IsActive = false;
             _context.SaveChanges();
         }
 
         public IEnumerable<ProgramDto.ReadProgram> GetAll()
         {
-            var programData = _programRepository.GetAllProgramAndTracks().Where(p=>p.IsActive);
+            var programData = _programRepository.GetAllProgramAndTracks().Where(p => p.IsActive);
             var mappedData = new List<ProgramDto.ReadProgram>();
             foreach (var program in programData) mappedData.Add(_mapper.Map<ProgramDto.ReadProgram>(program));
-            return mappedData.OrderBy(p=>p.Name);
+            return mappedData.OrderBy(p => p.Name);
         }
 
         public ProgramDto.ReadProgram GetById(int id)
         {
             var programData = _programRepository.GetProgramAndTracks(id);
-            if (programData.IsActive == false)
-            {
-                return null;
-            }
+            if (programData.IsActive == false) return null;
             return _mapper.Map<ProgramDto.ReadProgram>(_programRepository.GetProgramAndTracks(id));
         }
 

@@ -47,7 +47,7 @@ namespace InternConnect.Controllers
         public ActionResult<ProgramDto.ReadProgram> AddProgram(ProgramDto.AddProgram payload)
         {
             var programData = _programService.AddProgram(payload);
-            return CreatedAtRoute(nameof(GetProgram), new {programData.Id}, programData);
+            return CreatedAtRoute(nameof(GetProgram), new { programData.Id }, programData);
         }
 
 

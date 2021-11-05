@@ -107,7 +107,7 @@ namespace InternConnect.Service.Main
                     {
                         Code = item.Code,
                         AdminId = adminId,
-                        ProgramId = (int) adminData.ProgramId,
+                        ProgramId = (int)adminData.ProgramId,
                         SubmissionId = null,
                         Used = false
                     });

@@ -1,6 +1,4 @@
-﻿
-
-namespace InternConnect.Dto
+﻿namespace InternConnect.Dto
 {
     public class LogsQuery
     {

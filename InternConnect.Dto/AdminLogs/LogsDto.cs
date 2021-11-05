@@ -1,6 +1,4 @@
 ﻿using System;
-using InternConnect.Dto.Admin;
-using InternConnect.Dto.Submission;
 
 namespace InternConnect.Dto.AdminLogs
 {
@@ -13,8 +11,6 @@ namespace InternConnect.Dto.AdminLogs
             public string ActorEmail { get; set; }
             public string ActorType { get; set; }
             public string Action { get; set; }
-
         }
-
     }
 }

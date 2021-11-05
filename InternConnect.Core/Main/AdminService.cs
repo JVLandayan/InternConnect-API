@@ -90,8 +90,6 @@ namespace InternConnect.Service.Main
             //coord section target to coord section from
             adminDataTo.SectionId = payloadFrom.SectionId;
             _context.SaveChanges();
-
-
         }
 
         public void UpdateAdminProgram(AdminDto.UpdateAdminProgram payloadFrom, AdminDto.UpdateAdminProgram payloadTo)
@@ -110,10 +108,7 @@ namespace InternConnect.Service.Main
         public void DeleteESignature(int adminId, string adminEmail)
         {
             var adminData = _adminRepository.GetAdminWithEmail(adminId);
-            if (adminData.Account.Email != adminEmail.ToUpper())
-            {
-                return;
-            }
+            if (adminData.Account.Email != adminEmail.ToUpper()) return;
             adminData.StampFileName = null;
             _context.SaveChanges();
         }

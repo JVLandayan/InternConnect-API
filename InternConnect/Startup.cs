@@ -130,7 +130,9 @@ namespace InternConnect
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IBackgroundJobClient backgroundJobClient, IRecurringJobManager recurringJobManager, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            IBackgroundJobClient backgroundJobClient, IRecurringJobManager recurringJobManager,
+            IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -144,19 +146,15 @@ namespace InternConnect
 
             app.Use(async (context, next) =>
             {
-
                 await next();
 
-                if (context.Response.StatusCode == 404 && !System.IO.Path.HasExtension(context.Request.Path.Value))
+                if (context.Response.StatusCode == 404 && !Path.HasExtension(context.Request.Path.Value))
 
                 {
-
                     context.Request.Path = "/index.html";
 
                     await next();
-
                 }
-
             });
             app.UseDefaultFiles();
             app.UseHttpsRedirection();
@@ -207,7 +205,8 @@ namespace InternConnect
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
             app.UseHangfireDashboard();
-            recurringJobManager.AddOrUpdate("Run every day",()=>serviceProvider.GetService<IBackgroundService>().CompanyStatus(),Cron.Daily);
+            recurringJobManager.AddOrUpdate("Run every day",
+                () => serviceProvider.GetService<IBackgroundService>().CompanyStatus(), Cron.Daily);
         }
     }
 }

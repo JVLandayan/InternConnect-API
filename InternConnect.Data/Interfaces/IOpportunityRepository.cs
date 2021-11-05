@@ -5,6 +5,6 @@ namespace InternConnect.Data.Interfaces
 {
     public interface IOpportunityRepository : IBaseRepository<Opportunity>
     {
-        public IEnumerable<Opportunity>  GetAllOpportunitiesAndCompanies();
+        public IEnumerable<Opportunity> GetAllOpportunitiesAndCompanies();
     }
 }

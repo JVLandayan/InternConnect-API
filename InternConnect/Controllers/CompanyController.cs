@@ -64,7 +64,7 @@ namespace InternConnect.Controllers
         public ActionResult<CompanyDto.ReadCompany> AddCompany(CompanyDto.AddCompany payload)
         {
             var companyData = _companyService.AddCompany(payload);
-            return CreatedAtRoute(nameof(GetCompany), new {companyData.Id}, companyData);
+            return CreatedAtRoute(nameof(GetCompany), new { companyData.Id }, companyData);
         }
     }
 }

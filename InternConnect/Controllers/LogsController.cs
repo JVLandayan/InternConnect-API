@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using InternConnect.Dto;
 using InternConnect.Dto.AdminLogs;
 using InternConnect.Service.Main;
 using Microsoft.AspNetCore.Authorization;
@@ -24,12 +23,14 @@ namespace InternConnect.Controllers
         {
             return Ok(_logsService.GetAllLogs());
         }
+
         [Authorize(Roles = "Dean,Chair,Coordinator,Tech Coordinator")]
         [HttpGet("submission/{submissionId}")]
         public ActionResult<IEnumerable<LogsDto.ReadLogs>> GetLogsBySubmissionId(int submissionId)
         {
             return Ok(_logsService.GetLogsBySubmissionId(submissionId));
         }
+
         [Authorize(Roles = "Dean,Chair,Coordinator,Tech Coordinator")]
         [HttpGet("admin/{adminId}")]
         public ActionResult<IEnumerable<LogsDto.ReadLogs>> GetLogsByAdminEmail(int adminId)

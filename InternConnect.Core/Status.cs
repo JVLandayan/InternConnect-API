@@ -2,6 +2,13 @@
 {
     public class Status
     {
+        public enum CompanyStatusList
+        {
+            NEW,
+            EXISTING,
+            EXPIRED
+        }
+
         public enum StatusList
         {
             NEW_SUBMISSION,
@@ -10,13 +17,6 @@
             ACCEPTEDBYDEAN,
             EMAILSENTTOCOMPANY,
             COMPANYAGREES
-        }
-
-        public enum CompanyStatusList
-        {
-            NEW,
-            EXISTING,
-            EXPIRED
         }
     }
 }

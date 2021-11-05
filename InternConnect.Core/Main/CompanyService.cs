@@ -59,13 +59,14 @@ namespace InternConnect.Service.Main
             var mappedList = new List<CompanyDto.ReadCompany>();
             foreach (var company in companyList) mappedList.Add(_mapper.Map<CompanyDto.ReadCompany>(company));
 
-            return mappedList.Where(c=>c.IsActive).OrderBy(c => c.Name).ToList();
+            return mappedList.Where(c => c.IsActive).OrderBy(c => c.Name).ToList();
         }
 
         public CompanyDto.ReadCompany GetById(int id)
         {
             var companyData = _companyRepository.Get(id);
-            if (companyData.Status == Status.CompanyStatusList.EXPIRED.ToString() || companyData.IsActive == false) return null;
+            if (companyData.Status == Status.CompanyStatusList.EXPIRED.ToString() ||
+                companyData.IsActive == false) return null;
             return _mapper.Map<CompanyDto.ReadCompany>(companyData);
         }
 
@@ -75,9 +76,7 @@ namespace InternConnect.Service.Main
 
 
             if (DateTime.Compare(GetDate(), payload.Expiration) == 1)
-            {
                 companyData.Status = Status.CompanyStatusList.EXPIRED.ToString();
-            }
 
             if (payload.AddressTwo == "") payload.AddressTwo = null;
             if (payload.AddressThree == "") payload.AddressThree = null;
@@ -95,7 +94,8 @@ namespace InternConnect.Service.Main
 
         private DateTime GetDate()
         {
-            return TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
+            return TimeZoneInfo.ConvertTime(DateTime.Now,
+                TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
         }
     }
 }

@@ -25,18 +25,19 @@ namespace InternConnect.Service.Main
 
     public class AdminResponseService : IAdminResponseService
     {
+        private readonly IAdminRepository _adminRepository;
         private readonly IAdminResponseRepository _adminResponseRepository;
+        private readonly ICompanyRepository _companyRepository;
         private readonly InternConnectContext _context;
         private readonly IIsoCodeRepository _isoCodeRepository;
-        private readonly IAdminRepository _adminRepository;
-        private readonly ICompanyRepository _companyRepository;
         private readonly ILogsRepository _logsRepository;
         private readonly IMailerService _mailerService;
         private readonly IMapper _mapper;
 
         public AdminResponseService(InternConnectContext context, IMapper mapper,
             IAdminResponseRepository adminResponse, ILogsRepository logsRepository, IMailerService mailerService,
-            ISubmissionRepository submissionRepository, IIsoCodeRepository isoCodeRepository, IAdminRepository adminRepository, ICompanyRepository companyRepository)
+            ISubmissionRepository submissionRepository, IIsoCodeRepository isoCodeRepository,
+            IAdminRepository adminRepository, ICompanyRepository companyRepository)
         {
             _context = context;
             _mapper = mapper;
@@ -52,20 +53,20 @@ namespace InternConnect.Service.Main
             int adminId, int isoCode)
         {
             var responseData = _adminResponseRepository.GetAdminResponseWithSubmission(payload.Id);
-            var getAdminId = _adminRepository.GetAll().Where(a=>a.AuthId == 3)
+            var getAdminId = _adminRepository.GetAll().Where(a => a.AuthId == 3)
                 .First(a => a.SectionId == responseData.Submission.Student.SectionId).Id;
             var adminData = _adminRepository.GetAdminWithEmail(getAdminId);
             _mapper.Map(payload, responseData);
-            _logsRepository.Add(new Logs()
-                    {
-                        Action =
-                            $"ENDORSEMENT REQUEST OF {responseData.Submission.Student.Account.Email} {(payload.AcceptedByCoordinator ? "ACCEPTED" : "REJECTED")} ",
-                        DateStamped = GetDate(),
-                        SubmissionId = responseData.SubmissionId,
-                        ActorEmail = adminData.Account.Email,
-                        ActorType = _context.Set<Authorization>().Find(adminData.AuthId).Name
-                    }
-                );
+            _logsRepository.Add(new Logs
+                {
+                    Action =
+                        $"ENDORSEMENT REQUEST OF {responseData.Submission.Student.Account.Email} {(payload.AcceptedByCoordinator ? "ACCEPTED" : "REJECTED")} ",
+                    DateStamped = GetDate(),
+                    SubmissionId = responseData.SubmissionId,
+                    ActorEmail = adminData.Account.Email,
+                    ActorType = _context.Set<Authorization>().Find(adminData.AuthId).Name
+                }
+            );
             if (payload.AcceptedByCoordinator)
             {
                 responseData.Comments = null;
@@ -94,11 +95,8 @@ namespace InternConnect.Service.Main
                 .First(a => a.SectionId == responseData.Submission.Student.SectionId).Id;
             var adminData = _adminRepository.GetAdminWithEmail(getAdminDatabySection);
             _mapper.Map(payload, responseData);
-            if (payload.CompanyAgrees)
-            {
-                responseData.Comments = null;
-            }
-            _logsRepository.Add(new Logs()
+            if (payload.CompanyAgrees) responseData.Comments = null;
+            _logsRepository.Add(new Logs
                 {
                     Action =
                         $"{_companyRepository.Get(responseData.Submission.CompanyId).Name.ToUpper()} {(payload.CompanyAgrees ? "ACCEPTS" : "REJECTS")} {responseData.Submission.Student.Account.Email}",
@@ -127,11 +125,8 @@ namespace InternConnect.Service.Main
                 .First(a => a.SectionId == responseData.Submission.Student.SectionId).Id;
             var adminData = _adminRepository.GetAdminWithEmail(getAdminDatabySection);
             _mapper.Map(payload, responseData);
-            if (payload.EmailSentByCoordinator)
-            {
-                responseData.Comments = null;
-            }
-            _logsRepository.Add(new Logs()
+            if (payload.EmailSentByCoordinator) responseData.Comments = null;
+            _logsRepository.Add(new Logs
                 {
                     Action =
                         $"ENDORSEMENT LETTER OF {responseData.Submission.Student.Account.Email} SENT TO {_companyRepository.Get(responseData.Submission.CompanyId).Name.ToUpper()}",
@@ -161,14 +156,11 @@ namespace InternConnect.Service.Main
             _mapper.Map(payload, responseData);
             var getAdminDatabySection = _adminRepository.GetAll().First(a => a.AuthId == 1).Id;
             var adminData = _adminRepository.GetAdminWithEmail(getAdminDatabySection);
-            if (payload.AcceptedByDean)
-            {
-                responseData.Comments = null;
-            }
-            _logsRepository.Add(new Logs()
+            if (payload.AcceptedByDean) responseData.Comments = null;
+            _logsRepository.Add(new Logs
                 {
                     Action =
-                        $"ENDORSEMENT REQUEST OF {responseData.Submission.Student.Account.Email} {(payload.AcceptedByDean?"ACCEPTED":"REJECTED")}",
+                        $"ENDORSEMENT REQUEST OF {responseData.Submission.Student.Account.Email} {(payload.AcceptedByDean ? "ACCEPTED" : "REJECTED")}",
                     DateStamped = GetDate(),
                     SubmissionId = responseData.SubmissionId,
                     ActorEmail = adminData.Account.Email,
@@ -183,17 +175,15 @@ namespace InternConnect.Service.Main
         public void UpdateAcceptanceByChair(AdminResponseDto.UpdateChairResponse payload)
         {
             var responseData = _adminResponseRepository.GetAdminResponseWithSubmission(payload.Id);
-            var getAdminDatabySection = _adminRepository.GetAll().Where(a => a.AuthId == 2).First(a=>a.ProgramId == responseData.Submission.Student.ProgramId).Id;
+            var getAdminDatabySection = _adminRepository.GetAll().Where(a => a.AuthId == 2)
+                .First(a => a.ProgramId == responseData.Submission.Student.ProgramId).Id;
             var adminData = _adminRepository.GetAdminWithEmail(getAdminDatabySection);
             _mapper.Map(payload, responseData);
-            if (payload.AcceptedByChair)
-            {
-                responseData.Comments = null;
-            }
-            _logsRepository.Add(new Logs()
+            if (payload.AcceptedByChair) responseData.Comments = null;
+            _logsRepository.Add(new Logs
                 {
                     Action =
-                        $"ENDORSEMENT REQUEST OF {responseData.Submission.Student.Account.Email} {(payload.AcceptedByChair?"ACCEPTED":"REJECTED")}",
+                        $"ENDORSEMENT REQUEST OF {responseData.Submission.Student.Account.Email} {(payload.AcceptedByChair ? "ACCEPTED" : "REJECTED")}",
                     DateStamped = GetDate(),
                     SubmissionId = responseData.SubmissionId,
                     ActorEmail = adminData.Account.Email,

@@ -40,17 +40,10 @@ namespace InternConnect.Service.Main
         public void Remove(int id, string type)
         {
             var webStateData = _webStateRepository.Get(id);
-            if (type == "logo")
-            {
-                webStateData.LogoFileName = null;
-            }
-            if (type == "cover")
-            {
-                webStateData.CoverPhotoFileName = null;
-            }
+            if (type == "logo") webStateData.LogoFileName = null;
+            if (type == "cover") webStateData.CoverPhotoFileName = null;
 
             _context.SaveChanges();
-
         }
     }
 }

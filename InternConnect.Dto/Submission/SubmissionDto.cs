@@ -86,7 +86,6 @@ namespace InternConnect.Dto.Submission
         }
 
 
-
         public class UpdateSubmission
         {
             public int Id { get; set; }
@@ -99,7 +98,7 @@ namespace InternConnect.Dto.Submission
             public string ContactPersonFirstName { get; set; }
             public string ContactPersonLastName { get; set; }
             public string ContactPersonEmail { get; set; }
-            public string CompanyProfileFileName { get; set; }  
+            public string CompanyProfileFileName { get; set; }
             public string ContactPersonPosition { get; set; }
             public string AcceptanceLetterFileName { get; set; }
             public string JobDescription { get; set; }

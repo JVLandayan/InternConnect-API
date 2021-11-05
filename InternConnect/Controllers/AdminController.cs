@@ -86,7 +86,7 @@ namespace InternConnect.Controllers
         [HttpPut("section")]
         public ActionResult UpdateSection(List<AdminDto.UpdateAdminSection> payload)
         {
-            _adminService.UpdateAdminSection(payload[0],payload[1]);
+            _adminService.UpdateAdminSection(payload[0], payload[1]);
             return NoContent();
         }
 
@@ -97,6 +97,5 @@ namespace InternConnect.Controllers
             _adminService.DeleteESignature(adminId, adminEmail);
             return NoContent();
         }
-
     }
 }

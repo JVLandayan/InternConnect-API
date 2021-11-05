@@ -52,7 +52,7 @@ namespace InternConnect.Controllers
         public ActionResult<TrackDto.ReadTrack> AddTrack(TrackDto.AddTrack payload)
         {
             var trackData = _trackService.AddTrack(payload);
-            return CreatedAtRoute(nameof(GetTrack), new {trackData.Id}, trackData);
+            return CreatedAtRoute(nameof(GetTrack), new { trackData.Id }, trackData);
         }
 
         [Authorize(Roles = "Dean,Chair")]

@@ -65,7 +65,7 @@ namespace InternConnect.Service.ThirdParty
                 new Claim(ClaimTypes.Role,
                     accountData.Student == null
                         ? _authRepository.Get(accountData.Admin.AuthId).Name
-                        : _authRepository.Get((int) accountData.Student.AuthId).Name)
+                        : _authRepository.Get((int)accountData.Student.AuthId).Name)
             });
             tokenDescriptor.Expires = DateTime.UtcNow.AddDays(7);
             tokenDescriptor.SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),

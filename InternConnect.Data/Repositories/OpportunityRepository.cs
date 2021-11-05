@@ -15,7 +15,7 @@ namespace InternConnect.Data.Repositories
 
         public IEnumerable<Opportunity> GetAllOpportunitiesAndCompanies()
         {
-            return Context.Set<Opportunity>().Include(o=>o.Company).ToList();
+            return Context.Set<Opportunity>().Include(o => o.Company).ToList();
         }
     }
 }

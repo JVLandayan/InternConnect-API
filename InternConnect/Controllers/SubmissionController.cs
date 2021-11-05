@@ -1,4 +1,4 @@
-﻿    using System;
+﻿using System;
 using System.Collections.Generic;
 using InternConnect.Dto;
 using InternConnect.Dto.Submission;
@@ -61,7 +61,8 @@ namespace InternConnect.Controllers
 
         [Authorize(Roles = "Dean,Chair,Tech Coordinator,Coordinator")]
         [HttpGet("bystep/{stepNumber}/{uniqueId}")]
-        public ActionResult<IEnumerable<SubmissionDto.SubmissionStatus>> GetSubmissionByStep(int stepNumber, int uniqueId)
+        public ActionResult<IEnumerable<SubmissionDto.SubmissionStatus>> GetSubmissionByStep(int stepNumber,
+            int uniqueId)
         {
             return Ok(_submissionService.GetSubmissionsByStep(stepNumber, uniqueId));
         }

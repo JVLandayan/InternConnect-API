@@ -41,9 +41,10 @@ namespace InternConnect.Controllers
             _webStateService.UpdateWebState(payload);
             return NoContent();
         }
+
         [Authorize(Roles = "Dean,Tech Coordinator,Chair")]
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id,string type)
+        public ActionResult Delete(int id, string type)
         {
             _webStateService.Remove(id, type);
             return NoContent();

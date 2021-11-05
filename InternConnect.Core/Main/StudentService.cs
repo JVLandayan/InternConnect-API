@@ -17,8 +17,8 @@ namespace InternConnect.Service.Main
 
     public class StudentService : IStudentService
     {
-        private readonly IMapper _mapper;
         private readonly InternConnectContext _context;
+        private readonly IMapper _mapper;
         private readonly IStudentRepository _studentRepository;
 
         public StudentService(IStudentRepository student, IMapper mapper, InternConnectContext context)

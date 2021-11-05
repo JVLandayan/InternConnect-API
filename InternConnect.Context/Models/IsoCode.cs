@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace InternConnect.Context.Models
+﻿namespace InternConnect.Context.Models
 {
     public class IsoCode
     {
@@ -16,6 +10,5 @@ namespace InternConnect.Context.Models
         public int? SubmissionId { get; set; }
         public Admin Admin { get; set; }
         public int AdminId { get; set; }
-        
     }
 }

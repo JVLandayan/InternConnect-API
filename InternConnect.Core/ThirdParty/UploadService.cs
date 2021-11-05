@@ -79,9 +79,11 @@ namespace InternConnect.Service.ThirdParty
                 return e.Message;
             }
         }
+
         private DateTime GetDate()
         {
-            return TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
+            return TimeZoneInfo.ConvertTime(DateTime.Now,
+                TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
         }
     }
 }

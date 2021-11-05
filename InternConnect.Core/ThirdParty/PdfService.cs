@@ -302,18 +302,12 @@ namespace InternConnect.Service.ThirdParty
                         var coordSignature = new Image(coordSignatureData);
 
                         if (companyData.AddressThree != null)
-                        {
                             coordSignature.SetFixedPosition(180, 158).ScaleAbsolute(100, 30);
-                        }
 
                         else if (companyData.AddressTwo != null)
-                        {
                             coordSignature.SetFixedPosition(180, 169).ScaleAbsolute(100, 30);
-                        }
                         else
-                        {
                             coordSignature.SetFixedPosition(180, 180).ScaleAbsolute(100, 30);
-                        }
                         document.Add(coordSignature);
                     }
 
@@ -324,21 +318,14 @@ namespace InternConnect.Service.ThirdParty
                         var deanSignatureData = ImageDataFactory.Create(deanSignaturePath);
                         var deanSignature = new Image(deanSignatureData);
                         if (companyData.AddressThree != null)
-                        {
                             deanSignature.SetFixedPosition(50, 158).ScaleAbsolute(100, 30);
-                        }
 
                         else if (companyData.AddressTwo != null)
-                        {
                             deanSignature.SetFixedPosition(50, 169).ScaleAbsolute(100, 30);
-                        }
                         else
-                        {
                             deanSignature.SetFixedPosition(50, 180).ScaleAbsolute(100, 30);
-                        }
                         document.Add(deanSignature);
                     }
-
 
                     #endregion
 
@@ -612,7 +599,6 @@ namespace InternConnect.Service.ThirdParty
 
                     //var deanSignatureData = ImageDataFactory.Create(deanSignaturePath);
                     //var deanSignature = new Image(deanSignatureData);
-
 
 
                     //if (companyData.AddressThree != null)
@@ -904,18 +890,12 @@ namespace InternConnect.Service.ThirdParty
                         var coordSignature = new Image(coordSignatureData);
 
                         if (companyData.AddressThree != null)
-                        {
                             coordSignature.SetFixedPosition(180, 158).ScaleAbsolute(100, 30);
-                        }
 
                         else if (companyData.AddressTwo != null)
-                        {
                             coordSignature.SetFixedPosition(180, 169).ScaleAbsolute(100, 30);
-                        }
                         else
-                        {
                             coordSignature.SetFixedPosition(180, 180).ScaleAbsolute(100, 30);
-                        }
                         document.Add(coordSignature);
                     }
 
@@ -926,18 +906,12 @@ namespace InternConnect.Service.ThirdParty
                         var deanSignatureData = ImageDataFactory.Create(deanSignaturePath);
                         var deanSignature = new Image(deanSignatureData);
                         if (companyData.AddressThree != null)
-                        {
                             deanSignature.SetFixedPosition(50, 158).ScaleAbsolute(100, 30);
-                        }
 
                         else if (companyData.AddressTwo != null)
-                        {
                             deanSignature.SetFixedPosition(50, 169).ScaleAbsolute(100, 30);
-                        }
                         else
-                        {
                             deanSignature.SetFixedPosition(50, 180).ScaleAbsolute(100, 30);
-                        }
                         document.Add(deanSignature);
                     }
 
@@ -1099,7 +1073,7 @@ namespace InternConnect.Service.ThirdParty
                     document.Add(new Paragraph().Add(new Text(
                             "This is to recommend Mr. Juan Rizal. Kapitana, " +
                             "a bona fide student of section 4ITH of the College of Information and Computing Sciences of the University of Santo Tomas to take an Internship or  Practicum  Course  " +
-                            $"this  June  –  August  2020  in  your  reputable  company.  As  part  of  our Outcomes-Based Education curriculum requirements " +
+                            "this  June  –  August  2020  in  your  reputable  company.  As  part  of  our Outcomes-Based Education curriculum requirements " +
                             "in the  B. S. Information Technology program, said  student  must  undertake  a  minimum  of  750  hours  of  relevant  company  " +
                             "or  industry immersion. ").SetFontSize(11)).SetTextAlignment(TextAlignment.JUSTIFIED)
                         .SetFixedLeading(11.0f).SetMarginBottom(11.0f));
@@ -1224,6 +1198,12 @@ namespace InternConnect.Service.ThirdParty
             }
         }
 
+        private DateTime GetDate()
+        {
+            return TimeZoneInfo.ConvertTime(DateTime.Now,
+                TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
+        }
+
         public class BackGroundColorEvent : IEventHandler
         {
             private readonly Color SolidColor;
@@ -1235,7 +1215,7 @@ namespace InternConnect.Service.ThirdParty
 
             public void HandleEvent(Event @event)
             {
-                var pdfDoc = (PdfDocumentEvent) @event;
+                var pdfDoc = (PdfDocumentEvent)@event;
                 var pdf = pdfDoc.GetDocument();
                 var page = pdfDoc.GetPage();
 
@@ -1249,11 +1229,6 @@ namespace InternConnect.Service.ThirdParty
 
                 pdfCanvas.Release();
             }
-        }
-
-        private DateTime GetDate()
-        {
-            return TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
         }
     }
 }

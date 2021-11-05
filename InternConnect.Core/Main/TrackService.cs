@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using InternConnect.Context;
 using InternConnect.Context.Models;
@@ -51,10 +50,7 @@ namespace InternConnect.Service.Main
         public TrackDto.ReadTrack GetTrack(int id)
         {
             var trackData = _trackRepository.Get(id);
-            if (trackData.IsActive == false)
-            {
-                return null;
-            }
+            if (trackData.IsActive == false) return null;
             return _mapper.Map<TrackDto.ReadTrack>(trackData);
         }
 

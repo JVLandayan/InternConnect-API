@@ -35,7 +35,7 @@ namespace InternConnect.Controllers
         public ActionResult<IEnumerable<Account>> GetAccount(int id)
         {
             if (_accountService.GetById(id) != null) return Ok(_accountService.GetById(id));
-            return NotFound(new {message = "Account doesn't exist"});
+            return NotFound(new { message = "Account doesn't exist" });
         }
 
         [Authorize(Roles = "Chair")]
@@ -44,7 +44,7 @@ namespace InternConnect.Controllers
         {
             var accountData = _accountService.AddCoordinator(payload);
             if (accountData.Id == 0) return BadRequest("Email already exists");
-            return CreatedAtRoute(nameof(GetAccount), new {accountData.Id}, accountData);
+            return CreatedAtRoute(nameof(GetAccount), new { accountData.Id }, accountData);
         }
 
         [Authorize(Roles = "Coordinator, Chair")]
@@ -53,7 +53,7 @@ namespace InternConnect.Controllers
         {
             var accountData = _accountService.AddStudent(payload);
             if (accountData.Id == 0) return BadRequest("Email already exists");
-            return CreatedAtRoute(nameof(GetAccount), new {accountData.Id}, accountData);
+            return CreatedAtRoute(nameof(GetAccount), new { accountData.Id }, accountData);
         }
 
         //[Authorize(Roles = "Coordinator, Chair")]
@@ -73,7 +73,7 @@ namespace InternConnect.Controllers
         {
             var accountData = _accountService.AddTechCoordinator(payload);
             if (accountData.Id == 0) return BadRequest("Email already exists");
-            return CreatedAtRoute(nameof(GetAccount), new {accountData.Id}, accountData);
+            return CreatedAtRoute(nameof(GetAccount), new { accountData.Id }, accountData);
         }
 
         //Chairs
@@ -83,7 +83,7 @@ namespace InternConnect.Controllers
         {
             var accountData = _accountService.AddChair(payload);
             if (accountData.Id == 0) return BadRequest("Email already exists");
-            return CreatedAtRoute(nameof(GetAccount), new {accountData.Id}, accountData);
+            return CreatedAtRoute(nameof(GetAccount), new { accountData.Id }, accountData);
         }
 
         [Authorize(Roles = "Dean,Chair,Coordinator")]

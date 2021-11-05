@@ -53,7 +53,7 @@ namespace InternConnect.Dto.Company
         public class UpdateCompanyStatus
         {
             [Required] public int Id { get; set; }
-            [Required]public string Status { get; set; }
+            [Required] public string Status { get; set; }
         }
 
         public class AddCompany

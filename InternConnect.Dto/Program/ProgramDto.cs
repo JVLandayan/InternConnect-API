@@ -21,33 +21,31 @@ namespace InternConnect.Dto.Program
 
         public class UpdateProgram
         {
-            [Required]
-            public int Id { get; set; }
-            [Required]
-            public string Name { get; set; }
-            [Required]
-            public string IsoCodeProgramNumber { get; set; }
-            [Required]
-            public int NumberOfHours { get; set; }
-            [Required]
-            public DateTime PracticumStart { get; set; }
-            [Required]
-            public DateTime PracticumEnd { get; set; }
+            [Required] public int Id { get; set; }
+
+            [Required] public string Name { get; set; }
+
+            [Required] public string IsoCodeProgramNumber { get; set; }
+
+            [Required] public int NumberOfHours { get; set; }
+
+            [Required] public DateTime PracticumStart { get; set; }
+
+            [Required] public DateTime PracticumEnd { get; set; }
         }
 
 
         public class AddProgram
         {
-            [Required]
-            public string Name { get; set; }
-            [Required]
-            public string IsoCodeProgramNumber { get; set; }
-            [Required]
-            public int NumberOfHours { get; set; }
-            [Required]
-            public DateTime PracticumStart { get; set; }
-            [Required]
-            public DateTime PracticumEnd { get; set; }
+            [Required] public string Name { get; set; }
+
+            [Required] public string IsoCodeProgramNumber { get; set; }
+
+            [Required] public int NumberOfHours { get; set; }
+
+            [Required] public DateTime PracticumStart { get; set; }
+
+            [Required] public DateTime PracticumEnd { get; set; }
         }
     }
 }

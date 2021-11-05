@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using InternConnect.Context;
 using InternConnect.Context.Models;
@@ -30,20 +29,21 @@ namespace InternConnect.Service.Main
 
     public class SubmissionService : ISubmissionService
     {
-        private readonly ICompanyRepository _companyRepository;
-        private readonly ILogsRepository _logsRepository;
-        private readonly IStudentRepository _studentRepository;
         private readonly IAdminResponseRepository _adminResponse;
+        private readonly ICompanyRepository _companyRepository;
         private readonly InternConnectContext _context;
+        private readonly ILogsRepository _logsRepository;
         private readonly IMailerService _mailerService;
         private readonly IMapper _mapper;
         private readonly IProgramService _programService;
+        private readonly IStudentRepository _studentRepository;
         private readonly ISubmissionRepository _submissionRepository;
 
         public SubmissionService(ISubmissionRepository submission, IMapper mapper,
             InternConnectContext context, IMailerService mailerService,
             IProgramService programService,
-            ICompanyRepository companyRepository, ILogsRepository logsRepository, IStudentRepository studentRepository, IAdminResponseRepository adminResponse)
+            ICompanyRepository companyRepository, ILogsRepository logsRepository, IStudentRepository studentRepository,
+            IAdminResponseRepository adminResponse)
         {
             _mapper = mapper;
             _context = context;
@@ -73,7 +73,7 @@ namespace InternConnect.Service.Main
             _context.SaveChanges();
 
             var studentData = _studentRepository.GetStudentWithAccountData(payload.StudentId);
-            _logsRepository.Add(new Logs()
+            _logsRepository.Add(new Logs
                 {
                     Action =
                         $"{studentData.Account.Email} CREATED A SUBMISSION",
@@ -92,7 +92,7 @@ namespace InternConnect.Service.Main
         public IEnumerable<SubmissionDto.SubmissionReports> GetAllSubmissions()
         {
             var submissionList = _submissionRepository.GetAllRelatedData();
-            List<SubmissionDto.SubmissionReports> mappedList = GetSubmissionReports(submissionList);
+            var mappedList = GetSubmissionReports(submissionList);
             return mappedList;
         }
 
@@ -109,19 +109,19 @@ namespace InternConnect.Service.Main
             if (type == "whole" && id == 0)
                 return submissionList.GroupBy(x => x.CompanyId)
                     .Select(x => new CompanyAndNumberOfStudentModel
-                        {CompanyName = _companyRepository.Get(x.Key).Name, NumberOfOccurence = x.Count()})
+                        { CompanyName = _companyRepository.Get(x.Key).Name, NumberOfOccurence = x.Count() })
                     .OrderByDescending(c => c.NumberOfOccurence).ToList();
 
             if (type == "program")
                 return submissionList.Where(s => s.Student.ProgramId == id).GroupBy(x => x.CompanyId)
                     .Select(x => new CompanyAndNumberOfStudentModel
-                        {CompanyName = _companyRepository.Get(x.Key).Name, NumberOfOccurence = x.Count()})
+                        { CompanyName = _companyRepository.Get(x.Key).Name, NumberOfOccurence = x.Count() })
                     .OrderByDescending(c => c.NumberOfOccurence).ToList();
 
             if (type == "section")
                 return submissionList.Where(s => s.Student.SectionId == id).GroupBy(x => x.CompanyId)
                     .Select(x => new CompanyAndNumberOfStudentModel
-                        {CompanyName = _companyRepository.Get(x.Key).Name, NumberOfOccurence = x.Count()})
+                        { CompanyName = _companyRepository.Get(x.Key).Name, NumberOfOccurence = x.Count() })
                     .OrderByDescending(c => c.NumberOfOccurence).ToList();
 
             return null;
@@ -130,7 +130,7 @@ namespace InternConnect.Service.Main
         public IEnumerable<SubmissionDto.SubmissionReports> GetSubmissionByProgram(int programId)
         {
             var submissionList = _submissionRepository.GetAllRelatedData().Where(s => s.Student.ProgramId == programId);
-            List<SubmissionDto.SubmissionReports> mappedList = GetSubmissionReports(submissionList);
+            var mappedList = GetSubmissionReports(submissionList);
 
             return mappedList;
         }
@@ -139,37 +139,41 @@ namespace InternConnect.Service.Main
         {
             var submissionList = _submissionRepository.GetAllRelatedData().Where(s => s.Student.SectionId == sectionId);
 
-            List<SubmissionDto.SubmissionReports> mappedList = GetSubmissionReports(submissionList);
+            var mappedList = GetSubmissionReports(submissionList);
 
             return mappedList;
         }
 
-        public IEnumerable<SubmissionDto.SubmissionStatus> GetSubmissionsByStep(int stepNumber,int uniqueId)
+        public IEnumerable<SubmissionDto.SubmissionStatus> GetSubmissionsByStep(int stepNumber, int uniqueId)
         {
             var submissionList = new List<Submission>();
 
             if (stepNumber == 1)
-                submissionList = _submissionRepository.GetAllRelatedData().Where(s=>s.Student.SectionId == uniqueId).ToList()
+                submissionList = _submissionRepository.GetAllRelatedData().Where(s => s.Student.SectionId == uniqueId)
+                    .ToList()
                     .FindAll(s => s.AdminResponse.AcceptedByCoordinator == null &&
                                   s.AdminResponse.AcceptedByChair == null);
             else if (stepNumber == 2)
-                submissionList = _submissionRepository.GetAllRelatedData().Where(s=>s.Student.ProgramId == uniqueId).ToList()
+                submissionList = _submissionRepository.GetAllRelatedData().Where(s => s.Student.ProgramId == uniqueId)
+                    .ToList()
                     .FindAll(s =>
                         s.AdminResponse.AcceptedByCoordinator == true && s.AdminResponse.AcceptedByChair == null);
             else if (stepNumber == 3)
                 submissionList = _submissionRepository.GetAllRelatedData().ToList()
                     .FindAll(s => s.AdminResponse.AcceptedByChair == true && s.AdminResponse.AcceptedByDean == null);
             else if (stepNumber == 4)
-                submissionList = _submissionRepository.GetAllRelatedData().Where(s=>s.Student.SectionId == uniqueId).ToList()
+                submissionList = _submissionRepository.GetAllRelatedData().Where(s => s.Student.SectionId == uniqueId)
+                    .ToList()
                     .FindAll(s =>
                         s.AdminResponse.AcceptedByDean == true && s.AdminResponse.EmailSentByCoordinator == null);
             else if (stepNumber == 5)
-                submissionList = _submissionRepository.GetAllRelatedData().Where(s=>s.Student.SectionId == uniqueId).ToList()
+                submissionList = _submissionRepository.GetAllRelatedData().Where(s => s.Student.SectionId == uniqueId)
+                    .ToList()
                     .FindAll(s =>
                         s.AdminResponse.EmailSentByCoordinator == true && s.AdminResponse.CompanyAgrees == null);
 
 
-            List<SubmissionDto.SubmissionStatus> mappedList = GetSubmissionStatuses(submissionList);
+            var mappedList = GetSubmissionStatuses(submissionList);
             return mappedList;
         }
 
@@ -188,7 +192,7 @@ namespace InternConnect.Service.Main
             _context.SaveChanges();
 
             var studentData = _studentRepository.GetStudentWithAccountData(submissionData.StudentId);
-            _logsRepository.Add(new Logs()
+            _logsRepository.Add(new Logs
                 {
                     Action =
                         $"{studentData.Account.Email} SUBMITTED AN UPDATED SUBMISSION",
@@ -234,8 +238,7 @@ namespace InternConnect.Service.Main
             var mappedList = new List<SubmissionDto.SubmissionReports>();
             var companyList = _companyRepository.GetAll().ToList();
             foreach (var submission in payload)
-            {
-                mappedList.Add(new SubmissionDto.SubmissionReports()
+                mappedList.Add(new SubmissionDto.SubmissionReports
                 {
                     CompanyName = companyList.First(s => s.Id == submission.CompanyId).Name,
                     ContactPersonEmail = submission.ContactPersonEmail,
@@ -251,7 +254,6 @@ namespace InternConnect.Service.Main
                     ProgramId = submission.Student.ProgramId,
                     Comments = submission.AdminResponse.Comments
                 });
-            }
 
             return mappedList;
         }
@@ -261,15 +263,14 @@ namespace InternConnect.Service.Main
             var mappedList = new List<SubmissionDto.SubmissionStatus>();
             var companyList = _companyRepository.GetAll().ToList();
             var adminResponseList = _adminResponse.GetAll().ToList();
-            List<CompanyDto.ReadCompany> companyMappedList =
+            var companyMappedList =
                 _mapper.Map<List<Company>, List<CompanyDto.ReadCompany>>(companyList);
-            List<AdminResponseDto.ReadResponse> mappedAdminResp =
+            var mappedAdminResp =
                 _mapper.Map<List<AdminResponse>, List<AdminResponseDto.ReadResponse>>(adminResponseList);
             foreach (var submission in payload)
-            {
-                mappedList.Add(new SubmissionDto.SubmissionStatus()
+                mappedList.Add(new SubmissionDto.SubmissionStatus
                 {
-                    CompanyName = companyMappedList.First(s=>s.Id == submission.CompanyId).Name,
+                    CompanyName = companyMappedList.First(s => s.Id == submission.CompanyId).Name,
                     CompanyAddressTwo = companyMappedList.First(s => s.Id == submission.CompanyId).AddressTwo,
                     CompanyAddressOne = companyMappedList.First(s => s.Id == submission.CompanyId).AddressOne,
                     CompanyAddressThree = companyMappedList.First(s => s.Id == submission.CompanyId).AddressThree,
@@ -291,9 +292,8 @@ namespace InternConnect.Service.Main
                     TrackId = submission.TrackId,
                     StudentEmail = submission.Student.Account.Email,
                     StudentNumber = submission.StudentNumber,
-                    StudentTitle = submission.StudentTitle,
+                    StudentTitle = submission.StudentTitle
                 });
-            }
 
             return mappedList;
         }

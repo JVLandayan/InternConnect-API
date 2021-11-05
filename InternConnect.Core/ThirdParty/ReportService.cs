@@ -21,8 +21,8 @@ namespace InternConnect.Service.ThirdParty
     {
         private readonly IAccountRepository _accountRepository;
         private readonly ICompanyRepository _companyRepository;
-        private readonly IWebHostEnvironment _environment;
         private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _environment;
         private readonly IProgramRepository _programRepository;
         private readonly ISectionRepository _sectionRepository;
         private readonly IStudentRepository _studentRepository;
@@ -54,6 +54,7 @@ namespace InternConnect.Service.ThirdParty
                 var worksheet = workBook.Worksheets.Add("Submissions");
 
                 #region Headers
+
                 worksheet.Cell(1, 1).Value = "Lastname of Requesting Students";
                 worksheet.Cell(1, 2).Value = "Firstname of Requesting Student";
                 worksheet.Cell(1, 3).Value = "Middle Initial of Requesting Student";
@@ -108,7 +109,7 @@ namespace InternConnect.Service.ThirdParty
                         accountList.Find(s => s.Id == submission.Student.AccountId)
                             .Email;
                     worksheet.Cell(1 + index, 6).Value = submission.StudentTitle;
-                   
+
                     worksheet.Cell(1 + index, 7).Value = submission.StudentNumber;
                     worksheet.Cell(1 + index, 8).Value =
                         sectionList.Find(s => s.Id == submission.Student.SectionId).Name;
@@ -166,6 +167,7 @@ namespace InternConnect.Service.ThirdParty
                 worksheet.Rows().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
 
                 #endregion
+
                 using (var stream = new MemoryStream())
                 {
                     workBook.SaveAs(stream);
@@ -177,7 +179,8 @@ namespace InternConnect.Service.ThirdParty
 
         private DateTime GetDate()
         {
-            return TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
+            return TimeZoneInfo.ConvertTime(DateTime.Now,
+                TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time"));
         }
     }
 }

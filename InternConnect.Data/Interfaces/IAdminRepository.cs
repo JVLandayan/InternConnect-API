@@ -7,6 +7,5 @@ namespace InternConnect.Data.Interfaces
     {
         public IEnumerable<Admin> GetAllAdminsWithRelatedData();
         public Admin GetAdminWithEmail(int id);
-
     }
 }

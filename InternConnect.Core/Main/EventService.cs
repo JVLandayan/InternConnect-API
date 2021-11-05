@@ -63,7 +63,7 @@ namespace InternConnect.Service.Main
         public IEnumerable<EventDto.ReadEvent> GetAll(int adminId)
         {
             var eventsList = _eventsRepository.GetAllEventsWithAdmin().Where(e => e.AdminId == adminId).ToList();
-            List<EventDto.ReadEvent> mappedList = _mapper.Map<List<Event>, List<EventDto.ReadEvent>>(eventsList);
+            var mappedList = _mapper.Map<List<Event>, List<EventDto.ReadEvent>>(eventsList);
 
             return mappedList;
         }
@@ -72,7 +72,7 @@ namespace InternConnect.Service.Main
         {
             var eventsList = _eventsRepository.GetAllEventsWithAdmin().Where(e => e.Admin.AuthId == 2)
                 .Where(e => e.Admin.ProgramId == programId).ToList();
-            List<EventDto.ReadEvent> mappedList = _mapper.Map<List<Event>, List<EventDto.ReadEvent>>(eventsList);
+            var mappedList = _mapper.Map<List<Event>, List<EventDto.ReadEvent>>(eventsList);
             return mappedList;
         }
 
