@@ -68,6 +68,7 @@ namespace InternConnect.Service.Main
                 );
             if (payload.AcceptedByCoordinator)
             {
+                responseData.Comments = null;
                 responseData.Submission.IsoCode = isoCode;
                 var isoCodeData = _isoCodeRepository.GetAll().First(a => a.Code == isoCode && a.AdminId == getAdminId);
                 isoCodeData.Used = true;
@@ -93,6 +94,10 @@ namespace InternConnect.Service.Main
                 .First(a => a.SectionId == responseData.Submission.Student.SectionId).Id;
             var adminData = _adminRepository.GetAdminWithEmail(getAdminDatabySection);
             _mapper.Map(payload, responseData);
+            if (payload.CompanyAgrees)
+            {
+                responseData.Comments = null;
+            }
             _logsRepository.Add(new Logs()
                 {
                     Action =
@@ -122,6 +127,10 @@ namespace InternConnect.Service.Main
                 .First(a => a.SectionId == responseData.Submission.Student.SectionId).Id;
             var adminData = _adminRepository.GetAdminWithEmail(getAdminDatabySection);
             _mapper.Map(payload, responseData);
+            if (payload.EmailSentByCoordinator)
+            {
+                responseData.Comments = null;
+            }
             _logsRepository.Add(new Logs()
                 {
                     Action =
@@ -152,6 +161,10 @@ namespace InternConnect.Service.Main
             _mapper.Map(payload, responseData);
             var getAdminDatabySection = _adminRepository.GetAll().First(a => a.AuthId == 1).Id;
             var adminData = _adminRepository.GetAdminWithEmail(getAdminDatabySection);
+            if (payload.AcceptedByDean)
+            {
+                responseData.Comments = null;
+            }
             _logsRepository.Add(new Logs()
                 {
                     Action =
@@ -173,6 +186,10 @@ namespace InternConnect.Service.Main
             var getAdminDatabySection = _adminRepository.GetAll().Where(a => a.AuthId == 2).First(a=>a.ProgramId == responseData.Submission.Student.ProgramId).Id;
             var adminData = _adminRepository.GetAdminWithEmail(getAdminDatabySection);
             _mapper.Map(payload, responseData);
+            if (payload.AcceptedByChair)
+            {
+                responseData.Comments = null;
+            }
             _logsRepository.Add(new Logs()
                 {
                     Action =

@@ -89,5 +89,14 @@ namespace InternConnect.Controllers
             _adminService.UpdateAdminSection(payload[0],payload[1]);
             return NoContent();
         }
+
+        [Authorize(Roles = "Coordinator,Dean")]
+        [HttpDelete("esignature/{adminId}")]
+        public ActionResult<string> DeleteSignature(int adminId, string adminEmail)
+        {
+            _adminService.DeleteESignature(adminId, adminEmail);
+            return NoContent();
+        }
+
     }
 }

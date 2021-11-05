@@ -72,6 +72,13 @@ namespace InternConnect.Service.Main
         public void UpdateCompany(CompanyDto.UpdateCompany payload)
         {
             var companyData = _companyRepository.Get(payload.Id);
+
+
+            if (DateTime.Compare(GetDate(), payload.Expiration) == 1)
+            {
+                companyData.Status = Status.CompanyStatusList.EXPIRED.ToString();
+            }
+
             if (payload.AddressTwo == "") payload.AddressTwo = null;
             if (payload.AddressThree == "") payload.AddressThree = null;
             _mapper.Map(payload, companyData);

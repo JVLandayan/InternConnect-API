@@ -47,7 +47,7 @@ namespace InternConnect.Dto.Company
             public string ContactPersonName { get; set; }
             public string ContactPersonEmail { get; set; }
             public string ContactPersonDesignation { get; set; }
-            public DateTime Expiration { get; set; }
+            [Required] public DateTime Expiration { get; set; }
         }
 
         public class UpdateCompanyStatus

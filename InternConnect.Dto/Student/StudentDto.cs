@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using InternConnect.Dto.Account;
-using InternConnect.Dto.AdminResponse;
-using InternConnect.Dto.Company;
 using InternConnect.Dto.Program;
 using InternConnect.Dto.Section;
 using InternConnect.Dto.Submission;

@@ -294,34 +294,51 @@ namespace InternConnect.Service.ThirdParty
                     #region Signatures
 
                     //coordSignature.SetFixedPosition(50, 238).ScaleAbsolute(100, 30); IGAARP SIGNATURE
-                    var coordSignaturePath = _webHost.ContentRootPath +
-                                             $"/images/signatures/{coordinatorData.StampFileName}";
-                    var deanSignaturePath = _webHost.ContentRootPath +
-                                            $"/images/signatures/{deanData.StampFileName}";
+                    if (coordinatorData.StampFileName != null)
+                    {
+                        var coordSignaturePath = _webHost.ContentRootPath +
+                                                 $"/images/signatures/{coordinatorData.StampFileName}";
+                        var coordSignatureData = ImageDataFactory.Create(coordSignaturePath);
+                        var coordSignature = new Image(coordSignatureData);
 
-                    var coordSignatureData = ImageDataFactory.Create(coordSignaturePath);
-                    var coordSignature = new Image(coordSignatureData);
-                    var deanSignatureData = ImageDataFactory.Create(deanSignaturePath);
-                    var deanSignature = new Image(deanSignatureData);
+                        if (companyData.AddressThree != null)
+                        {
+                            coordSignature.SetFixedPosition(180, 158).ScaleAbsolute(100, 30);
+                        }
 
-                    if (companyData.AddressThree != null)
-                    {
-                        coordSignature.SetFixedPosition(180, 158).ScaleAbsolute(100, 30);
-                        deanSignature.SetFixedPosition(50, 158).ScaleAbsolute(100, 30);
-                    }
-                    else if (companyData.AddressTwo != null)
-                    {
-                        coordSignature.SetFixedPosition(180, 169).ScaleAbsolute(100, 30);
-                        deanSignature.SetFixedPosition(50, 169).ScaleAbsolute(100, 30);
-                    }
-                    else
-                    {
-                        coordSignature.SetFixedPosition(180, 180).ScaleAbsolute(100, 30);
-                        deanSignature.SetFixedPosition(50, 180).ScaleAbsolute(100, 30);
+                        else if (companyData.AddressTwo != null)
+                        {
+                            coordSignature.SetFixedPosition(180, 169).ScaleAbsolute(100, 30);
+                        }
+                        else
+                        {
+                            coordSignature.SetFixedPosition(180, 180).ScaleAbsolute(100, 30);
+                        }
+                        document.Add(coordSignature);
                     }
 
-                    document.Add(coordSignature);
-                    document.Add(deanSignature);
+                    if (deanData.StampFileName != null)
+                    {
+                        var deanSignaturePath = _webHost.ContentRootPath +
+                                                $"/images/signatures/{deanData.StampFileName}";
+                        var deanSignatureData = ImageDataFactory.Create(deanSignaturePath);
+                        var deanSignature = new Image(deanSignatureData);
+                        if (companyData.AddressThree != null)
+                        {
+                            deanSignature.SetFixedPosition(50, 158).ScaleAbsolute(100, 30);
+                        }
+
+                        else if (companyData.AddressTwo != null)
+                        {
+                            deanSignature.SetFixedPosition(50, 169).ScaleAbsolute(100, 30);
+                        }
+                        else
+                        {
+                            deanSignature.SetFixedPosition(50, 180).ScaleAbsolute(100, 30);
+                        }
+                        document.Add(deanSignature);
+                    }
+
 
                     #endregion
 
@@ -879,34 +896,50 @@ namespace InternConnect.Service.ThirdParty
                     #region Signatures
 
                     //coordSignature.SetFixedPosition(50, 238).ScaleAbsolute(100, 30); IGAARP SIGNATURE
-                    var coordSignaturePath = _webHost.ContentRootPath +
-                                             $"/images/signatures/{coordinatorData.StampFileName}";
-                    var deanSignaturePath = _webHost.ContentRootPath +
-                                            $"/images/signatures/{deanData.StampFileName}";
+                    if (coordinatorData.StampFileName != null)
+                    {
+                        var coordSignaturePath = _webHost.ContentRootPath +
+                                                 $"/images/signatures/{coordinatorData.StampFileName}";
+                        var coordSignatureData = ImageDataFactory.Create(coordSignaturePath);
+                        var coordSignature = new Image(coordSignatureData);
 
-                    var coordSignatureData = ImageDataFactory.Create(coordSignaturePath);
-                    var coordSignature = new Image(coordSignatureData);
-                    var deanSignatureData = ImageDataFactory.Create(deanSignaturePath);
-                    var deanSignature = new Image(deanSignatureData);
+                        if (companyData.AddressThree != null)
+                        {
+                            coordSignature.SetFixedPosition(180, 158).ScaleAbsolute(100, 30);
+                        }
 
-                    if (companyData.AddressThree != null)
-                    {
-                        coordSignature.SetFixedPosition(165, 158).ScaleAbsolute(100, 30);
-                        deanSignature.SetFixedPosition(50, 158).ScaleAbsolute(100, 30);
-                    }
-                    else if (companyData.AddressTwo != null)
-                    {
-                        coordSignature.SetFixedPosition(165, 169).ScaleAbsolute(100, 30);
-                        deanSignature.SetFixedPosition(50, 169).ScaleAbsolute(100, 30);
-                    }
-                    else
-                    {
-                        coordSignature.SetFixedPosition(165, 180).ScaleAbsolute(100, 30);
-                        deanSignature.SetFixedPosition(50, 180).ScaleAbsolute(100, 30);
+                        else if (companyData.AddressTwo != null)
+                        {
+                            coordSignature.SetFixedPosition(180, 169).ScaleAbsolute(100, 30);
+                        }
+                        else
+                        {
+                            coordSignature.SetFixedPosition(180, 180).ScaleAbsolute(100, 30);
+                        }
+                        document.Add(coordSignature);
                     }
 
-                    document.Add(coordSignature);
-                    document.Add(deanSignature);
+                    if (deanData.StampFileName != null)
+                    {
+                        var deanSignaturePath = _webHost.ContentRootPath +
+                                                $"/images/signatures/{deanData.StampFileName}";
+                        var deanSignatureData = ImageDataFactory.Create(deanSignaturePath);
+                        var deanSignature = new Image(deanSignatureData);
+                        if (companyData.AddressThree != null)
+                        {
+                            deanSignature.SetFixedPosition(50, 158).ScaleAbsolute(100, 30);
+                        }
+
+                        else if (companyData.AddressTwo != null)
+                        {
+                            deanSignature.SetFixedPosition(50, 169).ScaleAbsolute(100, 30);
+                        }
+                        else
+                        {
+                            deanSignature.SetFixedPosition(50, 180).ScaleAbsolute(100, 30);
+                        }
+                        document.Add(deanSignature);
+                    }
 
                     #endregion
 

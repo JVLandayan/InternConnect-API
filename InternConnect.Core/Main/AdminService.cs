@@ -17,6 +17,7 @@ namespace InternConnect.Service.Main
         public IEnumerable<AdminDto.ReadCoordinator> GetAllTechCoordinators();
         public void UpdateAdminSection(AdminDto.UpdateAdminSection payloadFrom, AdminDto.UpdateAdminSection payloadTo);
         public void UpdateAdminProgram(AdminDto.UpdateAdminProgram payloadFrom, AdminDto.UpdateAdminProgram payloadTo);
+        public void DeleteESignature(int adminId, string adminEmail);
     }
 
     public class AdminService : IAdminService
@@ -103,6 +104,17 @@ namespace InternConnect.Service.Main
 
             //coord section target to coord section from
             adminDataTo.ProgramId = payloadFrom.ProgramId;
+            _context.SaveChanges();
+        }
+
+        public void DeleteESignature(int adminId, string adminEmail)
+        {
+            var adminData = _adminRepository.GetAdminWithEmail(adminId);
+            if (adminData.Account.Email != adminEmail.ToUpper())
+            {
+                return;
+            }
+            adminData.StampFileName = null;
             _context.SaveChanges();
         }
     }

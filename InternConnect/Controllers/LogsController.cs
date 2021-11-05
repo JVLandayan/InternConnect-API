@@ -31,10 +31,10 @@ namespace InternConnect.Controllers
             return Ok(_logsService.GetLogsBySubmissionId(submissionId));
         }
         [Authorize(Roles = "Dean,Chair,Coordinator,Tech Coordinator")]
-        [HttpPost("email")]
-        public ActionResult<IEnumerable<LogsDto.ReadLogs>> GetLogsByAdminEmail(LogsQuery payload)
+        [HttpGet("admin/{adminId}")]
+        public ActionResult<IEnumerable<LogsDto.ReadLogs>> GetLogsByAdminEmail(int adminId)
         {
-            return Ok(_logsService.GetLogsByAdminEmail(payload.QueryEmail));
+            return Ok(_logsService.GetLogsByAdminId(adminId));
         }
     }
 }

@@ -53,7 +53,7 @@ namespace InternConnect.Controllers
             return NoContent();
         }
 
-        //[Authorize(Roles = "Dean")]
+        [Authorize(Roles = "Dean")]
         [HttpPut("dean/{adminId}")]
         public ActionResult UpdateAcceptanceByDean(
             AdminResponseDto.UpdateDeanResponse payload, int adminId)

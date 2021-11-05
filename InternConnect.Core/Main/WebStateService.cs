@@ -9,6 +9,7 @@ namespace InternConnect.Service.Main
     {
         public void UpdateWebState(WebStateDto.UpdateWebState payload);
         public WebStateDto.ReadWebState GetWebState(int id);
+        public void Remove(int id, string type);
     }
 
     public class WebStateService : IWebStateService
@@ -34,6 +35,22 @@ namespace InternConnect.Service.Main
             var webStateData = _webStateRepository.Get(payload.Id);
             _mapper.Map(payload, webStateData);
             _context.SaveChanges();
+        }
+
+        public void Remove(int id, string type)
+        {
+            var webStateData = _webStateRepository.Get(id);
+            if (type == "logo")
+            {
+                webStateData.LogoFileName = null;
+            }
+            if (type == "cover")
+            {
+                webStateData.CoverPhotoFileName = null;
+            }
+
+            _context.SaveChanges();
+
         }
     }
 }

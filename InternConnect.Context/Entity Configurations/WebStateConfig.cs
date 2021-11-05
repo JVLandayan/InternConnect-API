@@ -9,8 +9,8 @@ namespace InternConnect.Context.Entity_Configurations
         public void Configure(EntityTypeBuilder<WebState> modelBuilder)
         {
             modelBuilder.HasKey(ws => ws.Id);
-            modelBuilder.Property(ws => ws.LogoFileName).IsRequired();
-            modelBuilder.Property(ws => ws.CoverPhotoFileName).IsRequired();
+            modelBuilder.Property(ws => ws.LogoFileName).IsRequired(false);
+            modelBuilder.Property(ws => ws.CoverPhotoFileName).IsRequired(false);
         }
     }
 }
