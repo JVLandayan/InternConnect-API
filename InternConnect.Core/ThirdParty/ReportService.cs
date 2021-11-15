@@ -47,7 +47,7 @@ namespace InternConnect.Service.ThirdParty
         public IActionResult GenerateExcel(List<ReportsId> idList, ControllerBase controller)
         {
             var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            var fileName = $"Reports {GetDate()}.xlsx";
+            var fileName = $"Reports {GetDate().ToString("MM/dd/yyyy")}.xlsx";
 
             using (var workBook = new XLWorkbook())
             {
@@ -137,7 +137,7 @@ namespace InternConnect.Service.ThirdParty
 
                     if (submission.AdminResponse.AcceptedByCoordinator == null &&
                         submission.AdminResponse.AcceptedByChair == null)
-                        worksheet.Cell(1 + index, 22).Value = "Request Submitted";
+                        worksheet.Cell(1 + index, 22).Value = "Acknowledged";
                     else if (submission.AdminResponse.AcceptedByCoordinator == true &&
                              submission.AdminResponse.AcceptedByChair == null)
                         worksheet.Cell(1 + index, 22).Value = "Accepted By Coordinator";
@@ -149,9 +149,15 @@ namespace InternConnect.Service.ThirdParty
                         worksheet.Cell(1 + index, 22).Value = "Accepted By Dean";
                     else if (submission.AdminResponse.EmailSentByCoordinator == true &&
                              submission.AdminResponse.CompanyAgrees == null)
-                        worksheet.Cell(1 + index, 22).Value = "Email sent to company rep";
+                        worksheet.Cell(1 + index, 22).Value = "Sent to Company";
+                    else if (submission.AdminResponse.EmailSentByCoordinator == false ||
+                             submission.AdminResponse.CompanyAgrees == false|| 
+                             submission.AdminResponse.AcceptedByChair == false || 
+                             submission.AdminResponse.AcceptedByCoordinator == false||
+                             submission.AdminResponse.AcceptedByDean == false)
+                        worksheet.Cell(1 + index, 22).Value = "Disapproved";
                     else
-                        worksheet.Cell(1 + index, 22).Value = "Student Accepted";
+                        worksheet.Cell(1 + index, 22).Value = "Approved by Company";
 
                     #endregion
 

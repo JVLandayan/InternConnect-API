@@ -22,7 +22,7 @@ namespace InternConnect.Controllers
         //GET /admin
         [Authorize(Roles = "Dean,Chair,Coordinator,Tech Coordinator")]
         [HttpGet]
-        public ActionResult<IEnumerable<StudentDto.ReadStudent>> GetAllStudent()
+        public ActionResult<IEnumerable<StudentDto.EnrolledStudents>> GetAllStudent()
         {
             return Ok(_studentService.GetAll());
         }

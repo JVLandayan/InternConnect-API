@@ -10,7 +10,7 @@ namespace InternConnect.Service.Main
     public interface IStudentService
     {
         public StudentDto.ReadStudent GetById(int id);
-        public IEnumerable<StudentDto.ReadStudent> GetAll();
+        public IEnumerable<StudentDto.EnrolledStudents> GetAll();
         public IEnumerable<StudentDto.ReadStudent> GetAllForDashboard(string type, int id);
         public void UpdateStudentSection(StudentDto.UpdateStudent payload);
     }
@@ -28,13 +28,28 @@ namespace InternConnect.Service.Main
             _context = context;
         }
 
-        public IEnumerable<StudentDto.ReadStudent> GetAll()
+        public IEnumerable<StudentDto.EnrolledStudents> GetAll()
         {
-            var studentList = _studentRepository.GetAllStudentWithRelatedData();
-            var mappedList = new List<StudentDto.ReadStudent>();
+            var studentList = _studentRepository.GetDataOfStudentsForDashboard();
+            var mappedList = new List<StudentDto.EnrolledStudents>();
 
-            foreach (var student in studentList) mappedList.Add(_mapper.Map<StudentDto.ReadStudent>(student));
+            foreach (var student in studentList)
+            {
+                mappedList.Add(_mapper.Map<StudentDto.EnrolledStudents>(student));
+            }
 
+            foreach (var student in mappedList)
+            {
+                if (student.Submissions.Count == 0 )
+                {
+                    student.WithEndorsement = false;
+                }
+                else
+                {
+                    student.WithEndorsement = true;
+                }
+            }
+            
             return mappedList;
         }
 

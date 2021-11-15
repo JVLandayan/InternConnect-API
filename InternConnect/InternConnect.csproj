@@ -6,44 +6,61 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1"/>
-        <PackageReference Include="ClosedXML" Version="0.95.4"/>
-        <PackageReference Include="Hangfire.AspNetCore" Version="1.7.25"/>
-        <PackageReference Include="Hangfire.MemoryStorage" Version="1.7.0"/>
-        <PackageReference Include="itext7" Version="7.1.16"/>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.8"/>
-        <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="5.0.8"/>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.8"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.8"/>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+        <PackageReference Include="ClosedXML" Version="0.95.4" />
+        <PackageReference Include="Hangfire.AspNetCore" Version="1.7.25" />
+        <PackageReference Include="Hangfire.MemoryStorage" Version="1.7.0" />
+        <PackageReference Include="itext7" Version="7.1.16" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.8" />
+        <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="5.0.8" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.8" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.8" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.8">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.8"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.8" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.8">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3"/>
-        <PackageReference Include="System.Data.SqlClient" Version="4.8.2"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+        <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\InternConnect.Context\InternConnect.Context.csproj"/>
-        <ProjectReference Include="..\InternConnect.Core\InternConnect.Service.csproj"/>
-        <ProjectReference Include="..\InternConnect.Dto\InternConnect.Dto.csproj"/>
-        <ProjectReference Include="..\InternConnect.Util\InternConnect.Util.csproj"/>
+        <ProjectReference Include="..\InternConnect.Context\InternConnect.Context.csproj" />
+        <ProjectReference Include="..\InternConnect.Core\InternConnect.Service.csproj" />
+        <ProjectReference Include="..\InternConnect.Dto\InternConnect.Dto.csproj" />
+        <ProjectReference Include="..\InternConnect.Util\InternConnect.Util.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="..\.editorconfig" Link=".editorconfig"/>
+        <None Include="..\.editorconfig" Link=".editorconfig" />
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="images\company\"/>
-        <Folder Include="files\"/>
+        <Folder Include="images\company\" />
+        <Folder Include="files\" />
+        <Folder Include="wwwroot" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\assets\img\Accenture.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\img\company-pic1.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\img\favicon\android-chrome-192x192.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\img\favicon\android-chrome-512x512.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\img\favicon\apple-touch-icon.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\img\favicon\browserconfig.xml" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\img\favicon\favicon-16x16.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\img\favicon\favicon-32x32.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\img\favicon\favicon.ico" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\img\favicon\mstile-150x150.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\img\favicon\safari-pinned-tab.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\img\favicon\site.webmanifest" />
+      <_ContentIncludedByDefault Remove="wwwroot\assets\img\hero-img.png" />
     </ItemGroup>
 
 </Project>

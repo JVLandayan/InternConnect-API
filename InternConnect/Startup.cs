@@ -206,7 +206,7 @@ namespace InternConnect
 
             app.UseHangfireDashboard();
             recurringJobManager.AddOrUpdate("Run every day",
-                () => serviceProvider.GetService<IBackgroundService>().CompanyStatus(), Cron.Daily);
+                () => serviceProvider.GetService<IBackgroundService>().CompanyStatus(), Cron.Minutely);
         }
     }
 }

@@ -23,6 +23,22 @@ namespace InternConnect.Dto.Student
             public AccountDto.ReadCoordinator Account { get; set; }
             public IList<SubmissionDto.ReadStudentData> Submissions { get; set; }
         }
+        
+        public class EnrolledStudents
+        {
+            public int Id { get; set; }
+            public DateTime DateAdded { get; set; }
+            public string AddedBy { get; set; }
+            public int SectionId { get; set; }
+            public SectionDto.ReadSection Section { get; set; }
+            public int ProgramId { get; set; }
+            public ProgramDto.ReadProgram Program { get; set; }
+            public int AuthId { get; set; }
+            public int AccountId { get; set; }
+            public AccountDto.ReadCoordinator Account { get; set; }
+            public IList<SubmissionDto.ReadStudentData> Submissions { get; set; }
+            public bool WithEndorsement { get; set; }
+        }
 
 
         public class UpdateStudent

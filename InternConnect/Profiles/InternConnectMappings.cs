@@ -100,6 +100,7 @@ namespace InternConnect.Profiles
             //Student
             CreateMap<Student, StudentDto.ReadStudent>().ReverseMap();
             CreateMap<Student, StudentDto.UpdateStudent>().ReverseMap();
+            CreateMap<Student, StudentDto.EnrolledStudents>().ReverseMap();
 
             //Submission
             CreateMap<Submission, SubmissionDto.AddSubmission>().ReverseMap();
